@@ -1,0 +1,13 @@
+{
+  "expo": {
+    "name": "NexusFly",
+    "slug": "nexus-fly",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#020617",
+    "android": {
+      "package": "com.nexusfly.app"
+    }
+  }
+}
