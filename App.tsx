@@ -97,10 +97,13 @@ return (
 <Header title="NexusFly" />
 
 
-  <KeyboardAvoidingView  
-    behavior={Platform.OS === 'ios' ? 'padding' : undefined}  
-    keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}  
-    style={styles.chatWrapper}>  
+  <KeyboardAvoidingView
+    behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.chatWrapper}
+      >
+
+
+
     <FlatList  
       ref={flatListRef}  
       data={messages}  

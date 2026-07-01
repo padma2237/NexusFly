@@ -35,6 +35,7 @@ export default function ChatInput({
         value={value}
         onChangeText={onChangeText}
         multiline
+        textAlignVertical="top"
       />
 
       <TouchableOpacity
