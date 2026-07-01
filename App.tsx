@@ -8,13 +8,22 @@ import useChat from "./hooks/useChat";
 
 
 import React, { useState, useRef } from 'react';
+
+
 import {
-StyleSheet,
-FlatList,
-SafeAreaView,
-KeyboardAvoidingView,
-Platform,
-} from 'react-native';
+    StyleSheet,
+      FlatList,
+        KeyboardAvoidingView,
+          Platform,
+          } from 'react-native';
+
+          import {
+            SafeAreaProvider,
+              SafeAreaView,
+              } from 'react-native-safe-area-context';
+
+
+
 import { StatusBar } from 'expo-status-bar';
 
 type MessageItem = Message;
@@ -80,7 +89,9 @@ const renderMessage = ({ item }: { item: MessageItem }) => (
 );
 
 return (
-<SafeAreaView style={styles.container}>
+    <SafeAreaProvider>
+        <SafeAreaView style={styles.container}>
+
 <StatusBar style="light" />
 
 <Header title="NexusFly" />
@@ -113,8 +124,8 @@ return (
 
   </KeyboardAvoidingView>  
 </SafeAreaView>
-
-);
+  </SafeAreaProvider>
+  );
 }
 
 const styles = StyleSheet.create({
