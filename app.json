@@ -8,7 +8,9 @@
     "backgroundColor": "#020617",
     "assetBundlePatterns": ["**/*"],
     "android": {
-      "package": "com.nexusfly.app"
+      "package": "com.nexusfly.app",
+      "softwareKeyboardLayoutMode": "resize"
+      }
     }
   }
-}
+
