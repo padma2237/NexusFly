@@ -4,6 +4,7 @@ import { Message } from "./types/chat";
 import Colors from "./constants/colors";
 import ChatBubble from "./components/ChatBubble";
 import ChatInput from "./components/ChatInput";
+import useChat from "./hooks/useChat";
 
 
 import React, { useState, useRef } from 'react';
@@ -19,14 +20,10 @@ import { StatusBar } from 'expo-status-bar';
 type MessageItem = Message;
 export default function App() {
 // 2. Add types to your state hooks
-const [messages, setMessages] = useState<MessageItem[]>([
-{
-id: '1',
-role: 'assistant',
-text: 'Hello! I am NexusFly. Your New AI assistant. How can I help you today?',
-  createdAt: Date.now(),
-},
-]);
+
+const { messages, setMessages } = useChat();
+
+
 const [inputText, setInputText] = useState<string>('');
 const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -43,16 +40,17 @@ const userMessage: MessageItem = {
   createdAt: Date.now(),
 };  
 
-setMessages((prev) => [...prev, userMessage]);  
 
-setInputText('');  
-setIsLoading(true);  
+const updatedMessages = [...messages, userMessage];
 
-try {  
-  const aiText = await sendMessage([
-  ...messages,
-  userMessage,
-]);
+setMessages(updatedMessages);
+
+setInputText("");
+setIsLoading(true);
+
+try {
+  const aiText = await sendMessage(updatedMessages);
+
 
   setMessages((prev) => [  
     ...prev,  
