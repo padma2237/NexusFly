@@ -90,7 +90,10 @@ const renderMessage = ({ item }: { item: MessageItem }) => (
 
 return (
     <SafeAreaProvider>
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView
+          style={styles.container}
+            edges={["top", "left", "right"]}
+            >
 
 <StatusBar style="light" />
 
@@ -98,25 +101,27 @@ return (
 
 
   <KeyboardAvoidingView
+  style={styles.chatWrapper}
     behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.chatWrapper}
+    enabled
       >
 
 
 
-    <FlatList  
-      ref={flatListRef}  
-      data={messages}  
-      renderItem={renderMessage}  
-      keyExtractor={(item) => item.id}  
-      contentContainerStyle={styles.chatScroll}  
-      onContentSizeChange={() =>  
-        setTimeout(  
-          () => flatListRef.current?.scrollToEnd({ animated: true }),  
-          100  
-        )  
-      }  
-    />  
+  <FlatList
+    ref={flatListRef}
+      data={messages}
+        renderItem={renderMessage}
+          keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.chatScroll}
+              keyboardShouldPersistTaps="handled"
+                onContentSizeChange={() =>
+                    setTimeout(
+                          () => flatListRef.current?.scrollToEnd({ animated: true }),
+                                100
+                                    )
+                                      }
+                                      />
 
     <ChatInput
   value={inputText}
