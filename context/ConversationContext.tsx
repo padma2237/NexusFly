@@ -1,21 +1,23 @@
 import React, {
-    createContext,
-      useContext,
-        useState,
-          useEffect,
-          } from "react";
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+} from "react";
 import { Conversation } from "../types/conversation";
+
+import { loadChats, saveChats } from "../storage/chatStorage";
 
 interface ConversationContextType {
   conversations: Conversation[];
   setConversations: React.Dispatch<React.SetStateAction<Conversation[]>>;
-  
+
   currentConversation: Conversation | null;
   currentConversationId: string | null;
 
   setCurrentConversationId: React.Dispatch<
     React.SetStateAction<string | null>
-    >;
+  >;
 
 
   createNewConversation: () => void;
@@ -31,9 +33,9 @@ export function ConversationProvider({
   children: React.ReactNode;
 }) {
   const [conversations, setConversations] = useState<Conversation[]>([]);
-  
-const [currentConversationId, setCurrentConversationId] =
-  useState<string | null>(null);
+
+  const [currentConversationId, setCurrentConversationId] =
+    useState<string | null>(null);
 
 
 
@@ -41,8 +43,8 @@ const [currentConversationId, setCurrentConversationId] =
 
   const currentConversation =
     conversations.find(
-        (chat) => chat.id === currentConversationId
-          ) ?? null;
+      (chat) => chat.id === currentConversationId
+    ) ?? null;
 
 
   const createNewConversation = () => {
@@ -57,12 +59,27 @@ const [currentConversationId, setCurrentConversationId] =
     setConversations((prev) => [newConversation, ...prev]);
     setCurrentConversationId(newConversation.id);
   };
+
   useEffect(() => {
-      if (conversations.length === 0) {
-          createNewConversation();
-            }
-            }, [conversations]);
-  
+    (async () => {
+      const savedChats = await loadChats();
+
+      if (savedChats.length > 0) {
+        setConversations(savedChats);
+        setCurrentConversationId(savedChats[0].id);
+      } else {
+        createNewConversation();
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (conversations.length > 0) {
+      saveChats(conversations);
+    }
+  }, [conversations]);
+
+
 
   return (
     <ConversationContext.Provider
