@@ -8,7 +8,9 @@ interface ConversationContextType {
         setCurrentConversation: React.Dispatch<
             React.SetStateAction<Conversation | null>
               >;
+              createNewConversation: () => void;
               }
+              
 
               const ConversationContext =
                 createContext<ConversationContextType | null>(null);
@@ -22,6 +24,19 @@ interface ConversationContextType {
                         const [currentConversation, setCurrentConversation] =
                             useState<Conversation | null>(null);
 
+                            const createNewConversation = () => {
+                                const newConversation: Conversation = {
+                                    id: Date.now().toString(),
+                                        title: "New Chat",
+                                            messages: [],
+                                                createdAt: Date.now(),
+                                                    updatedAt: Date.now(),
+                                                      };
+
+                                                        setConversations((prev) => [newConversation, ...prev]);
+                                                          setCurrentConversation(newConversation);
+                                                          };
+                            
                               return (
                                   <ConversationContext.Provider
                                         value={{
@@ -29,12 +44,15 @@ interface ConversationContextType {
                                                         setConversations,
                                                                 currentConversation,
                                                                         setCurrentConversation,
+                                                                        createNewConversation,
+
                                                                               }}
                                                                                   >
                                                                                         {children}
                                                                                             </ConversationContext.Provider>
                                                                                               );
-                                                                                              }
+                                                                                            }
+
 
                                                                                               export function useConversation() {
                                                                                                 const context = useContext(ConversationContext);

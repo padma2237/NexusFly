@@ -17,8 +17,15 @@ import {
                 } from "@expo/vector-icons";
 
                 import Colors from "../constants/colors";
+                import { useConversation } from "../context/ConversationContext";
 
                 export default function CustomDrawer(props: any) {
+const {
+    createNewConversation,
+      conversations,
+      } = useConversation();
+
+
                   return (
                       <DrawerContentScrollView
                             {...props}
@@ -26,7 +33,13 @@ import {
                                       >
                                             <Text style={styles.logo}>NexusFly</Text>
 
-                                                  <TouchableOpacity style={styles.newChat}>
+                                                  <TouchableOpacity
+                                                    style={styles.newChat}
+                                                      onPress={() => {
+                                                          createNewConversation();
+                                                              props.navigation.closeDrawer();
+                                                                }}
+                                                                >
                                                           <Ionicons
                                                                     name="add"
                                                                               size={22}
@@ -41,31 +54,54 @@ import {
                                                                                                                                               Conversations
                                                                                                                                                     </Text>
 
+                                                                                                                                                      {conversations.map((chat) => (
                                                                                                                                                           <DrawerItem
-                                                                                                                                                                  label="Physics"
-                                                                                                                                                                          labelStyle={styles.label}
-                                                                                                                                                                                  icon={({ color, size }) => (
-                                                                                                                                                                                            <MaterialCommunityIcons
-                                                                                                                                                                                                        name="chat-outline"
-                                                                                                                                                                                                                    size={size}
-                                                                                                                                                                                                                                color={color}
-                                                                                                                                                                                                                                          />
-                                                                                                                                                                                                                                                  )}
-                                                                                                                                                                                                                                                          onPress={() => {}}
-                                                                                                                                                                                                                                                                />
+                                                                                                                                                              key={chat.id}
+                                                                                                                                                                  label={chat.title}
+                                                                                                                                                                      labelStyle={styles.label}
+                                                                                                                                                                          icon={({ color, size }) => (
+                                                                                                                                                                                <MaterialCommunityIcons
+                                                                                                                                                                                        name="chat-outline"
+                                                                                                                                                                                                size={size}
+                                                                                                                                                                                                        color={color}
+                                                                                                                                                                                                              />
+                                                                                                                                                                                                                  )}
+                                                                                                                                                                                                                      onPress={() => {
+                                                                                                                                                                                                                            props.navigation.closeDrawer();
+                                                                                                                                                                                                                                }}
+                                                                                                                                                                                                                                  />
+                                                                                                                                                                                                                                  ))}
+                                                                                                                                                      
+                                                                                                                                        
+                                                                                                                                
+                                                                                                                                            
+                                                                                                                                                          
+                                                                                                                                                                      
+                                                                                                                                                                                      
+                                                                                                                                                                                                  
+                                                                                                                                                                                                                
+                                                                                                                                                                                                                          
+                                                                                                                                                                                                              
 
-                                                                                                                                                                                                                                                                      <DrawerItem
-                                                                                                                                                                                                                                                                              label="Python"
-                                                                                                                                                                                                                                                                                      labelStyle={styles.label}
-                                                                                                                                                                                                                                                                                              icon={({ color, size }) => (
-                                                                                                                                                                                                                                                                                                        <MaterialCommunityIcons
-                                                                                                                                                                                                                                                                                                                    name="chat-outline"
-                                                                                                                                                                                                                                                                                                                                size={size}
-                                                                                                                                                                                                                                                                                                                                            color={color}
-                                                                                                                                                                                                                                                                                                                                                      />
-                                                                                                                                                                                                                                                                                                                                                              )}
-                                                                                                                                                                                                                                                                                                                                                                      onPress={() => {}}
-                                                                                                                                                                                                                                                                                                                                                                            />
+
+
+
+
+
+
+
+                                                                                                                                                                                                                                              
+                                                                                                                                                                                                                                                  
+                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                              
+                                                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                          
+                                                                                                                                                                                                                                                                            
+                                                                                                                                                                                                                                                                                                                          
+                                                                                                                                                                                                                                                                                                                                      
+                                                                                                                                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                                  
 
                                                                                                                                                                                                                                                                                                                                                                                   <View style={{ flex: 1 }} />
 
