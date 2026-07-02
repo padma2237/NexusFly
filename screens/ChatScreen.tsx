@@ -1,152 +1,159 @@
+import React, { useRef, useState } from "react";
+import {
+  FlatList,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
+
 import Header from "../components/Header";
-import { sendMessage } from "../services/api";
-import { Message } from "../types/chat";
-import Colors from "../constants/colors";
 import ChatBubble from "../components/ChatBubble";
 import ChatInput from "../components/ChatInput";
-import useChat from "../hooks/useChat";
+import Colors from "../constants/colors";
+import { sendMessage } from "../services/api";
 
+import { Message } from "../types/chat";
+import { useConversation } from "../context/ConversationContext";
 
-import React, { useState, useRef } from 'react';
+export default function ChatScreen() {
+  const {
+    currentConversation,
+    setConversations,
+    setCurrentConversationId,
+  } = useConversation();
 
+  const messages = currentConversation?.messages ?? [];
 
-import {
-    StyleSheet,
-          FlatList,
-                  KeyboardAvoidingView,
-                            Platform,
-                                      } from 'react-native';
+  const flatListRef = useRef<FlatList<Message>>(null);
 
-                                                import {
-                                                            SafeAreaProvider,
-                                                                          SafeAreaView,
-                                                                                        } from 'react-native-safe-area-context';
+  const [inputText, setInputText] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
+  const handleSend = async () => {
+    if (!currentConversation) return;
+    if (!inputText.trim() || isLoading) return;
 
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: "user",
+      text: inputText,
+      createdAt: Date.now(),
+    };
 
-                                                                                        import { StatusBar } from 'expo-status-bar';
+    const updatedMessages = [...messages, userMessage];
 
-                                                                                        type MessageItem = Message;
-                                                                                        export default function App() {
-                                                                                        // 2. Add types to your state hooks
-
-                                                                                        const { messages, setMessages } = useChat();
-
-
-                                                                                        const [inputText, setInputText] = useState<string>('');
-                                                                                        const [isLoading, setIsLoading] = useState<boolean>(false);
-
-                                                                                        // 3. Add type to your useRef hook
-                                                                                        const flatListRef = useRef<FlatList<MessageItem>>(null);
-
-                                                                                        const handleSend = async () => {
-                                                                                        if (!inputText.trim() || isLoading) return;
-
-                                                                                        const userMessage: MessageItem = {  
-                                                                                          id: Date.now().toString(),  
-                                                                                            role: 'user',  
-                                                                                              text: inputText,  
-                                                                                                createdAt: Date.now(),
-                                                                                                };  
-
-
-                                                                                                const updatedMessages = [...messages, userMessage];
-
-                                                                                                setMessages(updatedMessages);
-
-                                                                                                setInputText("");
-                                                                                                setIsLoading(true);
-
-                                                                                                try {
-                                                                                                  const aiText = await sendMessage(updatedMessages);
-
-
-                                                                                                    setMessages((prev) => [  
-                                                                                                        ...prev,  
-                                                                                                            { id: Date.now().toString(), 
-                                                                                                                role: 'assistant', 
-                                                                                                                    text: aiText,
-                                                                                                                        createdAt: Date.now(),
-                                                                                                                            },  
-                                                                                                                              ]);  
-                                                                                                                              } catch (error) {  
-                                                                                                                                setMessages((prev) => [  
-                                                                                                                                    ...prev,  
-                                                                                                                                        {  
-                                                                                                                                              id: Date.now().toString(),  
-                                                                                                                                                    role: 'assistant',  
-                                                                                                                                                          text: 'Error connecting to AI.', 
-                                                                                                                                                                createdAt: Date.now(),
-                                                                                                                                                                    },  
-                                                                                                                                                                      ]);  
-                                                                                                                                                                      } finally {  
-                                                                                                                                                                        setIsLoading(false);  
-                                                                                                                                                                        }
-                                                                                                                                                                        };
-
-                                                                                                                                                                        const renderMessage = ({ item }: { item: MessageItem }) => (
-                                                                                                                                                                          <ChatBubble message={item} />
-                                                                                                                                                                          );
-
-                                                                                                                                                                          return (
-                                                                                                                                                                              <SafeAreaProvider>
-                                                                                                                                                                                      <SafeAreaView
-                                                                                                                                                                                                style={styles.container}
-                                                                                                                                                                                                            edges={["top", "left", "right"]}
-                                                                                                                                                                                                                        >
-
-                                                                                                                                                                                                                        <StatusBar style="light" />
-
-                                                                                                                                                                                                                        <Header title="NexusFly" />
-
-
-                                                                                                                                                                                                                          <KeyboardAvoidingView
-                                                                                                                                                                                                                            style={styles.chatWrapper}
-                                                                                                                                                                                                                                behavior={Platform.OS === "ios" ? "padding" : "height"}
-                                                                                                                                                                                                                                    enabled
-                                                                                                                                                                                                                                          >
+    setConversations((prev) =>
+      prev.map((chat) =>
+        chat.id === currentConversation.id
+          ? {
+            ...chat,
+            messages: updatedMessages,
+            updatedAt: Date.now(),
+          }
+          : chat
+      )
+    );
 
 
 
-                                                                                                                                                                                                                                            <FlatList
-                                                                                                                                                                                                                                                ref={flatListRef}
-                                                                                                                                                                                                                                                      data={messages}
-                                                                                                                                                                                                                                                              renderItem={renderMessage}
-                                                                                                                                                                                                                                                                        keyExtractor={(item) => item.id}
-                                                                                                                                                                                                                                                                                    contentContainerStyle={styles.chatScroll}
-                                                                                                                                                                                                                                                                                                  keyboardShouldPersistTaps="handled"
-                                                                                                                                                                                                                                                                                                                  onContentSizeChange={() =>
-                                                                                                                                                                                                                                                                                                                                      setTimeout(
-                                                                                                                                                                                                                                                                                                                                                                () => flatListRef.current?.scrollToEnd({ animated: true }),
-                                                                                                                                                                                                                                                                                                                                                                                                100
-                                                                                                                                                                                                                                                                                                                                                                                                                                    )
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                          }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                />
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <ChatInput
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      value={inputText}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        onChangeText={setInputText}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          onSend={handleSend}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            isLoading={isLoading}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            />
+    setInputText("");
+    setIsLoading(true);
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </KeyboardAvoidingView>  
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </SafeAreaView>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </SafeAreaProvider>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  );
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  }
+    try {
+      const aiText = await sendMessage(updatedMessages);
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  const styles = StyleSheet.create({
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    container: {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        flex: 1,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            backgroundColor: Colors.background,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              },
+      const assistantMessage: Message = {
+        id: Date.now().toString(),
+        role: "assistant",
+        text: aiText,
+        createdAt: Date.now(),
+      };
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                chatWrapper: {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    flex: 1,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      },
+      setConversations((prev) =>
+        prev.map((chat) =>
+          chat.id === currentConversation.id
+            ? {
+              ...chat,
+              messages: [...chat.messages, assistantMessage],
+              updatedAt: Date.now(),
+            }
+            : chat
+        )
+      );
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        chatScroll: {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            padding: 20,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              },
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              });
+
+
+    } catch {
+      const errorMessage: Message = {
+        id: Date.now().toString(),
+        role: "assistant",
+        text: "Error connecting to AI.",
+        createdAt: Date.now(),
+      };
+
+      setConversations((prev) =>
+        prev.map((chat) =>
+          chat.id === currentConversation.id
+            ? {
+              ...chat,
+              messages: [...chat.messages, errorMessage],
+              updatedAt: Date.now(),
+            }
+            : chat
+        )
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <StatusBar style="light" />
+
+      <Header title="NexusFly" />
+
+      <KeyboardAvoidingView
+        style={styles.chatWrapper}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <FlatList
+          ref={flatListRef}
+          data={messages}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <ChatBubble message={item} />}
+          contentContainerStyle={styles.chatScroll}
+          keyboardShouldPersistTaps="handled"
+          onContentSizeChange={() =>
+            flatListRef.current?.scrollToEnd({ animated: true })
+          }
+        />
+
+        <ChatInput
+          value={inputText}
+          onChangeText={setInputText}
+          onSend={handleSend}
+          isLoading={isLoading}
+        />
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: Colors.background,
+  },
+
+  chatWrapper: {
+    flex: 1,
+  },
+
+  chatScroll: {
+    padding: 20,
+  },
+});
