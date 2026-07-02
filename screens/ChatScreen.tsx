@@ -43,15 +43,24 @@ export default function ChatScreen() {
     };
 
     const updatedMessages = [...messages, userMessage];
+    const newTitle =
+      currentConversation.title === "New Chat"
+          ? inputText.slice(0, 30)
+              : currentConversation.title;
 
     setConversations((prev) =>
       prev.map((chat) =>
         chat.id === currentConversation.id
           ? {
-            ...chat,
-            messages: updatedMessages,
-            updatedAt: Date.now(),
-          }
+              ...chat,
+                title: newTitle,
+                  messages: updatedMessages,
+                    updatedAt: Date.now(),
+                    }
+          
+
+
+
           : chat
       )
     );
