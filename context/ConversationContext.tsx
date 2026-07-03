@@ -21,6 +21,7 @@ interface ConversationContextType {
 
 
   createNewConversation: () => void;
+  deleteConversation: (id: string) => void;
 }
 
 
@@ -36,10 +37,6 @@ export function ConversationProvider({
 
   const [currentConversationId, setCurrentConversationId] =
     useState<string | null>(null);
-
-
-
-
 
   const currentConversation =
     conversations.find(
@@ -60,42 +57,58 @@ export function ConversationProvider({
     setCurrentConversationId(newConversation.id);
   };
 
-  useEffect(() => {
-    (async () => {
-      const savedChats = await loadChats();
+  const deleteConversation = (id: string) => {
+    setConversations((prev) => {
+      const updated = prev.filter((chat) => chat.id !== id);
 
-      if (savedChats.length > 0) {
-        setConversations(savedChats);
-        setCurrentConversationId(savedChats[0].id);
-      } else {
-        createNewConversation();
+      if (currentConversationId === id) {
+        setCurrentConversationId(
+          updated.length > 0 ? updated[0].id : null
+        );
       }
-    })();
-  }, []);
 
-  useEffect(() => {
-    if (conversations.length > 0) {
-      saveChats(conversations);
+      return updated;
+    });
+  };
+
+
+useEffect(() => {
+  (async () => {
+    const savedChats = await loadChats();
+
+    if (savedChats.length > 0) {
+      setConversations(savedChats);
+      setCurrentConversationId(savedChats[0].id);
+    } else {
+      createNewConversation();
     }
-  }, [conversations]);
+  })();
+}, []);
+
+useEffect(() => {
+  if (conversations.length > 0) {
+    saveChats(conversations);
+  }
+}, [conversations]);
 
 
 
-  return (
-    <ConversationContext.Provider
-      value={{
-        conversations,
-        setConversations,
-        currentConversation,
-        currentConversationId,
-        setCurrentConversationId,
-        createNewConversation,
+return (
+  <ConversationContext.Provider
+    value={{
+      conversations,
+      setConversations,
+      currentConversation,
+      currentConversationId,
+      setCurrentConversationId,
+      createNewConversation,
+      deleteConversation,
 
-      }}
-    >
-      {children}
-    </ConversationContext.Provider>
-  );
+    }}
+  >
+    {children}
+  </ConversationContext.Provider>
+);
 }
 
 

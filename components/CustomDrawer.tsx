@@ -24,6 +24,7 @@ export default function CustomDrawer(props: any) {
     createNewConversation,
     conversations,
     setCurrentConversationId,
+    deleteConversation,
   } = useConversation();
 
 
@@ -55,25 +56,57 @@ export default function CustomDrawer(props: any) {
         Conversations
       </Text>
 
-      {conversations.map((chat) => (
-        <DrawerItem
-          key={chat.id}
-          label={chat.title}
-          labelStyle={styles.label}
-          icon={({ color, size }) => (
-            <MaterialCommunityIcons
-              name="chat-outline"
-              size={size}
-              color={color}
-            />
-          )}
-          onPress={() => {
-            setCurrentConversationId(chat.id);
-            props.navigation.closeDrawer();
-          }}
-      
-        />
-      ))}
+      {conversations.map((chat) => ( 
+        
+
+<View
+  key={chat.id}
+    style={{
+        flexDirection: "row",
+            alignItems: "center",
+              }}
+              >
+                <View style={{ flex: 1 }}>
+                    <DrawerItem
+                          label={chat.title}
+                                labelStyle={styles.label}
+                                      icon={({ color, size }) => (
+                                              <MaterialCommunityIcons
+                                                        name="chat-outline"
+                                                                  size={size}
+                                                                            color={color}
+                                                                                    />
+                                                                                          )}
+                                                                                                onPress={() => {
+                                                                                                        setCurrentConversationId(chat.id);
+                                                                                                                props.navigation.closeDrawer();
+                                                                                                                      }}
+                                                                                                                          />
+                                                                                                                            </View>
+
+                                                                                                                              <TouchableOpacity
+                                                                                                                                  onPress={() => deleteConversation(chat.id)}
+                                                                                                                                      style={{
+                                                                                                                                            paddingHorizontal: 15,
+                                                                                                                                                }}
+                                                                                                                                                  >
+                                                                                                                                                      <Ionicons
+                                                                                                                                                            name="trash-outline"
+                                                                                                                                                                  size={20}
+                                                                                                                                                                        color="#ef4444"
+                                                                                                                                                                            />
+                                                                                                                                                                              </TouchableOpacity>
+                                                                                                                                                                              </View>))}
+
+
+
+
+
+
+
+
+
+          
 
 
       <View style={{ flex: 1 }} />
