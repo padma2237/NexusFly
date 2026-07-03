@@ -22,6 +22,8 @@ interface ConversationContextType {
 
   createNewConversation: () => void;
   deleteConversation: (id: string) => void;
+
+  renameConversation: (id: string, title: string) => void;
 }
 
 
@@ -57,20 +59,42 @@ export function ConversationProvider({
     setCurrentConversationId(newConversation.id);
   };
 
-  const deleteConversation = (id: string) => {
-    setConversations((prev) => {
-      const updated = prev.filter((chat) => chat.id !== id);
 
-      if (currentConversationId === id) {
-        setCurrentConversationId(
-          updated.length > 0 ? updated[0].id : null
-        );
-      }
+const deleteConversation = (id: string) => {
+    const updated = conversations.filter((chat) => chat.id !== id);
 
-      return updated;
-    });
+      setConversations(updated);
+
+        if (currentConversationId === id) {
+            if (updated.length > 0) {
+                  setCurrentConversationId(updated[0].id);
+                      } else {
+                            setCurrentConversationId(null);
+                                }
+                                  }
+                                };
+                                  
+                                
+
+
+
+      
+
+
+
+  const renameConversation = (id: string, title: string) => {
+    setConversations((prev) =>
+      prev.map((chat) =>
+        chat.id === id
+          ? {
+            ...chat,
+            title,
+            updatedAt: Date.now(),
+          }
+          : chat
+      )
+    );
   };
-
 
 useEffect(() => {
   (async () => {
@@ -86,9 +110,9 @@ useEffect(() => {
 }, []);
 
 useEffect(() => {
-  if (conversations.length > 0) {
+  
     saveChats(conversations);
-  }
+  
 }, [conversations]);
 
 
@@ -103,6 +127,7 @@ return (
       setCurrentConversationId,
       createNewConversation,
       deleteConversation,
+      renameConversation,
 
     }}
   >
