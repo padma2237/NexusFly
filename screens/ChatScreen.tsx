@@ -17,12 +17,16 @@ import { sendMessage } from "../services/api";
 import { Message } from "../types/chat";
 import { useConversation } from "../context/ConversationContext";
 
+import { useNavigation, DrawerActions } from "@react-navigation/native";
+
 export default function ChatScreen() {
   const {
     currentConversation,
     setConversations,
     setCurrentConversationId,
   } = useConversation();
+
+  const navigation = useNavigation();
 
   const messages = currentConversation?.messages ?? [];
 
@@ -123,7 +127,16 @@ export default function ChatScreen() {
     <SafeAreaView style={styles.container}>
       <StatusBar style="light" />
 
-      <Header title="NexusFly" />
+      <Header
+        title="NexusFly"
+          onMenuPress={() =>
+              navigation.dispatch(DrawerActions.openDrawer())
+                }
+                  onSearchPress={() => {}}
+                    onSettingsPress={() =>
+                        navigation.navigate("Settings" as never)
+                          }
+                          />
 
       <KeyboardAvoidingView
         style={styles.chatWrapper}
