@@ -21,12 +21,25 @@ import {
 } from "@expo/vector-icons";
 
 import Colors from "../constants/colors";
-import { useConversation } from "../context/ConversationContext";
+import {
+  useConversation
+} from "../context/ConversationContext";
 
 export default function CustomDrawer(props: any) {
 
-  const [deleteModalVisible, setDeleteModalVisible] = React.useState(false);
-  const [selectedChatId, setSelectedChatId] = React.useState<string | null>(null);
+  const [deleteModalVisible,
+    setDeleteModalVisible] = React.useState(false);
+  const [selectedChatId,
+    setSelectedChatId] = React.useState < string | null > (null);
+
+  const [renameModalVisible,
+    setRenameModalVisible] = React.useState(false);
+  const [selectedConversation,
+    setSelectedConversation] = React.useState < {
+    id: string;
+    title: string;
+  } | null > (null);
+
 
   const {
     createNewConversation,
@@ -42,7 +55,7 @@ export default function CustomDrawer(props: any) {
       <DrawerContentScrollView
         {...props}
         contentContainerStyle={styles.container}
-      >
+        >
         <Text style={styles.logo}>NexusFly</Text>
 
         <TouchableOpacity
@@ -51,12 +64,12 @@ export default function CustomDrawer(props: any) {
             createNewConversation();
             props.navigation.closeDrawer();
           }}
-        >
+          >
           <Ionicons
             name="add"
             size={22}
             color="white"
-          />
+            />
           <Text style={styles.newChatText}>
             New Chat
           </Text>
@@ -71,12 +84,12 @@ export default function CustomDrawer(props: any) {
 
           <View
             key={chat.id}
-            style={{
+            style={ {
               flexDirection: "row",
               alignItems: "center",
             }}
-          >
-            <View style={{ flex: 1 }}>
+            >
+            <View style={ { flex: 1 }}>
               <DrawerItem
                 label={chat.title}
                 labelStyle={styles.label}
@@ -85,34 +98,34 @@ export default function CustomDrawer(props: any) {
                     name="chat-outline"
                     size={size}
                     color={color}
-                  />
+                    />
                 )}
                 onPress={() => {
                   setCurrentConversationId(chat.id);
                   props.navigation.closeDrawer();
                 }}
-              />
+                />
             </View>
 
 
             <TouchableOpacity
               onPress={() => {
-                if (Platform.OS === "android") {
-                  Alert.alert(
-                    "Rename",
-                    "We'll replace this with a custom rename dialog in the next step."
-                  );
-                }
+                setSelectedConversation({
+                  id: chat.id,
+                  title: chat.title,
+                });
+
+                setRenameModalVisible(true);
               }}
-              style={{
+              style={ {
                 paddingHorizontal: 10,
               }}
-            >
+              >
               <Ionicons
                 name="create-outline"
                 size={20}
                 color="#60a5fa"
-              />
+                />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -122,19 +135,19 @@ export default function CustomDrawer(props: any) {
                 setDeleteModalVisible(true);
               }}
 
-              style={{
+              style={ {
                 paddingHorizontal: 15,
               }}
-            >
+              >
               <Ionicons
                 name="trash-outline"
                 size={20}
                 color="#ef4444"
-              />
+                />
             </TouchableOpacity>
           </View>))}
 
-        <View style={{ flex: 1 }} />
+        <View style={ { flex: 1 }} />
 
         <DrawerItem
           label="Settings"
@@ -144,13 +157,42 @@ export default function CustomDrawer(props: any) {
               name="settings-outline"
               size={size}
               color={color}
-            />
+              />
           )}
           onPress={() =>
-            props.navigation.navigate("Settings")
+          props.navigation.navigate("Settings")
           }
-        />
+          />
       </DrawerContentScrollView>
+
+<CustomModal
+  visible={renameModalVisible}
+  title="Rename Conversation"
+  message=""
+  confirmText="Save"
+  cancelText="Cancel"
+  showInput
+  inputValue={selectedConversation?.title ?? ""}
+  inputPlaceholder="Conversation name"
+  onCancel={() => {
+    setRenameModalVisible(false);
+    setSelectedConversation(null);
+  }}
+  onConfirm={(value) => {
+    if (
+      selectedConversation &&
+      value?.trim()
+    ) {
+      renameConversation(
+        selectedConversation.id,
+        value.trim()
+      );
+    }
+
+    setRenameModalVisible(false);
+    setSelectedConversation(null);
+  }}
+/>
 
 
       <CustomModal
@@ -171,54 +213,54 @@ export default function CustomDrawer(props: any) {
           setDeleteModalVisible(false);
           setSelectedChatId(null);
         }}
-      />
+        />
     </>
   );
 
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#020617",
-  },
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: "#020617",
+    },
 
-  logo: {
-    color: "white",
-    fontSize: 30,
-    fontWeight: "bold",
-    marginTop: 25,
-    marginLeft: 20,
-    marginBottom: 25,
-  },
+    logo: {
+      color: "white",
+      fontSize: 30,
+      fontWeight: "bold",
+      marginTop: 25,
+      marginLeft: 20,
+      marginBottom: 25,
+    },
 
-  newChat: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#4f46e5",
-    marginHorizontal: 15,
-    padding: 14,
-    borderRadius: 14,
-    marginBottom: 25,
-  },
+    newChat: {
+      flexDirection: "row",
+      alignItems: "center",
+      backgroundColor: "#4f46e5",
+      marginHorizontal: 15,
+      padding: 14,
+      borderRadius: 14,
+      marginBottom: 25,
+    },
 
-  newChatText: {
-    color: "white",
-    marginLeft: 10,
-    fontWeight: "600",
-    fontSize: 16,
-  },
+    newChatText: {
+      color: "white",
+      marginLeft: 10,
+      fontWeight: "600",
+      fontSize: 16,
+    },
 
-  heading: {
-    color: "#94a3b8",
-    marginLeft: 18,
-    marginBottom: 10,
-    fontSize: 13,
-    fontWeight: "600",
-  },
+    heading: {
+      color: "#94a3b8",
+      marginLeft: 18,
+      marginBottom: 10,
+      fontSize: 13,
+      fontWeight: "600",
+    },
 
-  label: {
-    color: "white",
-    fontSize: 15,
-  },
-});
+    label: {
+      color: "white",
+      fontSize: 15,
+    },
+  });
