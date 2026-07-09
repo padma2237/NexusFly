@@ -56,16 +56,22 @@ export default function ChatInput({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    alignItems: "flex-end",
-    backgroundColor: Colors.surface,
-    margin: 16,
-    padding: 8,
-    borderRadius: 28,
-    borderWidth: 1,
-    borderColor: Colors.border,
-  },
+ container: {
+  position: "absolute",
+
+  left: 16,
+  right: 16,
+  bottom: 16,
+
+  flexDirection: "row",
+  alignItems: "flex-end",
+
+  backgroundColor: Colors.surface,
+  padding: 8,
+  borderRadius: 28,
+  borderWidth: 1,
+  borderColor: Colors.border,
+},
 
   input: {
     flex: 1,

@@ -91,6 +91,14 @@ export default function ChatScreen() {
         }: chat
       )
     );
+    
+    
+    setTimeout(() => {
+  flatListRef.current?.scrollToEnd({
+    animated: true,
+  });
+}, 100);
+
 
     setInputText("");
     setIsLoading(true);
@@ -115,6 +123,7 @@ export default function ChatScreen() {
           }: chat
         )
       );
+  
 
     } catch {
       const errorMessage: Message = {
@@ -159,19 +168,23 @@ export default function ChatScreen() {
         behavior={Platform.OS === "ios" ? "padding": "height"}
         >
         <FlatList
-          ref={flatListRef}
-          data={messages}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <ChatBubble message={item} />}
-          contentContainerStyle={styles.chatScroll}
-          keyboardShouldPersistTaps="handled"
-          onContentSizeChange={() =>
-          flatListRef.current?.scrollToEnd({
-            animated: true
-          })
-          }
-          />
-          {isLoading && <TypingIndicator />}
+  ref={flatListRef}
+  data={messages}
+  keyExtractor={(item) => item.id}
+  renderItem={({ item }) => <ChatBubble message={item} />}
+  contentContainerStyle={styles.chatScroll}
+  keyboardShouldPersistTaps="handled"
+  ListFooterComponent={
+    isLoading ? <TypingIndicator /> : null
+  }
+  onContentSizeChange={() => {
+  if (isLoading) {
+    flatListRef.current?.scrollToEnd({
+      animated: true,
+    });
+  }
+}}
+/>
           
         <ChatInput
           value={inputText}
@@ -196,5 +209,6 @@ export default function ChatScreen() {
 
     chatScroll: {
       padding: 20,
+      paddingBottom: 120,
     },
   });
