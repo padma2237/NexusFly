@@ -4,47 +4,50 @@ import React, {
   useState,
   useEffect,
 } from "react";
-import { Conversation } from "../types/conversation";
+import {
+  Conversation
+} from "../types/conversation";
 
-import { loadChats, saveChats } from "../storage/chatStorage";
+import {
+  loadChats,
+  saveChats
+} from "../storage/chatStorage";
 
 interface ConversationContextType {
   conversations: Conversation[];
-  setConversations: React.Dispatch<React.SetStateAction<Conversation[]>>;
+  setConversations: React.Dispatch < React.SetStateAction < Conversation[]>>;
 
   currentConversation: Conversation | null;
   currentConversationId: string | null;
 
-  setCurrentConversationId: React.Dispatch<
-    React.SetStateAction<string | null>
-  >;
+  setCurrentConversationId: React.Dispatch <
+  React.SetStateAction < string | null > >;
 
-
-  createNewConversation: () => void;
+  createNewConversation: () => Conversation;
   deleteConversation: (id: string) => void;
 
   renameConversation: (id: string, title: string) => void;
 }
 
-
 const ConversationContext =
-  createContext<ConversationContextType | null>(null);
+createContext < ConversationContextType | null > (null);
 
 export function ConversationProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [conversations,
+    setConversations] = useState < Conversation[] > ([]);
 
-  const [currentConversationId, setCurrentConversationId] =
-    useState<string | null>(null);
+  const [currentConversationId,
+    setCurrentConversationId] =
+  useState < string | null > (null);
 
   const currentConversation =
-    conversations.find(
-      (chat) => chat.id === currentConversationId
-    ) ?? null;
-
+  conversations.find(
+    (chat) => chat.id === currentConversationId
+  ) ?? null;
 
   const createNewConversation = () => {
     const newConversation: Conversation = {
@@ -57,85 +60,79 @@ export function ConversationProvider({
 
     setConversations((prev) => [newConversation, ...prev]);
     setCurrentConversationId(newConversation.id);
+    return newConversation;
   };
 
-
-const deleteConversation = (id: string) => {
+  const deleteConversation = (id: string) => {
     const updated = conversations.filter((chat) => chat.id !== id);
 
-      setConversations(updated);
+    setConversations(updated);
 
-        if (currentConversationId === id) {
-            if (updated.length > 0) {
-                  setCurrentConversationId(updated[0].id);
-                      } else {
-                            setCurrentConversationId(null);
-                                }
-                                  }
-                                };
-                                  
-                                
-
-
-
-      
-
+    if (currentConversationId === id) {
+      if (updated.length > 0) {
+        setCurrentConversationId(updated[0].id);
+      } else {
+        setCurrentConversationId(null);
+      }
+    }
+  };
 
 
   const renameConversation = (id: string, title: string) => {
     setConversations((prev) =>
       prev.map((chat) =>
         chat.id === id
-          ? {
-            ...chat,
-            title,
-            updatedAt: Date.now(),
-          }
-          : chat
+        ? {
+          ...chat,
+          title,
+          updatedAt: Date.now(),
+        }: chat
       )
     );
   };
 
-useEffect(() => {
-  (async () => {
-    const savedChats = await loadChats();
 
-    if (savedChats.length > 0) {
+  useEffect(() => {
+    (async () => {
+      const savedChats = await loadChats();
+
       setConversations(savedChats);
-      setCurrentConversationId(savedChats[0].id);
-    } else {
-      createNewConversation();
-    }
-  })();
-}, []);
 
-useEffect(() => {
-  
-    saveChats(conversations);
-  
-}, [conversations]);
-
-
-
-return (
-  <ConversationContext.Provider
-    value={{
-      conversations,
-      setConversations,
-      currentConversation,
-      currentConversationId,
-      setCurrentConversationId,
-      createNewConversation,
-      deleteConversation,
-      renameConversation,
-
-    }}
-  >
-    {children}
-  </ConversationContext.Provider>
-);
+      if (savedChats.length > 0) {
+  setCurrentConversationId(null);
+} else {
+  setCurrentConversationId(null);
 }
+    })();
+  }, []);
 
+
+  useEffect(() => {
+
+    saveChats(conversations);
+
+  }, [conversations]);
+
+
+
+  return (
+    <ConversationContext.Provider
+      value={ {
+        conversations,
+        setConversations,
+        currentConversation,
+        currentConversationId,
+        setCurrentConversationId,
+        createNewConversation,
+        deleteConversation,
+        renameConversation,
+
+      }}
+      >
+      {children}
+    </ConversationContext.Provider>
+  );
+}
 
 export function useConversation() {
   const context = useContext(ConversationContext);

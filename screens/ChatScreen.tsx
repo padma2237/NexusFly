@@ -1,43 +1,71 @@
-import React, { useRef, useState } from "react";
+import React, {
+  useRef,
+  useState,
+  useEffect
+} from "react";
 import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { StatusBar } from "expo-status-bar";
+import {
+  SafeAreaView
+} from "react-native-safe-area-context";
+import {
+  StatusBar
+} from "expo-status-bar";
 
 import Header from "../components/Header";
 import ChatBubble from "../components/ChatBubble";
 import ChatInput from "../components/ChatInput";
 import Colors from "../constants/colors";
-import { sendMessage } from "../services/api";
+import {
+  sendMessage
+} from "../services/api";
 
-import { Message } from "../types/chat";
-import { useConversation } from "../context/ConversationContext";
+import {
+  Message
+} from "../types/chat";
+import {
+  useConversation
+} from "../context/ConversationContext";
 
-import { useNavigation, DrawerActions } from "@react-navigation/native";
+import {
+  useNavigation,
+  DrawerActions
+} from "@react-navigation/native";
 
 export default function ChatScreen() {
   const {
-    currentConversation,
-    setConversations,
-    setCurrentConversationId,
-  } = useConversation();
+  currentConversation,
+  currentConversationId,
+  createNewConversation,
+  setConversations,
+} = useConversation();
 
   const navigation = useNavigation();
 
   const messages = currentConversation?.messages ?? [];
 
-  const flatListRef = useRef<FlatList<Message>>(null);
+  const flatListRef = useRef < FlatList < Message>>(null);
 
-  const [inputText, setInputText] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [inputText,
+    setInputText] = useState("");
+  const [isLoading,
+    setIsLoading] = useState(false);
+    useEffect(() => {
+  setInputText("");
+}, [currentConversationId]);
 
   const handleSend = async () => {
-    if (!currentConversation) return;
     if (!inputText.trim() || isLoading) return;
+
+    let activeConversation = currentConversation;
+
+    if (!activeConversation) {
+  activeConversation = createNewConversation();
+}
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -46,38 +74,30 @@ export default function ChatScreen() {
       createdAt: Date.now(),
     };
 
-    const updatedMessages = [...messages, userMessage];
+    const updatedMessages = [...messages,
+      userMessage];
     const newTitle =
-      currentConversation.title === "New Chat"
-          ? inputText.slice(0, 30)
-              : currentConversation.title;
+    activeConversation.title === "New Chat"
+    ? inputText.slice(0, 30): activeConversation.title;
 
     setConversations((prev) =>
       prev.map((chat) =>
-        chat.id === currentConversation.id
-          ? {
-              ...chat,
-                title: newTitle,
-                  messages: updatedMessages,
-                    updatedAt: Date.now(),
-                    }
-          
-
-
-
-          : chat
+        chat.id === activeConversation.id
+        ? {
+          ...chat,
+          title: newTitle,
+          messages: updatedMessages,
+          updatedAt: Date.now(),
+        }: chat
       )
     );
-
-
-
 
     setInputText("");
     setIsLoading(true);
 
     try {
       const aiText = await sendMessage(updatedMessages);
-
+      
       const assistantMessage: Message = {
         id: Date.now().toString(),
         role: "assistant",
@@ -87,17 +107,14 @@ export default function ChatScreen() {
 
       setConversations((prev) =>
         prev.map((chat) =>
-          chat.id === currentConversation.id
-            ? {
-              ...chat,
-              messages: [...chat.messages, assistantMessage],
-              updatedAt: Date.now(),
-            }
-            : chat
+          chat.id === activeConversation.id
+          ? {
+            ...chat,
+            messages: [...chat.messages, assistantMessage],
+            updatedAt: Date.now(),
+          }: chat
         )
       );
-
-
 
     } catch {
       const errorMessage: Message = {
@@ -109,13 +126,12 @@ export default function ChatScreen() {
 
       setConversations((prev) =>
         prev.map((chat) =>
-          chat.id === currentConversation.id
-            ? {
-              ...chat,
-              messages: [...chat.messages, errorMessage],
-              updatedAt: Date.now(),
-            }
-            : chat
+          chat.id === activeConversation.id
+          ? {
+            ...chat,
+            messages: [...chat.messages, errorMessage],
+            updatedAt: Date.now(),
+          }: chat
         )
       );
     } finally {
@@ -129,19 +145,19 @@ export default function ChatScreen() {
 
       <Header
         title="NexusFly"
-          onMenuPress={() =>
-              navigation.dispatch(DrawerActions.openDrawer())
-                }
-                  onSearchPress={() => {}}
-                    onSettingsPress={() =>
-                        navigation.navigate("Settings" as never)
-                          }
-                          />
+        onMenuPress={() =>
+        navigation.dispatch(DrawerActions.openDrawer())
+        }
+        onSearchPress={() => {}}
+        onSettingsPress={() =>
+        navigation.navigate("Settings" as never)
+        }
+        />
 
       <KeyboardAvoidingView
         style={styles.chatWrapper}
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-      >
+        behavior={Platform.OS === "ios" ? "padding": "height"}
+        >
         <FlatList
           ref={flatListRef}
           data={messages}
@@ -150,32 +166,34 @@ export default function ChatScreen() {
           contentContainerStyle={styles.chatScroll}
           keyboardShouldPersistTaps="handled"
           onContentSizeChange={() =>
-            flatListRef.current?.scrollToEnd({ animated: true })
+          flatListRef.current?.scrollToEnd({
+            animated: true
+          })
           }
-        />
+          />
 
         <ChatInput
           value={inputText}
           onChangeText={setInputText}
           onSend={handleSend}
           isLoading={isLoading}
-        />
+          />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background,
-  },
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: Colors.background,
+    },
 
-  chatWrapper: {
-    flex: 1,
-  },
+    chatWrapper: {
+      flex: 1,
+    },
 
-  chatScroll: {
-    padding: 20,
-  },
-});
+    chatScroll: {
+      padding: 20,
+    },
+  });
