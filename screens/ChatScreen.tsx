@@ -30,7 +30,7 @@ import {
 import {
   useConversation
 } from "../context/ConversationContext";
-
+import TypingIndicator from "../components/TypingIndicator";
 import {
   useNavigation,
   DrawerActions
@@ -171,7 +171,8 @@ export default function ChatScreen() {
           })
           }
           />
-
+          {isLoading && <TypingIndicator />}
+          
         <ChatInput
           value={inputText}
           onChangeText={setInputText}

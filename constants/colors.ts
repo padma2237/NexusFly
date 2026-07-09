@@ -6,6 +6,7 @@ const Colors = {
 
   text: "#f8fafc",
   subText: "#94a3b8",
+  textSecondary: "#94A3B8",
 
   border: "#1e293b",
 
