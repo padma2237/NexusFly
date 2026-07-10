@@ -44,6 +44,7 @@ export default function CustomDrawer(props: any) {
   const {
     createNewConversation,
     conversations,
+    currentConversationId,
     setCurrentConversationId,
     deleteConversation,
     renameConversation,
@@ -54,7 +55,10 @@ export default function CustomDrawer(props: any) {
     <>
       <DrawerContentScrollView
         {...props}
-        contentContainerStyle={styles.container}
+        contentContainerStyle={ {
+          backgroundColor: "#020617",
+          paddingBottom: 20,
+        }}
         >
         <Text style={styles.logo}>NexusFly</Text>
 
@@ -90,7 +94,12 @@ export default function CustomDrawer(props: any) {
             }}
             >
             <View style={ { flex: 1 }}>
+
+
               <DrawerItem
+                focused={chat.id === currentConversationId}
+                activeBackgroundColor="#1e3a8a"
+                activeTintColor="#ffffff"
                 label={chat.title}
                 labelStyle={styles.label}
                 icon={({ color, size }) => (
@@ -147,8 +156,6 @@ export default function CustomDrawer(props: any) {
             </TouchableOpacity>
           </View>))}
 
-        <View style={ { flex: 1 }} />
-
         <DrawerItem
           label="Settings"
           labelStyle={styles.label}
@@ -165,34 +172,34 @@ export default function CustomDrawer(props: any) {
           />
       </DrawerContentScrollView>
 
-<CustomModal
-  visible={renameModalVisible}
-  title="Rename Conversation"
-  message=""
-  confirmText="Save"
-  cancelText="Cancel"
-  showInput
-  inputValue={selectedConversation?.title ?? ""}
-  inputPlaceholder="Conversation name"
-  onCancel={() => {
-    setRenameModalVisible(false);
-    setSelectedConversation(null);
-  }}
-  onConfirm={(value) => {
-    if (
-      selectedConversation &&
-      value?.trim()
-    ) {
-      renameConversation(
-        selectedConversation.id,
-        value.trim()
-      );
-    }
+      <CustomModal
+        visible={renameModalVisible}
+        title="Rename Conversation"
+        message=""
+        confirmText="Save"
+        cancelText="Cancel"
+        showInput
+        inputValue={selectedConversation?.title ?? ""}
+        inputPlaceholder="Conversation name"
+        onCancel={() => {
+          setRenameModalVisible(false);
+          setSelectedConversation(null);
+        }}
+        onConfirm={(value) => {
+          if (
+            selectedConversation &&
+            value?.trim()
+          ) {
+            renameConversation(
+              selectedConversation.id,
+              value.trim()
+            );
+          }
 
-    setRenameModalVisible(false);
-    setSelectedConversation(null);
-  }}
-/>
+          setRenameModalVisible(false);
+          setSelectedConversation(null);
+        }}
+        />
 
 
       <CustomModal
@@ -220,11 +227,6 @@ export default function CustomDrawer(props: any) {
 }
 
   const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: "#020617",
-    },
-
     logo: {
       color: "white",
       fontSize: 30,

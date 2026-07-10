@@ -19,6 +19,8 @@ interface ConversationContextType {
 
   currentConversation: Conversation | null;
   currentConversationId: string | null;
+  
+isLoading: boolean;
 
   setCurrentConversationId: React.Dispatch <
   React.SetStateAction < string | null > >;
@@ -43,6 +45,9 @@ export function ConversationProvider({
   const [currentConversationId,
     setCurrentConversationId] =
   useState < string | null > (null);
+  
+  const [isLoading, setIsLoading] = useState(true);
+  
 
   const currentConversation =
   conversations.find(
@@ -101,8 +106,18 @@ export function ConversationProvider({
       if (savedChats.length > 0) {
   setCurrentConversationId(null);
 } else {
-  setCurrentConversationId(null);
+  const newConversation: Conversation = {
+    id: Date.now().toString(),
+    title: "New Chat",
+    messages: [],
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+  };
+
+  setConversations([newConversation]);
+  setCurrentConversationId(newConversation.id);
 }
+setIsLoading(false);
     })();
   }, []);
 
@@ -126,6 +141,7 @@ export function ConversationProvider({
         createNewConversation,
         deleteConversation,
         renameConversation,
+        isLoading,
 
       }}
       >

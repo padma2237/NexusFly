@@ -19,7 +19,16 @@ export default function DrawerNavigator() {
       initialRouteName="Chat"
       screenOptions={ {
         headerShown: false,
-      }}
+        drawerType: "back",
+        drawerStyle: {
+    backgroundColor: "#020617",
+  },
+
+  sceneContainerStyle: {
+    backgroundColor: "#020617",
+  },
+}}
+      
       >
       <Drawer.Screen
         name="Chat"

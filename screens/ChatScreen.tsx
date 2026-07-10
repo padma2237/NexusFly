@@ -8,6 +8,8 @@ import {
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
+  Keyboard,
+  View,
 } from "react-native";
 import {
   SafeAreaView
@@ -101,6 +103,7 @@ export default function ChatScreen() {
 
 
     setInputText("");
+    Keyboard.dismiss();
     setIsLoading(true);
 
     try {
@@ -175,8 +178,8 @@ export default function ChatScreen() {
   contentContainerStyle={styles.chatScroll}
   keyboardShouldPersistTaps="handled"
   ListFooterComponent={
-    isLoading ? <TypingIndicator /> : null
-  }
+  isLoading ? <TypingIndicator /> : null
+}
   onContentSizeChange={() => {
   if (isLoading) {
     flatListRef.current?.scrollToEnd({
@@ -208,7 +211,7 @@ export default function ChatScreen() {
     },
 
     chatScroll: {
-      padding: 20,
-      paddingBottom: 120,
-    },
-  });
+  paddingHorizontal: 20,
+  paddingTop: 20,
+},
+});

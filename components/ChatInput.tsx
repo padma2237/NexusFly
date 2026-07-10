@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   StyleSheet,
+  Platform,
 } from "react-native";
 import { Mic, Send } from "lucide-react-native";
 import Colors from "../constants/colors";
@@ -61,7 +62,7 @@ const styles = StyleSheet.create({
 
   left: 16,
   right: 16,
-  bottom: 16,
+  bottom: Platform.OS === "ios" ? 8 : 16,
 
   flexDirection: "row",
   alignItems: "flex-end",
