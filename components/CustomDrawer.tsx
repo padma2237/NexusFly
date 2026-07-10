@@ -53,13 +53,21 @@ export default function CustomDrawer(props: any) {
 
   return (
     <>
-      <DrawerContentScrollView
-        {...props}
-        contentContainerStyle={ {
-          backgroundColor: "#020617",
-          paddingBottom: 20,
-        }}
-        >
+      
+      
+      
+      
+      
+  <DrawerContentScrollView
+  {...props}
+  style={{ backgroundColor: "#020617" }}
+  contentContainerStyle={{ paddingBottom: 20 }}
+>
+    
+    
+    
+    
+    
         <Text style={styles.logo}>NexusFly</Text>
 
         <TouchableOpacity
@@ -84,7 +92,6 @@ export default function CustomDrawer(props: any) {
         </Text>
 
         {conversations.map((chat) => (
-
 
           <View
             key={chat.id}
@@ -156,7 +163,10 @@ export default function CustomDrawer(props: any) {
             </TouchableOpacity>
           </View>))}
 
-        <DrawerItem
+      </DrawerContentScrollView>
+      
+      <View style={styles.bottomSection}>
+      <DrawerItem
           label="Settings"
           labelStyle={styles.label}
           icon={({ color, size }) => (
@@ -170,7 +180,7 @@ export default function CustomDrawer(props: any) {
           props.navigation.navigate("Settings")
           }
           />
-      </DrawerContentScrollView>
+          </View>
 
       <CustomModal
         visible={renameModalVisible}
@@ -195,7 +205,6 @@ export default function CustomDrawer(props: any) {
               value.trim()
             );
           }
-
           setRenameModalVisible(false);
           setSelectedConversation(null);
         }}
@@ -216,14 +225,12 @@ export default function CustomDrawer(props: any) {
           if (selectedChatId) {
             deleteConversation(selectedChatId);
           }
-
           setDeleteModalVisible(false);
           setSelectedChatId(null);
         }}
         />
     </>
   );
-
 }
 
   const styles = StyleSheet.create({
@@ -265,4 +272,12 @@ export default function CustomDrawer(props: any) {
       color: "white",
       fontSize: 15,
     },
+    
+    bottomSection: {
+  borderTopWidth: 1,
+  borderTopColor: "#1e293b",
+  backgroundColor: "#020617",
+  paddingTop: 8,
+},
+
   });

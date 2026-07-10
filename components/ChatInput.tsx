@@ -15,6 +15,7 @@ interface ChatInputProps {
   onChangeText: (text: string) => void;
   onSend: () => void;
   isLoading: boolean;
+  onHeightChange?: (height: number) => void;
 }
 
 export default function ChatInput({
@@ -22,9 +23,15 @@ export default function ChatInput({
   onChangeText,
   onSend,
   isLoading,
+  onHeightChange,
 }: ChatInputProps) {
   return (
-    <View style={styles.container}>
+    <View
+  style={styles.container}
+  onLayout={(e) =>
+    onHeightChange?.(e.nativeEvent.layout.height)
+  }
+>
       <TouchableOpacity style={styles.iconButton}>
         <Mic color="#a78bfa" size={22} />
       </TouchableOpacity>

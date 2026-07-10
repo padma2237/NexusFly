@@ -10,6 +10,7 @@ import {
   StyleSheet,
   Keyboard,
   View,
+  
 } from "react-native";
 import {
   SafeAreaView
@@ -51,11 +52,34 @@ export default function ChatScreen() {
   const messages = currentConversation?.messages ?? [];
 
   const flatListRef = useRef < FlatList < Message>>(null);
+  const contentHeight = useRef(0);
+  
+  const isUserNearBottom = useRef(true);
+  
+const [inputHeight, setInputHeight] = useState(0);
+
+const [listHeight, setListHeight] = useState(0);
+  
 
   const [inputText,
     setInputText] = useState("");
   const [isLoading,
     setIsLoading] = useState(false);
+    
+  const scrollToLatest = () => {
+  setTimeout(() => {
+    const offset = Math.max(
+      0,
+      contentHeight.current - listHeight + inputHeight + 32
+    );
+
+    flatListRef.current?.scrollToOffset({
+      offset,
+      animated: true,
+    });
+  }, 100);
+};
+    
     useEffect(() => {
   setInputText("");
 }, [currentConversationId]);
@@ -95,11 +119,7 @@ export default function ChatScreen() {
     );
     
     
-    setTimeout(() => {
-  flatListRef.current?.scrollToEnd({
-    animated: true,
-  });
-}, 100);
+    scrollToLatest();
 
 
     setInputText("");
@@ -126,6 +146,9 @@ export default function ChatScreen() {
           }: chat
         )
       );
+      
+      scrollToLatest();
+
   
 
     } catch {
@@ -167,7 +190,10 @@ export default function ChatScreen() {
         />
 
       <KeyboardAvoidingView
-        style={styles.chatWrapper}
+  style={styles.chatWrapper}
+  onLayout={(e) => {
+    setListHeight(e.nativeEvent.layout.height);
+  }}
         behavior={Platform.OS === "ios" ? "padding": "height"}
         >
         <FlatList
@@ -175,18 +201,36 @@ export default function ChatScreen() {
   data={messages}
   keyExtractor={(item) => item.id}
   renderItem={({ item }) => <ChatBubble message={item} />}
-  contentContainerStyle={styles.chatScroll}
+  contentContainerStyle={[
+  styles.chatScroll,
+  {
+    paddingBottom: inputHeight + 24,
+  },
+]}
+  
   keyboardShouldPersistTaps="handled"
-  ListFooterComponent={
+scrollEventThrottle={16}
+
+onScroll={({ nativeEvent }) => {
+  const { layoutMeasurement, contentOffset, contentSize } = nativeEvent;
+
+  isUserNearBottom.current =
+    layoutMeasurement.height + contentOffset.y >=
+    contentSize.height - 120;
+}}
+
+ListFooterComponent={
   isLoading ? <TypingIndicator /> : null
 }
-  onContentSizeChange={() => {
-  if (isLoading) {
-    flatListRef.current?.scrollToEnd({
-      animated: true,
-    });
+
+onContentSizeChange={(width, height) => {
+  contentHeight.current = height;
+
+  if (isLoading || isUserNearBottom.current) {
+    scrollToLatest();
   }
 }}
+
 />
           
         <ChatInput
@@ -194,6 +238,7 @@ export default function ChatScreen() {
           onChangeText={setInputText}
           onSend={handleSend}
           isLoading={isLoading}
+          onHeightChange={setInputHeight}
           />
       </KeyboardAvoidingView>
     </SafeAreaView>

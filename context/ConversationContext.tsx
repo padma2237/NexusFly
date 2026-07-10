@@ -53,20 +53,33 @@ export function ConversationProvider({
   conversations.find(
     (chat) => chat.id === currentConversationId
   ) ?? null;
-
+  
+  
   const createNewConversation = () => {
-    const newConversation: Conversation = {
-      id: Date.now().toString(),
-      title: "New Chat",
-      messages: [],
-      createdAt: Date.now(),
-      updatedAt: Date.now(),
-    };
+  // If current chat is empty, reuse it
+  if (
+    currentConversation &&
+    currentConversation.messages.length === 0
+  ) {
+    setCurrentConversationId(currentConversation.id);
+    return currentConversation;
+  }
 
-    setConversations((prev) => [newConversation, ...prev]);
-    setCurrentConversationId(newConversation.id);
-    return newConversation;
+  const newConversation: Conversation = {
+    id: Date.now().toString(),
+    title: "New Chat",
+    messages: [],
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
   };
+
+  setConversations((prev) => [newConversation, ...prev]);
+  setCurrentConversationId(newConversation.id);
+
+  return newConversation;
+};
+  
+  
 
   const deleteConversation = (id: string) => {
     const updated = conversations.filter((chat) => chat.id !== id);
