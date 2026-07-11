@@ -2,7 +2,10 @@ import { Message } from "../types/chat";
 
 const API_URL = "https://nexusfly-backend.onrender.com/ask";
 
-export async function sendMessage(messages: Message[]): Promise<string> {
+export async function sendMessage(
+  messages: Message[],
+  webSearch: boolean
+): Promise<string> {
   try {
     const response = await fetch(API_URL, {
       method: "POST",
@@ -10,6 +13,7 @@ export async function sendMessage(messages: Message[]): Promise<string> {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        webSearch,
         contents: messages.map((msg) => ({
           role: msg.role,
           parts: [{ text: msg.text }],
@@ -17,18 +21,23 @@ export async function sendMessage(messages: Message[]): Promise<string> {
       }),
     });
 
+    console.log("Status:", response.status);
+
+    const text = await response.text();
+    console.log("Response:", text);
+
     if (!response.ok) {
-      throw new Error("Network error");
+      return `Server Error (${response.status})`;
     }
 
-    const data = await response.json();
+    const data = JSON.parse(text);
 
     return (
-      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+      data?.candidates?.[0]?.content?.parts?.[0]?.text ??
       "No response received."
     );
   } catch (error) {
-    console.error(error);
+    console.error("Fetch Error:", error);
     return "❌ Unable to connect to NexusFly.";
   }
 }

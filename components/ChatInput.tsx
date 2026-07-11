@@ -10,13 +10,20 @@ import {
 import { Mic, Send } from "lucide-react-native";
 import Colors from "../constants/colors";
 
+import WebSearchToggle from "./WebSearchToggle";
+
+
 interface ChatInputProps {
   value: string;
   onChangeText: (text: string) => void;
   onSend: () => void;
   isLoading: boolean;
   onHeightChange?: (height: number) => void;
-}
+  
+  webSearchEnabled: boolean;
+onToggleWebSearch: () => void;
+ }
+
 
 export default function ChatInput({
   value,
@@ -24,6 +31,9 @@ export default function ChatInput({
   onSend,
   isLoading,
   onHeightChange,
+  webSearchEnabled,
+onToggleWebSearch,
+  
 }: ChatInputProps) {
   return (
     <View
@@ -32,9 +42,16 @@ export default function ChatInput({
     onHeightChange?.(e.nativeEvent.layout.height)
   }
 >
-      <TouchableOpacity style={styles.iconButton}>
-        <Mic color="#a78bfa" size={22} />
-      </TouchableOpacity>
+    <View style={styles.leftButtons}>
+  <TouchableOpacity style={styles.iconButton}>
+    <Mic color="#a78bfa" size={22} />
+  </TouchableOpacity>
+
+  <WebSearchToggle
+    enabled={webSearchEnabled}
+    onToggle={onToggleWebSearch}
+  />
+</View>
 
       <TextInput
         style={styles.input}
@@ -105,4 +122,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: Colors.primary,
   },
+  
+  leftButtons: {
+  flexDirection: "row",
+  alignItems: "center",
+},
+  
 });
