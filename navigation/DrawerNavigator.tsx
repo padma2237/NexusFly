@@ -24,9 +24,6 @@ export default function DrawerNavigator() {
     backgroundColor: "#020617",
   },
 
-  sceneContainerStyle: {
-    backgroundColor: "#020617",
-  },
 }}
       
       >

@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
 });
-const markdownStyles = {
+const markdownStyles = StyleSheet.create ( {
   body: {
     color: Colors.text,
     fontSize: 16,
@@ -70,14 +70,14 @@ const markdownStyles = {
   heading1: {
     color: Colors.text,
     fontSize: 28,
-    fontWeight: "700",
+    fontWeight: "bold",
     marginBottom: 10,
   },
 
   heading2: {
     color: Colors.text,
     fontSize: 24,
-    fontWeight: "700",
+    fontWeight: "bold",
     marginBottom: 8,
   },
 
@@ -105,11 +105,11 @@ const markdownStyles = {
 
   strong: {
     color: Colors.text,
-    fontWeight: "700",
+    fontWeight: "bold",
   },
 
   em: {
     color: Colors.text,
     fontStyle: "italic",
   },
-};
+});

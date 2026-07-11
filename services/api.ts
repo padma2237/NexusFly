@@ -21,10 +21,8 @@ export async function sendMessage(
       }),
     });
 
-    console.log("Status:", response.status);
-
-    const text = await response.text();
-    console.log("Response:", text);
+ const text = await response.text();
+  
 
     if (!response.ok) {
       return `Server Error (${response.status})`;
