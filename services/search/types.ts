@@ -13,3 +13,8 @@ export interface SearchResponse {
 export interface SearchProvider {
   search(query: string): Promise<SearchResponse>;
 }
+
+export interface ApiResponse {
+  answer: string;
+  sources: SearchResult[];
+}

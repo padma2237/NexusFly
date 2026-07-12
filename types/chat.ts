@@ -1,7 +1,11 @@
+
+import { SearchResult } from "../services/search/types";
+
 export interface Message {
   id: string;
   role: "user" | "assistant";
   text: string;
+  sources?: SearchResult[];
   createdAt: number;
 }
 

@@ -132,14 +132,15 @@ export default function ChatScreen() {
     setIsLoading(true);
 
     try {
-      const aiText = await sendMessage(updatedMessages, webSearchEnabled);
+      const result = await sendMessage(updatedMessages, webSearchEnabled);
 
-      const assistantMessage: Message = {
-        id: Date.now().toString(),
-        role: "assistant",
-        text: aiText,
-        createdAt: Date.now(),
-      };
+const assistantMessage: Message = {
+  id: Date.now().toString(),
+  role: "assistant",
+  text: result.answer,
+  sources: result.sources,
+  createdAt: Date.now(),
+};
 
       setConversations((prev) =>
         prev.map((chat) =>

@@ -1,11 +1,12 @@
 import { Message } from "../types/chat";
+import { ApiResponse } from "./search/types";
 
 const API_URL = "https://nexusfly-backend.onrender.com/ask";
 
 export async function sendMessage(
   messages: Message[],
   webSearch: boolean
-): Promise<string> {
+): Promise<ApiResponse> {
   try {
     const response = await fetch(API_URL, {
       method: "POST",
@@ -25,17 +26,23 @@ export async function sendMessage(
   
 
     if (!response.ok) {
-      return `Server Error (${response.status})`;
+      return {
+  answer: `Server Error (${response.status})`,
+  sources: [],
+};
     }
 
-    const data = JSON.parse(text);
+    
+    const data: ApiResponse = JSON.parse(text);
 
-    return (
-      data?.candidates?.[0]?.content?.parts?.[0]?.text ??
-      "No response received."
-    );
+return data;
+    
+    
+    
   } catch (error) {
     console.error("Fetch Error:", error);
-    return "❌ Unable to connect to NexusFly.";
-  }
+    return {
+  answer: "❌ Unable to connect to NexusFly.",
+  sources: [],
+};}
 }
