@@ -10,8 +10,11 @@ import {
   StyleSheet,
   Keyboard,
   View,
+  TouchableWithoutFeedback,
 
 } from "react-native";
+
+
 import {
   SafeAreaView
 } from "react-native-safe-area-context";
@@ -122,9 +125,11 @@ export default function ChatScreen() {
         }: chat
       )
     );
-
-
-    scrollToLatest();
+    
+    
+    
+    
+    
 
 
     setInputText("");
@@ -153,7 +158,11 @@ const assistantMessage: Message = {
         )
       );
 
-      scrollToLatest();
+      setTimeout(() => {
+  flatListRef.current?.scrollToEnd({
+    animated: true,
+  });
+}, 50);
 
 
 
@@ -179,6 +188,64 @@ const assistantMessage: Message = {
       setIsLoading(false);
     }
   };
+  
+  const handleRegenerate = async () => {
+  if (messages.length < 2 || isLoading) return;
+
+  // Find the last user message
+  const lastUserIndex = [...messages]
+    .reverse()
+    .findIndex((m) => m.role === "user");
+
+  if (lastUserIndex === -1) return;
+
+  const userIndex = messages.length - 1 - lastUserIndex;
+
+  const updatedMessages = messages.slice(0, userIndex + 1);
+
+  setConversations((prev) =>
+    prev.map((chat) =>
+      chat.id === currentConversationId
+        ? {
+            ...chat,
+            messages: updatedMessages,
+            updatedAt: Date.now(),
+          }
+        : chat
+    )
+  );
+
+  setIsLoading(true);
+
+  try {
+    const result = await sendMessage(
+      updatedMessages,
+      webSearchEnabled
+    );
+
+    const assistantMessage: Message = {
+      id: Date.now().toString(),
+      role: "assistant",
+      text: result.answer,
+      sources: result.sources,
+      createdAt: Date.now(),
+    };
+
+    setConversations((prev) =>
+      prev.map((chat) =>
+        chat.id === currentConversationId
+          ? {
+              ...chat,
+              messages: [...updatedMessages, assistantMessage],
+              updatedAt: Date.now(),
+            }
+          : chat
+      )
+    );
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <SafeAreaView style={styles.container}>
@@ -195,6 +262,10 @@ const assistantMessage: Message = {
         }
         />
 
+<TouchableWithoutFeedback
+  onPress={Keyboard.dismiss}
+  accessible={false}
+>
       <KeyboardAvoidingView
         style={styles.chatWrapper}
         onLayout={(e) => {
@@ -206,7 +277,17 @@ const assistantMessage: Message = {
           ref={flatListRef}
           data={messages}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <ChatBubble message={item} />}
+          renderItem={({ item, index }) => (
+  <ChatBubble
+    message={item}
+    onRegenerate={
+      index === messages.length - 1 &&
+      item.role === "assistant"
+        ? handleRegenerate
+        : undefined
+    }
+  />
+)}
           contentContainerStyle={[
             styles.chatScroll,
             {
@@ -234,12 +315,12 @@ const assistantMessage: Message = {
           }
 
           onContentSizeChange={(width, height) => {
-            contentHeight.current = height;
+  contentHeight.current = height;
 
-            if (isLoading || isUserNearBottom.current) {
-              scrollToLatest();
-            }
-          }}
+  if (isLoading) {
+    scrollToLatest();
+  }
+}}
 
           />
         <ChatInput
@@ -254,6 +335,7 @@ const assistantMessage: Message = {
           }
           />
       </KeyboardAvoidingView>
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 }

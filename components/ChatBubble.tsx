@@ -5,22 +5,109 @@ import {
   StyleSheet,
   Pressable,
   Linking,
+  Alert,
+  Share,
+  Keyboard,
+  BackHandler,
 } from "react-native";
+
+import * as Clipboard from "expo-clipboard";
+
 import Colors from "../constants/colors";
 import {
   Message
 } from "../types/chat";
 import Markdown from "react-native-markdown-display";
 
+import { useEffect, useRef } from "react";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import MessageActionSheet from "./MessageActionSheet";
+
+
 
 interface ChatBubbleProps {
   message: Message;
-}
+  onRegenerate?: () => void;
+} 
+
+
+
+
+
 
 export default function ChatBubble({
-  message
+  message,
+  onRegenerate,
 }: ChatBubbleProps) {
   const isUser = message.role === "user";
+  const sheetRef = useRef<BottomSheetModal>(null);
+  
+  const [isSheetOpen, setIsSheetOpen] = React.useState(false);
+
+useEffect(() => {
+  const subscription = BackHandler.addEventListener(
+    "hardwareBackPress",
+    () => {
+      if (isSheetOpen) {
+        sheetRef.current?.dismiss();
+        return true;
+      }
+
+      return false;
+    }
+  );
+
+  return () => subscription.remove();
+}, [isSheetOpen]);
+
+
+  const copyMessage = async () => {
+  await Clipboard.setStringAsync(message.text);
+
+};
+
+const shareMessage = async () => {
+  try {
+    await Share.share({
+      message: message.text,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const showMenu = () => {
+  Alert.alert(
+    "Message",
+    "Choose an action",
+    [
+      {
+        text: "📋 Copy",
+        onPress: () => {
+          copyMessage();
+        },
+      },
+      {
+        text: "📤 Share",
+        onPress: () => {
+          shareMessage();
+        },
+      },
+      ...(onRegenerate
+        ? [
+            {
+              text: "🔄 Regenerate",
+              onPress: onRegenerate,
+            },
+          ]
+        : []),
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+    ]
+  );
+};
   
   
   
@@ -33,50 +120,72 @@ export default function ChatBubble({
 };
 
   return (
-    <View
+  <>
+    <Pressable
+      onLongPress={
+  !isUser
+    ? () => {
+        Keyboard.dismiss();
+
+        setTimeout(() => {
+          sheetRef.current?.present();
+        }, 120);
+      }
+    : undefined
+}
+      delayLongPress={350}
       style={[
         styles.bubble,
-        isUser ? styles.userBubble: styles.aiBubble,
-      ]}>
-
+        isUser ? styles.userBubble : styles.aiBubble,
+      ]}
+    >
       {isUser ? (
         <Text style={styles.text}>{message.text}</Text>
-      ): (
+      ) : (
         <>
-          <Markdown style={markdownStyles}>
+          <Markdown
+            style={markdownStyles}
+            mergeStyle={true}
+          >
             {message.text}
           </Markdown>
 
           {message.sources && message.sources.length > 0 && (
             <>
-              
-              
-      <Text style={styles.sourceTitle}>
-  📚 Sources
-</Text>
+              <Text style={styles.sourceTitle}>
+                📚 Sources
+              </Text>
 
-{message.sources.map((source, index) => (
-  <Pressable
-    key={index}
-    style={styles.sourceCard}
-    onPress={() => Linking.openURL(source.url)}
-  >
-    <Text style={styles.sourceName}>
-      🌐 {source.title}
-    </Text>
+              {message.sources.map((source, index) => (
+                <Pressable
+                  key={index}
+                  style={styles.sourceCard}
+                  onPress={() => Linking.openURL(source.url)}
+                >
+                  <Text style={styles.sourceName}>
+                    🌐 {source.title}
+                  </Text>
 
-    <Text style={styles.sourceDomain}>
-      {getDomain(source.url)}
-    </Text>
-  </Pressable>
-))}
-         </>
+                  <Text style={styles.sourceDomain}>
+                    {getDomain(source.url)}
+                  </Text>
+                </Pressable>
+              ))}
+            </>
+          )}
+        </>
       )}
-    </>
-   )}
+    </Pressable>
 
-    </View>
-  );
+    <MessageActionSheet
+      ref={sheetRef}
+      onCopy={copyMessage}
+      onShare={shareMessage}
+      onRegenerate={onRegenerate}
+      onChange={(index) => setIsSheetOpen(index >= 0)}
+    />
+  </>
+);
 }
 
   const styles = StyleSheet.create({
