@@ -129,7 +129,9 @@ export default function ChatScreen() {
     setIsLoading(true);
 
     try {
+
       const result = await sendMessage(updatedMessages, webSearchEnabled);
+
 
       const assistantMessage: Message = {
         id: Date.now().toString(),
@@ -158,7 +160,9 @@ export default function ChatScreen() {
 
     }
 
-    catch {
+    catch (error) {
+      console.error(error);
+
       const errorMessage: Message = {
         id: Date.now().toString(),
         role: "assistant",
@@ -365,4 +369,5 @@ export default function ChatScreen() {
       paddingHorizontal: 20,
       paddingTop: 20,
     },
-  });
+  }
+  );

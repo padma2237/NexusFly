@@ -1,12 +1,16 @@
-import { Message } from "../types/chat";
-import { ApiResponse } from "./search/types";
+import {
+  Message
+} from "../types/chat";
+import {
+  ApiResponse
+} from "./search/types";
 
 const API_URL = "https://nexusfly-backend.onrender.com/ask";
 
 export async function sendMessage(
   messages: Message[],
   webSearch: boolean
-): Promise<ApiResponse> {
+): Promise < ApiResponse > {
   try {
     const response = await fetch(API_URL, {
       method: "POST",
@@ -17,32 +21,39 @@ export async function sendMessage(
         webSearch,
         contents: messages.map((msg) => ({
           role: msg.role,
-          parts: [{ text: msg.text }],
+          parts: [{
+            text: msg.text
+          }],
         })),
       }),
     });
 
- const text = await response.text();
-  
+
+
+    const text = await response.text();
 
     if (!response.ok) {
       return {
-  answer: `Server Error (${response.status})`,
-  sources: [],
-};
+        answer: `Server Error (${response.status})`,
+        sources: [],
+      };
     }
 
-    
-    const data: ApiResponse = JSON.parse(text);
+    try {
+      return JSON.parse(text) as ApiResponse;
+    } catch {
+      return {
+        answer: "Invalid response from server.",
+        sources: [],
+      };
+    }
+  }
 
-return data;
-    
-    
-    
-  } catch (error) {
+  catch (error) {
     console.error("Fetch Error:", error);
     return {
-  answer: "❌ Unable to connect to NexusFly.",
-  sources: [],
-};}
+      answer: "❌ Unable to connect to NexusFly.",
+      sources: [],
+    };
+  }
 }
