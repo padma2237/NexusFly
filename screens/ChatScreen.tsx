@@ -1,7 +1,8 @@
 import React, {
   useRef,
   useState,
-  useEffect
+  useEffect,
+  useCallback,
 } from "react";
 import {
   FlatList,
@@ -11,9 +12,7 @@ import {
   Keyboard,
   View,
   TouchableWithoutFeedback,
-
 } from "react-native";
-
 
 import {
   SafeAreaView
@@ -67,7 +66,6 @@ export default function ChatScreen() {
 
   const [webSearchEnabled,
     setWebSearchEnabled] = useState(false);
-
 
   const [inputText,
     setInputText] = useState("");
@@ -125,24 +123,21 @@ export default function ChatScreen() {
         }: chat
       )
     );
-    
-    
-  
+
     setInputText("");
     Keyboard.dismiss();
     setIsLoading(true);
-    
 
     try {
       const result = await sendMessage(updatedMessages, webSearchEnabled);
 
-const assistantMessage: Message = {
-  id: Date.now().toString(),
-  role: "assistant",
-  text: result.answer,
-  sources: result.sources,
-  createdAt: Date.now(),
-};
+      const assistantMessage: Message = {
+        id: Date.now().toString(),
+        role: "assistant",
+        text: result.answer,
+        sources: result.sources,
+        createdAt: Date.now(),
+      };
 
       setConversations((prev) =>
         prev.map((chat) =>
@@ -156,14 +151,14 @@ const assistantMessage: Message = {
       );
 
       setTimeout(() => {
-  flatListRef.current?.scrollToEnd({
-    animated: true,
-  });
-}, 50);
+        flatListRef.current?.scrollToEnd({
+          animated: true,
+        });
+      }, 50);
 
-} 
+    }
 
-catch {
+    catch {
       const errorMessage: Message = {
         id: Date.now().toString(),
         role: "assistant",
@@ -185,64 +180,86 @@ catch {
       setIsLoading(false);
     }
   };
-  
-  const handleRegenerate = async () => {
-  if (messages.length < 2 || isLoading) return;
 
-  // Find the last user message
-  const lastUserIndex = [...messages]
+  const handleRegenerate = useCallback (async () => {
+    if (messages.length < 2 || isLoading) return;
+
+    // Find the last user message
+    const lastUserIndex = [...messages]
     .reverse()
     .findIndex((m) => m.role === "user");
 
-  if (lastUserIndex === -1) return;
+    if (lastUserIndex === -1) return;
 
-  const userIndex = messages.length - 1 - lastUserIndex;
+    const userIndex = messages.length - 1 - lastUserIndex;
 
-  const updatedMessages = messages.slice(0, userIndex + 1);
-
-  setConversations((prev) =>
-    prev.map((chat) =>
-      chat.id === currentConversationId
-        ? {
-            ...chat,
-            messages: updatedMessages,
-            updatedAt: Date.now(),
-          }
-        : chat
-    )
-  );
-
-  setIsLoading(true);
-
-  try {
-    const result = await sendMessage(
-      updatedMessages,
-      webSearchEnabled
-    );
-
-    const assistantMessage: Message = {
-      id: Date.now().toString(),
-      role: "assistant",
-      text: result.answer,
-      sources: result.sources,
-      createdAt: Date.now(),
-    };
+    const updatedMessages = messages.slice(0, userIndex + 1);
 
     setConversations((prev) =>
       prev.map((chat) =>
         chat.id === currentConversationId
-          ? {
-              ...chat,
-              messages: [...updatedMessages, assistantMessage],
-              updatedAt: Date.now(),
-            }
-          : chat
+        ? {
+          ...chat,
+          messages: updatedMessages,
+          updatedAt: Date.now(),
+        }: chat
       )
     );
-  } finally {
-    setIsLoading(false);
-  }
-};
+
+    setIsLoading(true);
+
+    try {
+      const result = await sendMessage(
+        updatedMessages,
+        webSearchEnabled
+      );
+
+      const assistantMessage: Message = {
+        id: Date.now().toString(),
+        role: "assistant",
+        text: result.answer,
+        sources: result.sources,
+        createdAt: Date.now(),
+      };
+
+      setConversations((prev) =>
+        prev.map((chat) =>
+          chat.id === currentConversationId
+          ? {
+            ...chat,
+            messages: [...updatedMessages, assistantMessage],
+            updatedAt: Date.now(),
+          }: chat
+        )
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  },
+    [messages,
+      currentConversationId,
+      webSearchEnabled,
+      isLoading]);
+
+  const renderItem = useCallback(
+    ({
+      item, index
+    }: {
+      item: Message; index: number
+    }) => (
+      <ChatBubble
+        message={item}
+        onRegenerate={
+        index === messages.length - 1 &&
+        item.role === "assistant"
+        ? handleRegenerate: undefined
+        }
+        />
+    ),
+    [messages,
+      handleRegenerate]
+  );
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -259,84 +276,81 @@ catch {
         }
         />
 
-<TouchableWithoutFeedback
-  onPress={Keyboard.dismiss}
-  accessible={false}
->
-      <KeyboardAvoidingView
-        style={styles.chatWrapper}
-        onLayout={(e) => {
-          setListHeight(e.nativeEvent.layout.height);
-        }}
-        behavior={Platform.OS === "ios" ? "padding": "height"}
+      <TouchableWithoutFeedback
+        onPress={Keyboard.dismiss}
+        accessible={false}
         >
-        <FlatList
-          ref={flatListRef}
-          data={messages}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item, index }) => (
-  <ChatBubble
-    message={item}
-    onRegenerate={
-      index === messages.length - 1 &&
-      item.role === "assistant"
-        ? handleRegenerate
-        : undefined
-    }
-  />
-)}
-          contentContainerStyle={[
-            styles.chatScroll,
-            {
-              paddingBottom: inputHeight + 24,
-            },
-          ]}
-
-          keyboardShouldPersistTaps="handled"
-          scrollEventThrottle={16}
-
-          onScroll={({
-            nativeEvent
-          }) => {
-            const {
-              layoutMeasurement, contentOffset, contentSize
-            } = nativeEvent;
-
-            isUserNearBottom.current =
-            layoutMeasurement.height + contentOffset.y >=
-            contentSize.height - 120;
+        <KeyboardAvoidingView
+          style={styles.chatWrapper}
+          onLayout={(e) => {
+            setListHeight(e.nativeEvent.layout.height);
           }}
+          behavior={Platform.OS === "ios" ? "padding": "height"}
+          >
+          <FlatList
+            ref={flatListRef}
+            data={messages}
+            initialNumToRender={12}
+            maxToRenderPerBatch={8}
+            windowSize={7}
+            removeClippedSubviews={Platform.OS === "android"}
+            keyExtractor={(item) => item.id}
 
-          ListFooterComponent={
-          isLoading ? <TypingIndicator />: null
-          }
+            renderItem={renderItem}
 
-          onContentSizeChange={(width, height) => {
-  contentHeight.current = height;
+            contentContainerStyle={[
+              styles.chatScroll,
+              {
+                paddingBottom: inputHeight + 24,
+              },
+            ]}
 
-  if (isLoading) {
-    scrollToLatest();
-  }
-}}
+            keyboardShouldPersistTaps="handled"
+            scrollEventThrottle={16}
 
-          />
-        <ChatInput
-          value={inputText}
-          onChangeText={setInputText}
-          onSend={handleSend}
-          isLoading={isLoading}
-          onHeightChange={setInputHeight}
-          webSearchEnabled={webSearchEnabled}
-          onToggleWebSearch={() =>
-          setWebSearchEnabled((prev) => !prev)
-          }
-          />
-      </KeyboardAvoidingView>
+            onScroll={({
+              nativeEvent
+            }) => {
+              const {
+                layoutMeasurement,
+                contentOffset,
+                contentSize
+              } = nativeEvent;
+
+              isUserNearBottom.current =
+              layoutMeasurement.height + contentOffset.y >=
+              contentSize.height - 120;
+            }}
+
+            ListFooterComponent={
+            isLoading ? <TypingIndicator />: null
+            }
+
+            onContentSizeChange={(width, height) => {
+              contentHeight.current = height;
+
+              if (isLoading) {
+                scrollToLatest();
+              }
+            }}
+
+            />
+          <ChatInput
+            value={inputText}
+            onChangeText={setInputText}
+            onSend={handleSend}
+            isLoading={isLoading}
+            onHeightChange={setInputHeight}
+            webSearchEnabled={webSearchEnabled}
+            onToggleWebSearch={() =>
+            setWebSearchEnabled((prev) => !prev)
+            }
+            />
+        </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 }
-
   const styles = StyleSheet.create({
     container: {
       flex: 1,
