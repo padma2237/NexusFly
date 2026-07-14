@@ -127,14 +127,11 @@ export default function ChatScreen() {
     );
     
     
-    
-    
-    
-
-
+  
     setInputText("");
     Keyboard.dismiss();
     setIsLoading(true);
+    
 
     try {
       const result = await sendMessage(updatedMessages, webSearchEnabled);
@@ -164,9 +161,9 @@ const assistantMessage: Message = {
   });
 }, 50);
 
+} 
 
-
-    } catch {
+catch {
       const errorMessage: Message = {
         id: Date.now().toString(),
         role: "assistant",
