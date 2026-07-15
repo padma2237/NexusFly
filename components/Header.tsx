@@ -8,14 +8,14 @@ import { SquarePen } from "lucide-react-native";
 interface HeaderProps {
   title: string;
   onMenuPress?: () => void;
-  onSearchPress?: () => void;
+  onNewChatPress?: () => void;
   onSettingsPress?: () => void;
 }
 
 export default function Header({
   title,
   onMenuPress,
-  onSearchPress,
+  onNewChatPress,
   onSettingsPress,
 }: HeaderProps) {
   const { colors } = useTheme();
@@ -40,7 +40,7 @@ export default function Header({
     
     <TouchableOpacity
   style={styles.iconButton}
-  onPress={onSearchPress}>
+  onPress={onNewChatPress}>
   <SquarePen color={colors.text} size={22} />
 </TouchableOpacity>
 

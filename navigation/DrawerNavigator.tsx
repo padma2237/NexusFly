@@ -3,16 +3,19 @@ import {
   createDrawerNavigator
 } from "@react-navigation/drawer";
 
+import { useTheme } from "../theme/useTheme";
+
 import ChatScreen from "../screens/ChatScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import CustomDrawer from "../components/CustomDrawer";
 
 import { Dimensions } from "react-native";
 
-
 const Drawer = createDrawerNavigator();
 
 export default function DrawerNavigator() {
+  const { colors } = useTheme();
+  
   return (
     <Drawer.Navigator
       drawerContent={(props) => (
@@ -25,7 +28,7 @@ export default function DrawerNavigator() {
         drawerType: "back",
         drawerStyle: {
   width: Dimensions.get("window").width * 0.86,
-  backgroundColor: "#020617",
+  backgroundColor: colors.background,
 },
 
 }}

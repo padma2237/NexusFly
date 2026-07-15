@@ -284,7 +284,14 @@ export default function ChatScreen() {
         onMenuPress={() =>
         navigation.dispatch(DrawerActions.openDrawer())
         }
-        onSearchPress={() => {}}
+        onNewChatPress={() => {
+  createNewConversation();
+  Keyboard.dismiss();
+  flatListRef.current?.scrollToOffset({
+    offset: 0,
+    animated: true,
+  });
+}}
         onSettingsPress={() =>
         navigation.navigate("Settings" as never)
         }

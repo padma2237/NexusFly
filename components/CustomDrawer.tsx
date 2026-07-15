@@ -8,6 +8,8 @@ import {
   Platform,
 } from "react-native";
 
+import { useTheme } from "../theme/useTheme";
+
 import CustomModal from "../components/CustomModal";
 
 import {
@@ -26,6 +28,12 @@ import {
 } from "../context/ConversationContext";
 
 export default function CustomDrawer(props: any) {
+  
+  const { colors } = useTheme();
+  const styles = React.useMemo(
+  () => createStyles(colors),
+  [colors]
+);
 
   const [deleteModalVisible,
     setDeleteModalVisible] = React.useState(false);
@@ -55,18 +63,11 @@ export default function CustomDrawer(props: any) {
     <>
       
       
-      
-      
-      
   <DrawerContentScrollView
   {...props}
-  style={{ backgroundColor: "#020617" }}
+  style={{ backgroundColor: colors.background }}
   contentContainerStyle={{ paddingBottom: 20 }}
 >
-    
-    
-    
-    
     
         <Text style={styles.logo}>NexusFly</Text>
 
@@ -233,9 +234,10 @@ export default function CustomDrawer(props: any) {
   );
 }
 
-  const styles = StyleSheet.create({
+  const createStyles = (colors: any) =>
+  StyleSheet.create({
     logo: {
-      color: "white",
+      color: colors.text,
       fontSize: 30,
       fontWeight: "bold",
       marginTop: 25,
@@ -246,7 +248,7 @@ export default function CustomDrawer(props: any) {
     newChat: {
       flexDirection: "row",
       alignItems: "center",
-      backgroundColor: "#4f46e5",
+      backgroundColor: colors.primary,
       marginHorizontal: 15,
       padding: 14,
       borderRadius: 14,
@@ -254,14 +256,14 @@ export default function CustomDrawer(props: any) {
     },
 
     newChatText: {
-      color: "white",
+      color: "#fff",
       marginLeft: 10,
       fontWeight: "600",
       fontSize: 16,
     },
 
     heading: {
-      color: "#94a3b8",
+      color: colors.subText,
       marginLeft: 18,
       marginBottom: 10,
       fontSize: 13,
@@ -269,15 +271,14 @@ export default function CustomDrawer(props: any) {
     },
 
     label: {
-      color: "white",
+      color: colors.text,
       fontSize: 15,
     },
-    
-    bottomSection: {
-  borderTopWidth: 1,
-  borderTopColor: "#1e293b",
-  backgroundColor: "#020617",
-  paddingTop: 8,
-},
 
+    bottomSection: {
+      borderTopWidth: 1,
+      borderTopColor: colors.border,
+      backgroundColor: colors.background,
+      paddingTop: 8,
+    },
   });
