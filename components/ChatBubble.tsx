@@ -13,7 +13,8 @@ import {
 
 import * as Clipboard from "expo-clipboard";
 
-import Colors from "../constants/colors";
+import { useTheme } from "../theme/useTheme";
+
 import {
   Message
 } from "../types/chat";
@@ -40,6 +41,18 @@ function ChatBubble({
   onRegenerate,
 }: ChatBubbleProps) {
   const isUser = message.role === "user";
+  const { colors } = useTheme();
+  
+  const styles = React.useMemo(
+  () => createStyles(colors),
+  [colors]
+);
+
+const markdownStyles = React.useMemo(
+  () => createMarkdownStyles(colors),
+  [colors]
+);
+  
   const sheetRef = useRef < BottomSheetModal > (null);
 
   const [isSheetOpen,
@@ -183,116 +196,111 @@ function ChatBubble({
   );
 }
 
-const styles = StyleSheet.create({
-  bubble: {
-    maxWidth: "90%",
-    padding: 14,
-    borderRadius: 20,
-    marginBottom: 16,
-  },
 
-  userBubble: {
-    alignSelf: "flex-end",
-    backgroundColor: Colors.primary,
-    borderBottomRightRadius: 6,
-  },
 
-  aiBubble: {
-    alignSelf: "flex-start",
-    backgroundColor: Colors.surface,
-    borderBottomLeftRadius: 6,
-    borderWidth: 1,
-    borderColor: Colors.border,
-  },
+const createStyles = (colors: any) =>
+  StyleSheet.create({
+    bubble: {
+      maxWidth: "90%",
+      padding: 14,
+      borderRadius: 20,
+      marginBottom: 16,
+    },
 
-  text: {
-    color: Colors.text,
-    fontSize: 16,
-    lineHeight: 24,
-  },
+    userBubble: {
+      alignSelf: "flex-end",
+      backgroundColor: colors.primary,
+      borderBottomRightRadius: 6,
+    },
 
-  sourceTitle: {
-    color: Colors.text,
-    fontWeight: "bold",
-    marginTop: 14,
-    marginBottom: 8,
-  },
+    aiBubble: {
+      alignSelf: "flex-start",
+      backgroundColor: colors.surface,
+      borderBottomLeftRadius: 6,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
 
-  sourceCard: {
-    backgroundColor: "#0f172a",
-    borderRadius: 12,
-    padding: 12,
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: "#1e293b",
-  },
+    text: {
+      color: colors.text,
+      fontSize: 16,
+      lineHeight: 24,
+    },
 
-  sourceName: {
-    color: Colors.text,
-    fontWeight: "bold",
-    fontSize: 15,
-  },
+    sourceTitle: {
+      color: colors.text,
+      fontWeight: "bold",
+      marginTop: 14,
+      marginBottom: 8,
+    },
 
-  sourceDomain: {
-    color: "#94a3b8",
-    marginTop: 4,
-    fontSize: 13,
-  },
+    sourceCard: {
+      backgroundColor: colors.background,
+      borderRadius: 12,
+      padding: 12,
+      marginBottom: 10,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
 
-});
-const markdownStyles = StyleSheet.create ( {
-  body: {
-    color: Colors.text,
-    fontSize: 16,
-    lineHeight: 24,
-  },
+    sourceName: {
+      color: colors.text,
+      fontWeight: "bold",
+      fontSize: 15,
+    },
 
-  heading1: {
-    color: Colors.text,
-    fontSize: 28,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
+    sourceDomain: {
+      color: colors.subText,
+      marginTop: 4,
+      fontSize: 13,
+    },
+  });
 
-  heading2: {
-    color: Colors.text,
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 8,
-  },
+const createMarkdownStyles = (colors: any) =>
+  StyleSheet.create({
+    body: {
+      color: colors.text,
+      fontSize: 16,
+      lineHeight: 24,
+    },
 
-  code_inline: {
-    backgroundColor: "#1e293b",
-    color: "#38bdf8",
-    paddingHorizontal: 4,
-    borderRadius: 4,
-  },
+    heading1: {
+      color: colors.text,
+    },
 
-  code_block: {
-    backgroundColor: "#0f172a",
-    color: "#38bdf8",
-    padding: 12,
-    borderRadius: 10,
-  },
+    heading2: {
+      color: colors.text,
+    },
 
-  bullet_list: {
-    color: Colors.text,
-  },
+    strong: {
+      color: colors.text,
+    },
 
-  ordered_list: {
-    color: Colors.text,
-  },
+    em: {
+      color: colors.text,
+    },
 
-  strong: {
-    color: Colors.text,
-    fontWeight: "bold",
-  },
+    bullet_list: {
+      color: colors.text,
+    },
 
-  em: {
-    color: Colors.text,
-    fontStyle: "italic",
-  },
+    ordered_list: {
+      color: colors.text,
+    },
 
-});
+    code_inline: {
+      backgroundColor: colors.background,
+      color: colors.primary,
+      paddingHorizontal: 4,
+      borderRadius: 4,
+    },
+
+    code_block: {
+      backgroundColor: colors.background,
+      color: colors.primary,
+      padding: 12,
+      borderRadius: 10,
+    },
+  });
 
 export default React.memo(ChatBubble);

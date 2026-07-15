@@ -24,7 +24,8 @@ import {
 import Header from "../components/Header";
 import ChatBubble from "../components/ChatBubble";
 import ChatInput from "../components/ChatInput";
-import Colors from "../constants/colors";
+import { useTheme } from "../theme/useTheme";
+
 import {
   sendMessage
 } from "../services/api";
@@ -50,6 +51,13 @@ export default function ChatScreen() {
   } = useConversation();
 
   const navigation = useNavigation();
+  
+  const { colors, themeName, setTheme } = useTheme();
+  
+  const styles = React.useMemo(
+  () => createStyles(colors),
+  [colors]
+);
 
   const messages = currentConversation?.messages ?? [];
 
@@ -91,7 +99,9 @@ export default function ChatScreen() {
   }, [currentConversationId]);
 
   const handleSend = async () => {
-    if (!inputText.trim() || isLoading) return;
+    if (!inputText.trim() || isLoading) 
+    
+    return;
 
     let activeConversation = currentConversation;
 
@@ -355,10 +365,13 @@ export default function ChatScreen() {
     </SafeAreaView>
   );
 }
-  const styles = StyleSheet.create({
+  
+  const createStyles = (colors: any) =>
+  
+  StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: Colors.background,
+      backgroundColor: colors.background,
     },
 
     chatWrapper: {
@@ -367,7 +380,7 @@ export default function ChatScreen() {
 
     chatScroll: {
       paddingHorizontal: 20,
-      paddingTop: 20,
+      paddingTop: 80,
     },
   }
   );

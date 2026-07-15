@@ -1,7 +1,9 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Menu, Search, Settings } from "lucide-react-native";
-import Colors from "../constants/colors";
+import { useTheme } from "../theme/useTheme";
+
+import { SquarePen } from "lucide-react-native";
 
 interface HeaderProps {
   title: string;
@@ -16,49 +18,128 @@ export default function Header({
   onSearchPress,
   onSettingsPress,
 }: HeaderProps) {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={onMenuPress}>
-        <Menu color={Colors.text} size={24} />
-      </TouchableOpacity>
+      
+      
 
-      <Text style={styles.title}>{title}</Text>
+  <TouchableOpacity
+    style={styles.leftButton}
+    onPress={onMenuPress}>
+    <Menu color={colors.text} size={24} />
+  </TouchableOpacity>
 
-      <View style={styles.right}>
-        <TouchableOpacity onPress={onSearchPress}>
-          <Search color={Colors.text} size={22} />
-        </TouchableOpacity>
+  <Text style={styles.title}>
+    ✦ NexusFly
+  </Text>
 
-        <TouchableOpacity
-          onPress={onSettingsPress}
-          style={{ marginLeft: 16 }}>
-          <Settings color={Colors.text} size={22} />
-        </TouchableOpacity>
-      </View>
-    </View>
+  <View style={styles.rightButtons}>
+    
+    <TouchableOpacity
+  style={styles.iconButton}
+  onPress={onSearchPress}>
+  <SquarePen color={colors.text} size={22} />
+</TouchableOpacity>
+
+    <TouchableOpacity
+      style={styles.iconButton}
+      onPress={onSettingsPress}>
+      <Settings color={colors.text} size={22} />
+    </TouchableOpacity>
+  </View>
+
+</View>
+    
   );
 }
 
-const styles = StyleSheet.create({
+const createStyles = (colors: any) =>
+  StyleSheet.create({
   container: {
-    height: 64,
-    backgroundColor: Colors.background,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 16,
-  },
+  position: "absolute",
 
-  title: {
-    color: Colors.text,
-    fontSize: 22,
-    fontWeight: "700",
-  },
+  top: 30,
+  left: 18,
+  right: 18,
 
-  right: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
+  zIndex: 100,
+
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "center",
+
+  paddingVertical: 10,
+
+  backgroundColor: "transparent",
+},
+
+    
+    
+  leftButton: {
+  position: "absolute",
+  left: 0,
+
+  width: 44,
+  height: 44,
+  borderRadius: 22,
+
+  justifyContent: "center",
+  alignItems: "center",
+
+  backgroundColor: colors.surface,
+
+  borderWidth: 1,
+  borderColor: colors.border,
+
+  elevation: 3,
+
+  shadowColor: "#000",
+  shadowOpacity: 0.08,
+  shadowRadius: 8,
+  shadowOffset: { width: 0, height: 3 },
+},
+
+title: {
+  alignSelf: "center",
+
+  fontSize: 28,
+letterSpacing: 0.8,
+  fontWeight: "900",
+
+  color: colors.text,
+},
+
+rightButtons: {
+  position: "absolute",
+  right: 0,
+
+  flexDirection: "row",
+
+  gap: 10,
+},
+
+iconButton: {
+  width: 44,
+  height: 44,
+  borderRadius: 22,
+
+  justifyContent: "center",
+  alignItems: "center",
+
+  backgroundColor: colors.surface,
+
+  borderWidth: 1,
+  borderColor: colors.border,
+
+  elevation: 3,
+
+  shadowColor: "#000",
+  shadowOpacity: 0.08,
+  shadowRadius: 8,
+  shadowOffset: { width: 0, height: 3 },
+},
+
 });

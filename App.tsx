@@ -9,6 +9,9 @@ import {
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 
+import { ThemeProvider } from "./theme/ThemeContext";
+
+
 function AppContent() {
   const { isLoading } = useConversation();
 
@@ -27,9 +30,11 @@ export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <BottomSheetModalProvider>
-        <ConversationProvider>
-          <AppContent />
-        </ConversationProvider>
+        <ThemeProvider>
+          <ConversationProvider>
+            <AppContent />
+          </ConversationProvider>
+        </ThemeProvider>
       </BottomSheetModalProvider>
     </GestureHandlerRootView>
   );

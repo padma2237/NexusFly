@@ -7,6 +7,9 @@ import ChatScreen from "../screens/ChatScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import CustomDrawer from "../components/CustomDrawer";
 
+import { Dimensions } from "react-native";
+
+
 const Drawer = createDrawerNavigator();
 
 export default function DrawerNavigator() {
@@ -21,8 +24,9 @@ export default function DrawerNavigator() {
         headerShown: false,
         drawerType: "back",
         drawerStyle: {
-    backgroundColor: "#020617",
-  },
+  width: Dimensions.get("window").width * 0.86,
+  backgroundColor: "#020617",
+},
 
 }}
       
