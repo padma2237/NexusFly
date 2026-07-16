@@ -13,6 +13,7 @@ import {
   View,
   TouchableWithoutFeedback,
 } from "react-native";
+import EmptyState from "../components/EmptyState";
 
 import {
   SafeAreaView
@@ -310,14 +311,30 @@ export default function ChatScreen() {
           >
           <FlatList
             ref={flatListRef}
-            data={messages}
+            
+            data={messages.length === 0 ? [{ id: "empty" } as any] : messages}
             initialNumToRender={12}
             maxToRenderPerBatch={8}
             windowSize={7}
             removeClippedSubviews={Platform.OS === "android"}
             keyExtractor={(item) => item.id}
 
-            renderItem={renderItem}
+            renderItem={({ item, index }) => {
+  if (messages.length === 0) {
+    return (
+      <EmptyState
+        onPromptPress={(prompt) => {
+          setInputText(prompt);
+        }}
+      />
+    );
+  }
+
+  return renderItem({
+    item,
+    index,
+  } as any);
+}}
 
             contentContainerStyle={[
               styles.chatScroll,

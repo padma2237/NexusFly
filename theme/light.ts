@@ -17,6 +17,12 @@ const lightTheme = {
     success: "#16a34a",
     warning: "#d97706",
     error: "#dc2626",
+
+    cardGreen: "#DFF6E4",
+    cardBlue: "#E5F1FF",
+    cardOrange: "#FFF2D8",
+    cardPurple: "#F4E8FF",
+
   },
 };
 

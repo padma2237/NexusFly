@@ -55,14 +55,16 @@ export function ConversationProvider({
   ) ?? null;
   
   
+
   const createNewConversation = () => {
-  // If current chat is empty, reuse it
-  if (
-    currentConversation &&
-    currentConversation.messages.length === 0
-  ) {
-    setCurrentConversationId(currentConversation.id);
-    return currentConversation;
+  // Reuse ANY existing empty chat
+  const existingEmptyChat = conversations.find(
+    (chat) => chat.messages.length === 0
+  );
+
+  if (existingEmptyChat) {
+    setCurrentConversationId(existingEmptyChat.id);
+    return existingEmptyChat;
   }
 
   const newConversation: Conversation = {
