@@ -32,9 +32,10 @@ export default function Header({
     <Menu color={colors.text} size={24} />
   </TouchableOpacity>
 
-  <Text style={styles.title}>
-    ✦ NexusFly
-  </Text>
+  <View style={styles.logoContainer}>
+    <Text style={styles.logoIcon}>✦</Text>
+    <Text style={styles.title}>NexusFly</Text>
+</View>
 
   <View style={styles.rightButtons}>
     
@@ -105,8 +106,8 @@ const createStyles = (colors: any) =>
 title: {
   alignSelf: "center",
 
-  fontSize: 28,
-letterSpacing: 0.8,
+  fontSize: 25,
+letterSpacing: 0.6,
   fontWeight: "900",
 
   color: colors.text,
@@ -118,7 +119,18 @@ rightButtons: {
 
   flexDirection: "row",
 
-  gap: 10,
+  gap: 4,
+},
+
+logoContainer: {
+  flexDirection: "row",
+  alignItems: "center",
+},
+
+logoIcon: {
+  color: colors.primary,
+  fontSize: 24,
+  marginRight: 6,
 },
 
 iconButton: {

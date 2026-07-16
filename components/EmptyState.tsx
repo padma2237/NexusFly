@@ -55,7 +55,12 @@ if (hour >= 12 && hour < 17) {
   {greeting}
 </Text>
 
-<Text style={styles.subtitle}>
+    <Text
+  style={[
+    styles.subtitle,
+    { color: colors.subText },
+  ]}
+>
   Ready to build, learn and explore?
 </Text>
 
@@ -70,6 +75,10 @@ if (hour >= 12 && hour < 17) {
   entering={FadeInUp.delay(index * 100).springify()}
 >
   <TouchableOpacity
+  activeOpacity={0.8}
+  android_ripple={{
+    color: "rgba(255,255,255,0.12)",
+  }}
         
           onPress={() => onPromptPress(item.title)}
           style={[
@@ -80,9 +89,22 @@ if (hour >= 12 && hour < 17) {
             },
           ]}
         >
-          <Text style={[styles.cardText, { color: colors.text }]}>
-            {item.icon} {item.title}
-          </Text>
+         
+         <View style={styles.cardContent}>
+  <Text style={[styles.cardText, { color: colors.text }]}>
+    {item.icon} {item.title}
+  </Text>
+
+  <Text
+    style={[
+      styles.arrow,
+      { color: colors.subText },
+    ]}
+  >
+    →
+  </Text>
+</View>
+         
         </TouchableOpacity>
         </Animated.View>
       ))}
@@ -111,7 +133,7 @@ const styles = StyleSheet.create({
   },
 
   question: {
-    marginTop: 30,
+    marginTop: 60,
     marginBottom: 25,
     textAlign: "center",
     fontSize: 22,
@@ -134,6 +156,17 @@ const styles = StyleSheet.create({
   fontSize: 34,
   fontWeight: "900",
   textAlign: "center",
+},
+
+cardContent: {
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "space-between",
+},
+
+arrow: {
+  fontSize: 20,
+  fontWeight: "700",
 },
   
 });

@@ -11,6 +11,12 @@ import {
   BackHandler,
 } from "react-native";
 
+import Animated, {
+  
+  FadeInLeft,
+  FadeInRight,
+} from "react-native-reanimated";
+
 import * as Clipboard from "expo-clipboard";
 
 import { useTheme } from "../theme/useTheme";
@@ -129,7 +135,16 @@ const markdownStyles = React.useMemo(
 
   return (
     <>
-      <Pressable
+    
+     <Animated.View
+  entering={
+    isUser
+      ? FadeInRight.springify().damping(50)
+      : FadeInLeft.springify().damping(50)
+  }
+>
+       
+  <Pressable
         onLongPress={
         !isUser
         ? () => {
@@ -184,6 +199,7 @@ const markdownStyles = React.useMemo(
           </>
         )}
       </Pressable>
+      </Animated.View>
 
       <MessageActionSheet
         ref={sheetRef}
