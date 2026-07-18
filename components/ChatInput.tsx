@@ -7,7 +7,19 @@ import {
   StyleSheet,
   Platform,
 } from "react-native";
+
 import {
+  useRef
+} from "react";
+
+import {
+  BottomSheetModal
+} from "@gorhom/bottom-sheet";
+
+import AttachmentSheet from "./AttachmentSheet";
+
+import {
+  Plus,
   Mic,
   Send
 } from "lucide-react-native";
@@ -17,6 +29,11 @@ import WebSearchToggle from "./WebSearchToggle";
 import {
   useTheme
 } from "../theme/useTheme";
+
+import Animated, {
+  FadeIn,
+  FadeOut,
+} from "react-native-reanimated";
 
 
 interface ChatInputProps {
@@ -46,48 +63,108 @@ export default function ChatInput({
   } = useTheme();
   const styles = createStyles(colors);
 
+  const attachmentSheetRef = useRef < BottomSheetModal > (null);
+
+
+
   return (
-    <View
-      style={styles.container}
-      onLayout={(e) =>
-      onHeightChange?.(e.nativeEvent.layout.height)
-      }
-      >
-      <View style={styles.leftButtons}>
-        <TouchableOpacity style={styles.iconButton}>
-          <Mic color="#a78bfa" size={22} />
+    <>
+      <View
+        style={styles.container}
+        onLayout={(e) =>
+        onHeightChange?.(e.nativeEvent.layout.height)
+        }
+        >
+        <View style={styles.leftButtons}>
+
+          <TouchableOpacity
+            activeOpacity={0.8}
+
+            style={styles.iconButton}
+            onPress={() => attachmentSheetRef.current?.present()}
+            >
+
+            <Plus color={colors.primary} size={20} />
+          </TouchableOpacity>
+
+          <WebSearchToggle
+            enabled={webSearchEnabled}
+            onToggle={onToggleWebSearch}
+            />
+        </View>
+
+        <TextInput
+          style={styles.input}
+          placeholder="Message NexusFly..."
+          placeholderTextColor={colors.subText}
+          value={value}
+          onChangeText={onChangeText}
+          multiline
+          textAlignVertical="top"
+          />
+
+        <TouchableOpacity
+          activeOpacity={0.75}
+
+          style={[
+            styles.sendButton,
+            (!value.trim() || isLoading) && {
+              opacity: 0.5,
+            },
+          ]}
+
+          disabled={isLoading || !value.trim()}
+          onPress={value.trim() ? onSend: undefined}
+          >
+
+
+          {isLoading ? (
+            <ActivityIndicator color="#fff" />
+          ): value.trim() ? (
+            <Animated.View
+              key="send"
+              entering={FadeIn.duration(180)}
+              exiting={FadeOut.duration(120)}
+              >
+              <Send color="#fff" size={20} />
+            </Animated.View>
+          ): (
+            <Animated.View
+              key="mic"
+              entering={FadeIn.duration(180)}
+              exiting={FadeOut.duration(120)}
+              >
+              <Mic color="#fff" size={20} />
+            </Animated.View>
+          )}
+
+
         </TouchableOpacity>
 
-        <WebSearchToggle
-          enabled={webSearchEnabled}
-          onToggle={onToggleWebSearch}
-          />
       </View>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Message NexusFly..."
-        placeholderTextColor={colors.subText}
-        value={value}
-        onChangeText={onChangeText}
-        multiline
-        textAlignVertical="top"
-        />
 
-      <TouchableOpacity
-        style={[
-          styles.sendButton,
-          isLoading && { opacity: 0.6 },
-        ]}
-        disabled={isLoading}
-        onPress={onSend}>
-        {isLoading ? (
-          <ActivityIndicator color="#fff" />
-        ): (
-          <Send color="#fff" size={18} />
-        )}
-      </TouchableOpacity>
-    </View>
+
+
+
+
+      <AttachmentSheet
+        ref={attachmentSheetRef}
+        onCamera={() => {
+          attachmentSheetRef.current?.dismiss();
+        }}
+        onGallery={() => {
+          attachmentSheetRef.current?.dismiss();
+        }}
+        onFile={() => {
+          attachmentSheetRef.current?.dismiss();
+        }}
+        onClipboard={() => {
+          attachmentSheetRef.current?.dismiss();
+        }}
+        />
+    </>
+
   );
 }
 
@@ -105,8 +182,8 @@ export default function ChatInput({
 
       backgroundColor: colors.surface + "DD",
 
-      paddingHorizontal: 10,
-      paddingVertical: 8,
+      paddingHorizontal: 8,
+      paddingVertical: 5,
 
       borderRadius: 30,
 
@@ -122,21 +199,22 @@ export default function ChatInput({
         width: 0,
         height: 8,
       },
+
     },
 
     input: {
       flex: 1,
       color: colors.text,
-      paddingHorizontal: 14,
+      paddingHorizontal: 8,
       fontSize: 16,
       lineHeight: 22,
       maxHeight: 120,
     },
 
     iconButton: {
-      width: 42,
-      height: 42,
-      borderRadius: 21,
+      width: 40,
+      height: 40,
+      borderRadius: 20,
       justifyContent: "center",
       alignItems: "center",
       backgroundColor: colors.background,
@@ -146,9 +224,9 @@ export default function ChatInput({
 
     sendButton: {
 
-      width: 46,
-      height: 46,
-      borderRadius: 23,
+      width: 40,
+      height: 40,
+      borderRadius: 20,
 
       elevation: 4,
 
@@ -168,6 +246,7 @@ export default function ChatInput({
     leftButtons: {
       flexDirection: "row",
       alignItems: "center",
+      gap: 4,
     },
 
   });

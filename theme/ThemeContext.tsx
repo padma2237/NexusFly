@@ -3,9 +3,19 @@ import React, {
   useContext,
   useMemo,
   useState,
+  useEffect,
 } from "react";
 
+import {
+  Appearance,
+  ColorSchemeName,
+} from "react-native";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { themes, ThemeName } from "./index";
+
+const STORAGE_KEY = "nexusfly_theme_v2";
 
 type ThemeContextType = {
   themeName: ThemeName;
@@ -21,15 +31,59 @@ export function ThemeProvider({
   children: React.ReactNode;
 }) {
   const [themeName, setThemeName] =
-    useState<ThemeName>("dark");
+    useState<ThemeName>("system");
+    
+    const [systemTheme, setSystemTheme] =
+  useState<ColorSchemeName>(
+    Appearance.getColorScheme()
+  );
+  useEffect(() => {
+  const subscription =
+    Appearance.addChangeListener(({ colorScheme }) => {
+      setSystemTheme(colorScheme);
+    });
+
+  return () => subscription.remove();
+}, []);
+  
+
+  useEffect(() => {
+    (async () => {
+      const savedTheme = await AsyncStorage.getItem(
+        STORAGE_KEY
+      )
+      
+      if (
+  savedTheme === "system" ||
+  savedTheme in themes
+)
+      {
+        setThemeName(savedTheme as ThemeName);
+      }
+    })();
+  }, []);
+
+  const setTheme = async (theme: ThemeName) => {
+    setThemeName(theme);
+    await AsyncStorage.setItem(
+      STORAGE_KEY,
+      theme
+    );
+  };
+
 
   const value = useMemo(
     () => ({
       themeName,
-      colors: themes[themeName].colors,
-      setTheme: setThemeName,
+      colors:
+  themeName === "system"
+    ? systemTheme === "dark"
+      ? themes.dark.colors
+      : themes.light.colors
+    :themes[themeName as keyof typeof themes].colors,
+      setTheme,
     }),
-    [themeName]
+    [themeName, systemTheme ]
   );
 
   return (

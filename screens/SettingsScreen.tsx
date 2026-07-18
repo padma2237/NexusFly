@@ -6,12 +6,21 @@ import {
   StyleSheet,
 } from "react-native";
 
-import { useTheme } from "../theme/useTheme";
+import {
+  useTheme
+} from "../theme/useTheme";
 
 export default function SettingsScreen() {
-  const { themeName, setTheme, colors } = useTheme();
+  const {
+    themeName,
+    setTheme,
+    colors
+  } = useTheme();
 
-  const themes = [
+  const themes = [{
+    id: "system",
+    title: "📱 System",
+  },
     {
       id: "dark",
       title: "🌑 Dark",
@@ -38,7 +47,7 @@ export default function SettingsScreen() {
           backgroundColor: colors.background,
         },
       ]}
-    >
+      >
       <Text
         style={[
           styles.heading,
@@ -46,7 +55,7 @@ export default function SettingsScreen() {
             color: colors.text,
           },
         ]}
-      >
+        >
         Appearance
       </Text>
 
@@ -57,13 +66,12 @@ export default function SettingsScreen() {
             styles.button,
             {
               backgroundColor:
-                themeName === theme.id
-                  ? colors.primary
-                  : colors.surface,
+              themeName === theme.id
+              ? colors.primary: colors.surface,
             },
           ]}
           onPress={() => setTheme(theme.id as any)}
-        >
+          >
           <Text
             style={[
               styles.buttonText,
@@ -71,7 +79,7 @@ export default function SettingsScreen() {
                 color: colors.text,
               },
             ]}
-          >
+            >
             {theme.title}
           </Text>
         </TouchableOpacity>
@@ -80,26 +88,26 @@ export default function SettingsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-  },
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      padding: 20,
+    },
 
-  heading: {
-    fontSize: 26,
-    fontWeight: "700",
-    marginBottom: 24,
-  },
+    heading: {
+      fontSize: 26,
+      fontWeight: "700",
+      marginBottom: 24,
+    },
 
-  button: {
-    padding: 18,
-    borderRadius: 16,
-    marginBottom: 14,
-  },
+    button: {
+      padding: 18,
+      borderRadius: 16,
+      marginBottom: 14,
+    },
 
-  buttonText: {
-    fontSize: 18,
-    fontWeight: "600",
-  },
-});
+    buttonText: {
+      fontSize: 18,
+      fontWeight: "600",
+    },
+  });

@@ -1,5 +1,6 @@
 import darkTheme from "./dark";
 import lightTheme from "./light";
+
 import experimentalTheme from "./experimental";
 import auroraTheme from "./aurora";
 
@@ -10,4 +11,6 @@ export const themes = {
   aurora: auroraTheme,
 };
 
-export type ThemeName = keyof typeof themes;
+export type ThemeName =
+  | keyof typeof themes
+  | "system";
