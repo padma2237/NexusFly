@@ -17,6 +17,11 @@ const experimentalTheme = {
     success: "#22c55e",
     warning: "#f59e0b",
     error: "#ef4444",
+    
+cardGreen: "#163C2C",
+cardBlue: "#1A3550",
+cardOrange: "#4A3818",
+cardPurple: "#3A2648",
   },
 };
 

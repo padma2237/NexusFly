@@ -76,9 +76,6 @@ if (hour >= 12 && hour < 17) {
 >
   <TouchableOpacity
   activeOpacity={0.8}
-  android_ripple={{
-    color: "rgba(255,255,255,0.12)",
-  }}
         
           onPress={() => onPromptPress(item.title)}
           style={[

@@ -31,12 +31,20 @@ const AttachmentSheet = forwardRef<BottomSheetModal, Props>(
       <BottomSheetModal
         ref={ref}
         
-        detached={true}
-        bottomInset={15}
-        enableHandlePanningGesture={false}
-handleComponent={null}
-       
         
+        
+        android_keyboardInputMode="adjustResize"
+        
+      detached={true}
+      bottomInset={15}
+        
+        
+        
+       
+        keyboardBehavior="interactive"
+keyboardBlurBehavior="restore"
+enableHandlePanningGesture={false}
+handleComponent={null}
         
         
         backgroundStyle={{
@@ -74,7 +82,7 @@ alignSelf: "flex-start",
   }
 );
 
-// At the bottom of AttachmentSheet.tsx
+
 export default AttachmentSheet;
 
 const createStyles = (colors: any) =>

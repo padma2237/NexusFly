@@ -24,7 +24,7 @@ import {
 
 import Header from "../components/Header";
 import ChatBubble from "../components/ChatBubble";
-import ChatInput from "../components/ChatInput";
+import ChatComposer from "../components/ChatComposer";
 import { useTheme } from "../theme/useTheme";
 
 import {
@@ -373,17 +373,20 @@ export default function ChatScreen() {
             }}
 
             />
-          <ChatInput
-            value={inputText}
-            onChangeText={setInputText}
-            onSend={handleSend}
-            isLoading={isLoading}
-            onHeightChange={setInputHeight}
-            webSearchEnabled={webSearchEnabled}
-            onToggleWebSearch={() =>
-            setWebSearchEnabled((prev) => !prev)
-            }
-            />
+          
+          
+
+<ChatComposer
+  value={inputText}
+  onChangeText={setInputText}
+  onSend={handleSend}
+  isLoading={isLoading}
+  webSearchEnabled={webSearchEnabled}
+  onToggleWebSearch={() =>
+    setWebSearchEnabled(!webSearchEnabled)
+  }
+/>
+            
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </SafeAreaView>

@@ -34,7 +34,9 @@ export default function Header({
 
   <View style={styles.logoContainer}>
     <Text style={styles.logoIcon}>✦</Text>
-    <Text style={styles.title}>NexusFly</Text>
+    <Text style={styles.title}>NexusFly
+    
+    </Text>
 </View>
 
   <View style={styles.rightButtons}>

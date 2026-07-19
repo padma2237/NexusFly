@@ -6,7 +6,15 @@ import {
   ActivityIndicator,
   StyleSheet,
   Platform,
+  Image,
 } from "react-native";
+
+import { X } from "lucide-react-native";
+
+import {
+  pickImage
+} from "../services/imagePicker";
+
 
 import {
   useRef
@@ -64,17 +72,61 @@ export default function ChatInput({
   const styles = createStyles(colors);
 
   const attachmentSheetRef = useRef < BottomSheetModal > (null);
-
-
+  
+  const [selectedImage, setSelectedImage] = React.useState<any>(null);
+  
 
   return (
     <>
       <View
-        style={styles.container}
-        onLayout={(e) =>
+        style={[
+  styles.container,
+  selectedImage && styles.containerWithImage,
+]}
+        
+        
+       onLayout={(e) =>
         onHeightChange?.(e.nativeEvent.layout.height)
         }
         >
+       
+        
+        
+        {selectedImage && (
+  <Animated.View
+    entering={FadeIn.duration(180)}
+    exiting={FadeOut.duration(120)}
+    style={styles.previewContainer}
+  >
+    
+    <TouchableOpacity activeOpacity={0.9}>
+  <Image
+    source={{ uri: selectedImage.uri }}
+    style={styles.previewImage}
+    onLoad={() => console.log("Image loaded")}
+  onError={(e) => console.log("Image error", e.nativeEvent)}
+    
+  />
+  
+  
+  
+
+  
+</TouchableOpacity>
+
+    <TouchableOpacity
+      style={styles.removeButton}
+      onPress={() => setSelectedImage(null)}
+    >
+  <X color="#fff" size={12} />
+    </TouchableOpacity>
+  </Animated.View>
+)}
+        
+        
+        <View style={styles.inputRow}>
+          
+          
         <View style={styles.leftButtons}>
 
           <TouchableOpacity
@@ -83,8 +135,8 @@ export default function ChatInput({
             style={styles.iconButton}
             onPress={() => attachmentSheetRef.current?.present()}
             >
-
-            <Plus color={colors.primary} size={20} />
+<Plus color={colors.primary} size={20} />
+            
           </TouchableOpacity>
 
           <WebSearchToggle
@@ -92,6 +144,8 @@ export default function ChatInput({
             onToggle={onToggleWebSearch}
             />
         </View>
+
+
 
         <TextInput
           style={styles.input}
@@ -144,7 +198,7 @@ export default function ChatInput({
       </View>
 
 
-
+</View>
 
 
 
@@ -153,9 +207,19 @@ export default function ChatInput({
         onCamera={() => {
           attachmentSheetRef.current?.dismiss();
         }}
-        onGallery={() => {
-          attachmentSheetRef.current?.dismiss();
-        }}
+        
+        onGallery={async () => {
+  console.log("Gallery pressed");
+
+  attachmentSheetRef.current?.dismiss();
+
+  const image = await pickImage();
+
+if (image) {
+  setSelectedImage(image);
+}
+}}
+        
         onFile={() => {
           attachmentSheetRef.current?.dismiss();
         }}
@@ -177,7 +241,7 @@ export default function ChatInput({
       right: 16,
       bottom: Platform.OS === "ios" ? 8: 16,
 
-      flexDirection: "row",
+      flexDirection: "column",
       alignItems: "flex-end",
 
       backgroundColor: colors.surface + "DD",
@@ -205,10 +269,15 @@ export default function ChatInput({
     input: {
       flex: 1,
       color: colors.text,
+      paddingVertical: 10,
       paddingHorizontal: 8,
+      
+      textAlignVertical:"top",
+      paddingTop: 8,
       fontSize: 16,
       lineHeight: 22,
-      maxHeight: 120,
+      maxHeight: 150,
+      backgroundColor: 'transparent',
     },
 
     iconButton: {
@@ -248,5 +317,52 @@ export default function ChatInput({
       alignItems: "center",
       gap: 4,
     },
+    
+    
+  
+
+previewContainer: {
+  width: 170,
+  height: 140,
+  marginBottom: 10,
+  position: "relative",
+  overflow: "hidden",
+},
+
+
+inputRow: {
+  flexDirection: "row",
+  alignItems: "flex-end",
+  width: "100%",
+},
+
+
+
+
+previewImage: {
+  width: "100%",
+  height: "100%",
+  borderRadius: 16,
+  resizeMode: "cover",
+},
+
+
+removeButton: {
+  position: "absolute",
+  top: -6,
+  right: -6,
+
+  width: 24,
+  height: 24,
+  borderRadius: 10,
+  backgroundColor: "rgba(0,0,0,0.65)",
+  justifyContent: "center",
+  alignItems: "center",
+},
+
+containerWithImage: {
+  minHeight: 140,
+},
+
 
   });
