@@ -35,11 +35,11 @@ const styles = StyleSheet.create({
     borderRadius: 21,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: Colors.border,
-    marginRight: 8,
+    backgroundColor: "transparent",
+    marginRight: 4,
   },
 
   activeButton: {
-    backgroundColor: "#2563eb",
+    backgroundColor: Colors.primary,
   },
 });
