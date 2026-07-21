@@ -60,7 +60,7 @@ export default function ChatComposer({
   style={[
     styles.container,
     {
-      backgroundColor: colors.card,
+      backgroundColor: colors.surface,
       borderColor: colors.border,
     },
   ]}
