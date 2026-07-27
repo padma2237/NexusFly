@@ -24,7 +24,10 @@ import {
 
 import Header from "../components/Header";
 import ChatBubble from "../components/ChatBubble";
-import ChatComposer from "../components/ChatComposer";
+
+import Composer from "../components/Composer";
+
+
 import { useTheme } from "../theme/useTheme";
 
 import {
@@ -376,15 +379,16 @@ export default function ChatScreen() {
           
           
 
-<ChatComposer
+<Composer
   value={inputText}
   onChangeText={setInputText}
   onSend={handleSend}
   isLoading={isLoading}
   webSearchEnabled={webSearchEnabled}
   onToggleWebSearch={() =>
-    setWebSearchEnabled(!webSearchEnabled)
+  setWebSearchEnabled(!webSearchEnabled)
   }
+  onAttachmentPress={() => {}}
 />
             
         </KeyboardAvoidingView>

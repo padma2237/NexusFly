@@ -1,6 +1,4 @@
-import React, {
-  useState
-} from "react";
+import React, { useState } from "react";
 import {
   View,
   TextInput,
@@ -8,15 +6,15 @@ import {
   NativeSyntheticEvent,
   TextInputContentSizeChangeEventData,
 } from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+  Easing,
+} from "react-native-reanimated";
 
-import {
-  useTheme
-} from "../../theme/useTheme";
-
-
-import ComposerFooter from "./ComposerFooter";
-import ComposerActions from "./ComposerActions";
-import ComposerSendButton from "./ComposerSendButton";
+import { useTheme } from "../../theme/useTheme";
+import AnimatedToolbar from "./AnimatedToolbar";
 
 interface Props {
   value: string;
@@ -32,6 +30,9 @@ interface Props {
   onToggleWebSearch: () => void;
 }
 
+const MIN_INPUT_HEIGHT = 24;
+const MAX_INPUT_HEIGHT = 120;
+
 export default function ComposerInput({
   value,
   onChangeText,
@@ -42,156 +43,124 @@ export default function ComposerInput({
   webSearchEnabled,
   onToggleWebSearch,
 }: Props) {
+  const { colors } = useTheme();
 
-  const {
-    colors
-  } = useTheme();
+  
+  const inputHeight = useSharedValue(MIN_INPUT_HEIGHT);
+const expanded = useSharedValue(false);
 
-  const MIN_HEIGHT = 24;
-  const MAX_HEIGHT = 140;
+const containerStyle = useAnimatedStyle(() => ({
+  paddingBottom: withTiming(
+    expanded.value ? 12 : 10,
+    {
+      duration: 220,
+      easing: Easing.out(Easing.cubic),
+    }
+  ),
+}));
 
-  const [inputHeight,
-    setInputHeight] = useState(MIN_HEIGHT);
-    
-const isSingleLine = inputHeight <= MIN_HEIGHT + 2;
+const toolbarStyle = useAnimatedStyle(() => ({
+  marginTop: withTiming(
+    expanded.value ? 10 : 0,
+    {
+      duration: 220,
+      easing: Easing.out(Easing.cubic),
+    }
+  ),
+}));
 
-    const [isMultiline, setIsMultiline] = useState(false);
+const [textHeight, setTextHeight] = useState(MIN_INPUT_HEIGHT);
 
-const handleContentSizeChange = (
+
+
+  const handleContentSizeChange = (
   e: NativeSyntheticEvent<TextInputContentSizeChangeEventData>
 ) => {
-  const height = e.nativeEvent.contentSize.height;
-
-  const newHeight = Math.min(
-    MAX_HEIGHT,
-    Math.max(MIN_HEIGHT, height)
+  const h = Math.max(
+    MIN_INPUT_HEIGHT,
+    Math.min(MAX_INPUT_HEIGHT, e.nativeEvent.contentSize.height)
   );
 
-  setInputHeight(newHeight);
+  setTextHeight(h);
 
-  setIsMultiline(newHeight > 30);
+  inputHeight.value = h;
+  expanded.value = h > 28;
 };
-
+  
+  
 
   return (
-    
-   <>
-  {isMultiline ? (
-    <View>
+    <Animated.View
+      style={[
+        styles.container,
+        containerStyle,
+        {
+         backgroundColor: colors.surface,
+          borderColor: colors.border,
+        },
+      ]}
+    >
       <TextInput
         value={value}
         onChangeText={onChangeText}
-        placeholder="Message NexusFly..."
-        placeholderTextColor={colors.subText}
         multiline
         underlineColorAndroid="transparent"
+        placeholder="Message NexusFly..."
+        placeholderTextColor={colors.subText}
         onContentSizeChange={handleContentSizeChange}
-        scrollEnabled={inputHeight >= MAX_HEIGHT}
+        scrollEnabled={textHeight >= MAX_INPUT_HEIGHT}
+        textAlignVertical="top"
         style={[
           styles.input,
           {
             color: colors.text,
-            height: inputHeight,
+            height: textHeight,
+            textAlignVertical: "top",
           },
         ]}
       />
 
-      <ComposerFooter
-        hasText={hasText}
-        isLoading={isLoading}
-        onSend={onSend}
-        onAttachmentPress={onAttachmentPress}
-        webSearchEnabled={webSearchEnabled}
-        onToggleWebSearch={onToggleWebSearch}
-      />
-    </View>
-  ) : (
-    
-    
-    <View style={styles.singleRow}>
-
-  <ComposerActions
+    <Animated.View style={toolbarStyle}>
+  <AnimatedToolbar
+    hasText={hasText}
+    isLoading={isLoading}
+    onSend={onSend}
     onAttachmentPress={onAttachmentPress}
     webSearchEnabled={webSearchEnabled}
     onToggleWebSearch={onToggleWebSearch}
   />
 
-  <TextInput
-    value={value}
-    onChangeText={onChangeText}
-    placeholder="Message NexusFly..."
-    placeholderTextColor={colors.subText}
-    multiline
-    underlineColorAndroid="transparent"
-    onContentSizeChange={handleContentSizeChange}
-    scrollEnabled={false}
-    style={[
-      styles.singleInput,
-      {
-        color: colors.text,
-      },
-    ]}
-  />
 
-  <ComposerSendButton
-    hasText={hasText}
-    isLoading={isLoading}
-    onSend={onSend}
-  />
+</Animated.View>
+</Animated.View>
 
-</View>
-    
-    
-   
-
-  )}
-</>
-   
-   
-   
-   
-  );
-
+);
 }
-
-  const styles = StyleSheet.create({
     
-    singleRow: {
-  flexDirection: "row",
-  alignItems: "center",
-  paddingHorizontal: 14,
-  paddingVertical: 10,
-},
-
-
-inputContainer: {
-  flex: 1,
-},
-
-multiContainer: {
-  flexDirection: "column",
-},
     
-    input: {
-      fontSize: 17,
-      lineHeight: 24,
 
-  color: "#000",
-      padding: 0,
-borderWidth: 0,
-      marginHorizontal: 14,
-      marginTop: 12,
-      textAlignVertical: "top",
 
-      includeFontPadding: false,
-    },
-    
-    singleInput: {
-  flex: 1,
-  fontSize: 17,
-  lineHeight: 24,
-  padding: 0,
-  marginLeft: 8,
-  includeFontPadding: false,
-},
-  });
+
+const styles = StyleSheet.create({
+  container: {
+    borderRadius: 28,
+    borderWidth: 1,
+    overflow: "hidden",
+
+    paddingHorizontal: 14,
+    paddingTop: 10,
+    paddingBottom: 10,
+
+    minHeight: 56,
+  },
+
+  input: {
+    fontSize: 17,
+    lineHeight: 22,
+
+    padding: 0,
+    margin: 0,
+
+    includeFontPadding: false,
+  },
+});

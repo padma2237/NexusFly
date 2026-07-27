@@ -12,6 +12,9 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { ThemeProvider } from "./theme/ThemeContext";
 
 
+
+
+
 function AppContent() {
   const { isLoading } = useConversation();
 
