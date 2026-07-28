@@ -15,6 +15,8 @@ import {
 } from "react-native";
 import EmptyState from "../components/EmptyState";
 
+
+
 import {
   SafeAreaView
 } from "react-native-safe-area-context";
@@ -388,7 +390,7 @@ export default function ChatScreen() {
   onToggleWebSearch={() =>
   setWebSearchEnabled(!webSearchEnabled)
   }
-  onAttachmentPress={() => {}}
+  
 />
             
         </KeyboardAvoidingView>

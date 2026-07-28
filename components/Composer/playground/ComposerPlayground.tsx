@@ -19,9 +19,7 @@ export default function ComposerPlayground() {
           console.log("SEND:", text);
           setText("");
         }}
-        onAttachmentPress={() =>
-          console.log("Attachment")
-        }
+        
         onToggleWebSearch={() =>
           console.log("Toggle Search")
         }

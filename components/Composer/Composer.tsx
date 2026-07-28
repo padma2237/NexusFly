@@ -1,24 +1,16 @@
-import React from "react";
-import {
-  View
-} from "react-native";
-import Animated from "react-native-reanimated";
+import React, { useRef } from "react";
 
-import LeftActions from "./components/LeftActions";
-import RightActions from "./components/RightActions";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
+
+import AttachmentSheet from "../AttachmentSheet";
 
 import ComposerCard from "./ComposerCard";
 import ComposerBody from "./ComposerBody";
 
-import styles from "./styles";
-
 import useComposer from "./hooks/useComposer";
 
-import ComposerInput from "./components/ComposerInput";
-import Toolbar from "./Toolbar";
-
 import {
-  ComposerProps
+  ComposerProps,
 } from "./types";
 
 export default function Composer({
@@ -27,23 +19,48 @@ export default function Composer({
   webSearchEnabled,
   onChangeText,
   onSend,
-  onAttachmentPress,
+  
   onToggleWebSearch,
 }: ComposerProps) {
+  
   const composer = useComposer();
+  const attachmentSheetRef =
+  useRef<BottomSheetModal>(null);
 
-  return (
-    <ComposerCard animatedStyle={composer.animation.containerStyle} >
-    <ComposerBody
-  composer={composer}
-  value={value}
-  isLoading={isLoading}
-  webSearchEnabled={webSearchEnabled}
-  onChangeText={onChangeText}
-  onSend={onSend}
-  onAttachmentPress={onAttachmentPress}
-  onToggleWebSearch={onToggleWebSearch}
-/>
-</ComposerCard>
-  );
+ return (
+  <>
+    <ComposerCard
+      animatedStyle={composer.animation.containerStyle}
+    >
+      <ComposerBody
+        composer={composer}
+        value={value}
+        isLoading={isLoading}
+        webSearchEnabled={webSearchEnabled}
+        onChangeText={onChangeText}
+        onSend={onSend}
+        onAttachmentPress={() =>
+          attachmentSheetRef.current?.present()
+        }
+        onToggleWebSearch={onToggleWebSearch}
+      />
+    </ComposerCard>
+
+    <AttachmentSheet
+      ref={attachmentSheetRef}
+      onCamera={() => {
+        attachmentSheetRef.current?.dismiss();
+      }}
+      onGallery={() => {
+        attachmentSheetRef.current?.dismiss();
+      }}
+      onFile={() => {
+        attachmentSheetRef.current?.dismiss();
+      }}
+      onClipboard={() => {
+        attachmentSheetRef.current?.dismiss();
+      }}
+    />
+  </>
+);
 }

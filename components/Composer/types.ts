@@ -86,7 +86,6 @@ export interface ComposerProps {
 
   onSend: () => void;
 
-  onAttachmentPress: () => void;
 
   onToggleWebSearch: () => void;
 }
