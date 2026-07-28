@@ -4,6 +4,8 @@
 export const INPUT_LINE_HEIGHT = 22;
 export const INPUT_FONT_SIZE = 16;
 
+
+
 export const MIN_INPUT_HEIGHT = INPUT_LINE_HEIGHT;
 export const MAX_INPUT_HEIGHT = 176; // ≈ 8 visible lines
 

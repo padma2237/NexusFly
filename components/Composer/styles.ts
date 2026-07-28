@@ -14,6 +14,7 @@ import {
   ACTION_GAP,
   INPUT_PADDING_TOP,
   INPUT_PADDING_BOTTOM,
+  
   TOOLBAR_MARGIN_TOP,
 } from "./config/measurements";
 
@@ -37,6 +38,7 @@ const styles = StyleSheet.create({
 
   inputContainer: {
     flex: 1,
+    
     marginHorizontal: ACTION_GAP,
     justifyContent: "center",
   },
@@ -55,31 +57,43 @@ const styles = StyleSheet.create({
   },
 
   leftActions: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: ACTION_GAP,
-  },
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: ACTION_GAP,
+  
+},
 
-  rightActions: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginLeft: ACTION_GAP,
-  },
+rightActions: {
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "center",
+  marginLeft: ACTION_GAP,
+},
+
+iconButton: {
+  width: BUTTON_SIZE,
+  height: BUTTON_SIZE,
+  borderRadius: BUTTON_RADIUS,
+  justifyContent: "center",
+  alignItems: "center",
+  padding: 0,
+  margin: 0,
+},
+
+iconContent: {
+  width: "100%",
+  height: "100%",
+  justifyContent: "center",
+  alignItems: "center",
+},
+  
 
   toolbar: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginTop: TOOLBAR_MARGIN_TOP,
-  },
-
-  iconButton: {
-    width: BUTTON_SIZE,
-    height: BUTTON_SIZE,
-    borderRadius: BUTTON_RADIUS,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 0,
   },
 
   sendButton: {

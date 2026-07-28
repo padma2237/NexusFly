@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  TouchableOpacity,
-} from "react-native";
-
-import Animated from "react-native-reanimated";
+import { TouchableOpacity, View } from "react-native";
 
 import styles from "../styles";
 
@@ -21,10 +17,9 @@ export default function ActionButton({
       disabled={disabled}
       style={styles.iconButton}
     >
-      <Animated.View>
-      
+      <View style={styles.iconContent}>
         {icon}
-      </Animated.View>
+      </View>
     </TouchableOpacity>
   );
 }

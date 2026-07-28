@@ -1,16 +1,14 @@
 import React from "react";
 import { TouchableOpacity } from "react-native";
-import { Mic, Send } from "lucide-react-native";
+
+import { Send, Mic } from "lucide-react-native";
 
 import Animated from "react-native-reanimated";
 
 import styles from "../styles";
 
 import { useComposerTheme } from "../config/useComposerTheme";
-
-import {
-  SEND_ICON_SIZE,
-} from "../config/constants";
+import { SEND_ICON_SIZE } from "../config/constants";
 
 import { SendButtonProps } from "../types";
 

@@ -17,6 +17,7 @@ import {
 import {
   COLLAPSED_RADIUS,
   EXPANDED_RADIUS,
+  COMPOSER_MIN_HEIGHT,
 } from "../config/constants";
 
 interface Params {
@@ -63,25 +64,27 @@ export default function useComposerAnimation({
   */
 
   const containerStyle = useAnimatedStyle(() => {
-    return {
-      height: animatedHeight.value + 16,
-      
-      borderRadius: interpolate(
-        progress.value,
-        [0, 1],
-        [
-          COLLAPSED_RADIUS,
-          EXPANDED_RADIUS,
-        ]
-      ),
+  return {
+    minHeight: COMPOSER_MIN_HEIGHT,
 
-      paddingBottom: interpolate(
-        progress.value,
-        [0, 1],
-        [8, 8]
-      ),
-    };
-  });
+    height: Math.max(
+      COMPOSER_MIN_HEIGHT,
+      animatedHeight.value + 16
+    ),
+
+    borderRadius: interpolate(
+      progress.value,
+      [0, 1],
+      [
+        COLLAPSED_RADIUS,
+        EXPANDED_RADIUS,
+      ]
+    ),
+  };
+});
+  
+  
+  
 
   /*
   |--------------------------------------------------------------------------
