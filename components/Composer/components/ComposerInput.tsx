@@ -48,7 +48,7 @@ export default function ComposerInput({
       multiline
       scrollEnabled={scrollEnabled}
       underlineColorAndroid="transparent"
-      textAlignVertical="center"
+      textAlignVertical="top"
       placeholder="Message..."
       placeholderTextColor={theme.placeholder}
       onChangeText={onChangeText}
@@ -60,10 +60,7 @@ export default function ComposerInput({
         {
           color: theme.text,
           height: inputHeight,
-          fontSize: INPUT_FONT_SIZE,
-          lineHeight: INPUT_LINE_HEIGHT,
-          paddingTop: INPUT_PADDING_TOP,
-          paddingBottom: INPUT_PADDING_BOTTOM,
+          
         },
       ]}
     />

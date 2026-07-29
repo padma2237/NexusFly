@@ -69,7 +69,7 @@ export default function useComposerAnimation({
 
     height: Math.max(
       COMPOSER_MIN_HEIGHT,
-      animatedHeight.value + 16
+      animatedHeight.value + 36 + 8 + 16
     ),
 
     borderRadius: interpolate(

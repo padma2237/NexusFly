@@ -29,32 +29,27 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 
-  body: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    width: "100%",
-  },
+composerContent: {
+  width: "100%",
+},
 
-  inputContainer: {
-    flex: 1,
-    
-    marginHorizontal: ACTION_GAP,
-    justifyContent: "center",
-  },
+inputContainer: {
+  width: "100%",
+},
 
-  input: {
-    width: "100%",
-    minHeight: MIN_INPUT_HEIGHT,
-    fontSize: INPUT_FONT_SIZE,
-    lineHeight: INPUT_LINE_HEIGHT,
-    margin: 0,
-    paddingHorizontal: 0,
-    paddingTop: INPUT_PADDING_TOP,
-    paddingBottom: INPUT_PADDING_BOTTOM,
-    includeFontPadding: false,
-    textAlignVertical: "center",
-  },
+
+input: {
+  width: "100%",
+  minHeight: MIN_INPUT_HEIGHT,
+  fontSize: INPUT_FONT_SIZE,
+  lineHeight: INPUT_LINE_HEIGHT,
+  margin: 0,
+  paddingHorizontal: 0,
+  paddingTop: 4,
+  paddingBottom: 2,
+  includeFontPadding: false,
+  textAlignVertical: "top",
+},
 
   leftActions: {
   flexDirection: "row",
@@ -89,12 +84,14 @@ iconContent: {
 },
   
 
+  
   toolbar: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: TOOLBAR_MARGIN_TOP,
-  },
+  width: "100%",
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+  marginTop: TOOLBAR_MARGIN_TOP,
+},
 
   sendButton: {
     width: BUTTON_SIZE,
