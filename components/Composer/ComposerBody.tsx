@@ -6,6 +6,9 @@ import Toolbar from "./Toolbar";
 
 import styles from "./styles";
 
+import LeftActions from "./components/LeftActions";
+import RightActions from "./components/RightActions";
+
 export default function ComposerBody(props: any) {
   const {
     composer,
@@ -19,25 +22,48 @@ export default function ComposerBody(props: any) {
   } = props;
 
   const hasText = value.trim().length > 0;
+  const expanded = composer.state.isExpanded;
+ 
+ return (
+  <View
+    style={[
+      styles.composerContent,
+      expanded
+        ? styles.expandedLayout
+        : styles.collapsedLayout,
+    ]}
+  >
+    {!expanded && (
+      <LeftActions
+        webSearchEnabled={webSearchEnabled}
+        onAttachmentPress={onAttachmentPress}
+        onToggleWebSearch={onToggleWebSearch}
+      />
+    )}
 
-  return (
-    <View style={styles.composerContent}>
-      <View style={styles.inputContainer}>
-        <ComposerInput
-          value={value}
-          inputHeight={composer.state.inputHeight}
-          scrollEnabled={composer.state.scrollEnabled}
-          isExpanded={composer.state.isExpanded}
-          onChangeText={onChangeText}
-          onContentHeightChange={
-            composer.actions.updateContentHeight
-          }
-          onFocus={composer.actions.focus}
-          onBlur={composer.actions.blur}
-        />
-      </View>
+    <View
+      style={[
+        styles.inputContainer,
+        expanded
+          ? styles.inputContainerExpanded
+          : styles.inputContainerCollapsed,
+      ]}
+    >
+      <ComposerInput
+        value={value}
+        inputHeight={composer.state.inputHeight}
+        scrollEnabled={composer.state.scrollEnabled}
+        isExpanded={expanded}
+        onChangeText={onChangeText}
+        onContentHeightChange={composer.actions.updateContentHeight}
+        onFocus={composer.actions.focus}
+        onBlur={composer.actions.blur}
+      />
+    </View>
 
+    {expanded ? (
       <Toolbar
+        animatedStyle={composer.animation.toolbarStyle}
         hasText={hasText}
         isLoading={isLoading}
         webSearchEnabled={webSearchEnabled}
@@ -45,6 +71,14 @@ export default function ComposerBody(props: any) {
         onAttachmentPress={onAttachmentPress}
         onToggleWebSearch={onToggleWebSearch}
       />
-    </View>
-  );
+    ) : (
+      <RightActions
+        hasText={hasText}
+        isLoading={isLoading}
+        onSend={onSend}
+      />
+    )}
+  </View>
+);
+
 }

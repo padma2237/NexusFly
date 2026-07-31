@@ -1,6 +1,5 @@
 import React from "react";
 
-
 export interface ComposerInputProps {
   value: string;
 
@@ -20,11 +19,14 @@ export interface ComposerInputProps {
 }
 
 export interface ToolbarProps {
+  animatedStyle?: any;
+  
   hasText: boolean;
 
   webSearchEnabled: boolean;
 
   isLoading: boolean;
+
 
   onSend: () => void;
 

@@ -67,11 +67,6 @@ export default function useComposerAnimation({
   return {
     minHeight: COMPOSER_MIN_HEIGHT,
 
-    height: Math.max(
-      COMPOSER_MIN_HEIGHT,
-      animatedHeight.value + 36 + 8 + 16
-    ),
-
     borderRadius: interpolate(
       progress.value,
       [0, 1],
@@ -82,9 +77,9 @@ export default function useComposerAnimation({
     ),
   };
 });
-  
-  
-  
+
+
+
 
   /*
   |--------------------------------------------------------------------------
@@ -92,24 +87,13 @@ export default function useComposerAnimation({
   |--------------------------------------------------------------------------
   */
 
-  const toolbarStyle = useAnimatedStyle(() => {
-    return {
-      marginTop: interpolate(
-        progress.value,
-        [0, 1],
-        [6, 6]
-      ),
 
-      transform: [{
-        translateY: interpolate(
-          progress.value,
-          [0, 1],
-          [0, 4]
-        ),
-      },
-      ],
-    };
-  });
+const toolbarStyle = useAnimatedStyle(() => {
+  return {
+    marginTop: 6,
+  };
+});
+
 
   /*
   |--------------------------------------------------------------------------
@@ -130,13 +114,13 @@ export default function useComposerAnimation({
     };
   });
 
+
   return {
     progress,
-
     containerStyle,
-
+    
     toolbarStyle,
-
     sendButtonStyle,
   };
+
 }

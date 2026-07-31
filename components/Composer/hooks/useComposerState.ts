@@ -1,33 +1,51 @@
-import { useState } from "react";
-import { useSharedValue } from "react-native-reanimated";
-
+import { useRef, useState } from "react";
 import {
   MAX_INPUT_HEIGHT,
   MIN_INPUT_HEIGHT,
-  MULTILINE_THRESHOLD,
 } from "../config/constants";
 
 export default function useComposerState() {
-  /*
-  |--------------------------------------------------------------------------
-  | Internal State
-  |--------------------------------------------------------------------------
-  */
-
   const [inputHeight, setInputHeight] =
     useState(MIN_INPUT_HEIGHT);
-    
+
+  const expandedRef = useRef(false);
 
   /*
   |--------------------------------------------------------------------------
-  | Derived State
+  | Expansion thresholds
+  |--------------------------------------------------------------------------
+  |
+  | Use hysteresis:
+  |
+  | 34px -> expand
+  | 22px -> collapse
+  |
+  | This prevents the layout from switching back and forth when
+  | TextInput reports slightly different heights around line 2.
+  |
+  */
+
+  const EXPAND_THRESHOLD = 34;
+  const COLLAPSE_THRESHOLD = 22;
+
+  /*
+  |--------------------------------------------------------------------------
+  | Derived state
   |--------------------------------------------------------------------------
   */
-  
-  const isMultiline =
-  inputHeight > MULTILINE_THRESHOLD;
 
-  const isExpanded =  isMultiline;
+  if (!expandedRef.current && inputHeight >= EXPAND_THRESHOLD) {
+    expandedRef.current = true;
+  } else if (
+    expandedRef.current &&
+    inputHeight <= COLLAPSE_THRESHOLD
+  ) {
+    expandedRef.current = false;
+  }
+
+  const isExpanded = expandedRef.current;
+
+  const isMultiline = isExpanded;
 
   const scrollEnabled =
     inputHeight >= MAX_INPUT_HEIGHT;
@@ -38,21 +56,19 @@ export default function useComposerState() {
   |--------------------------------------------------------------------------
   */
 
-  const focus = () => { };
+  const focus = () => {};
 
-  const blur = () => {
-  };
+  const blur = () => {};
 
-  const updateContentHeight = (
-    height: number
-  ) => {
+  const updateContentHeight = (height: number) => {
     const nextHeight = Math.max(
       MIN_INPUT_HEIGHT,
       Math.min(MAX_INPUT_HEIGHT, height)
     );
 
-    setInputHeight(nextHeight);
-    
+    if (nextHeight !== inputHeight) {
+      setInputHeight(nextHeight);
+    }
   };
 
   /*
@@ -63,20 +79,15 @@ export default function useComposerState() {
 
   return {
     state: {
-
       inputHeight,
-
       isExpanded,
-
       isMultiline,
-
       scrollEnabled,
     },
 
     actions: {
       updateContentHeight,
       focus,
-
       blur,
     },
   };

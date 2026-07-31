@@ -31,9 +31,28 @@ const styles = StyleSheet.create({
 
 composerContent: {
   width: "100%",
+  
+  
+},
+
+collapsedLayout: {
+  flexDirection: "row",
+  alignItems: "center",
+},
+
+expandedLayout: {
+  flexDirection: "column",
 },
 
 inputContainer: {
+  justifyContent: "center",
+},
+
+inputContainerCollapsed: {
+  flex: 1,
+},
+
+inputContainerExpanded: {
   width: "100%",
 },
 
@@ -45,10 +64,9 @@ input: {
   lineHeight: INPUT_LINE_HEIGHT,
   margin: 0,
   paddingHorizontal: 0,
-  paddingTop: 4,
-  paddingBottom: 2,
+  
   includeFontPadding: false,
-  textAlignVertical: "top",
+  
 },
 
   leftActions: {
@@ -82,16 +100,22 @@ iconContent: {
   justifyContent: "center",
   alignItems: "center",
 },
-  
+  singleLineRow: {
+  flexDirection: "row",
+  alignItems: "center",
+},
+
 
   
-  toolbar: {
-  width: "100%",
+toolbar: {
   flexDirection: "row",
   justifyContent: "space-between",
   alignItems: "center",
+  width: "100%",
+  minHeight: 36,
   marginTop: TOOLBAR_MARGIN_TOP,
 },
+
 
   sendButton: {
     width: BUTTON_SIZE,

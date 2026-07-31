@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"; // <-- Added useEffect
+import React from "react";
 import {
   NativeSyntheticEvent,
   TextInput,
@@ -6,18 +6,16 @@ import {
 } from "react-native";
 
 import { useComposerTheme } from "../config/useComposerTheme";
-import { INPUT_FONT_SIZE, INPUT_LINE_HEIGHT } from "../config/constants";
-import { INPUT_PADDING_TOP, INPUT_PADDING_BOTTOM } from "../config/measurements";
+
 import styles from "../styles";
 import { ComposerInputProps } from "../types";
 
-// Define default single-line height based on your constants
-const INITIAL_HEIGHT = INPUT_LINE_HEIGHT + INPUT_PADDING_TOP + INPUT_PADDING_BOTTOM;
 
 export default function ComposerInput({
   value,
   inputHeight,
   scrollEnabled,
+  isExpanded,
   onChangeText,
   onContentHeightChange,
   onFocus,
@@ -26,21 +24,12 @@ export default function ComposerInput({
   const theme = useComposerTheme();
 
   // FIX: Reset height back to initial baseline whenever value is cleared
-  useEffect(() => {
-    if (!value || value.trim() === "") {
-      onContentHeightChange(INITIAL_HEIGHT);
-    }
-  }, [value, onContentHeightChange]);
-
   const handleContentSizeChange = (
-    e: NativeSyntheticEvent<TextInputContentSizeChangeEventData>
-  ) => {
-    const h = e.nativeEvent.contentSize.height;
-    // Only adjust height if there is actual text content
-    if (value && value.trim() !== "") {
-      onContentHeightChange(h);
-    }
-  };
+  e: NativeSyntheticEvent<TextInputContentSizeChangeEventData>
+) => {
+  const height = e.nativeEvent.contentSize.height;
+  onContentHeightChange(height);
+};
 
   return (
     <TextInput
@@ -48,21 +37,27 @@ export default function ComposerInput({
       multiline
       scrollEnabled={scrollEnabled}
       underlineColorAndroid="transparent"
-      textAlignVertical="top"
+      
       placeholder="Message..."
       placeholderTextColor={theme.placeholder}
       onChangeText={onChangeText}
       onFocus={onFocus}
       onBlur={onBlur}
       onContentSizeChange={handleContentSizeChange}
+      
+      
       style={[
-        styles.input,
-        {
-          color: theme.text,
-          height: inputHeight,
-          
-        },
-      ]}
+  styles.input,
+  {
+    color: theme.text,
+    minHeight: inputHeight,
+
+    textAlignVertical: isExpanded ? "top" : "center",
+
+    paddingTop: isExpanded ? 4 : 0,
+    paddingBottom: isExpanded ? 2 : 0,
+  },
+]}
     />
   );
 }
