@@ -114,6 +114,7 @@ toolbar: {
   width: "100%",
   minHeight: 36,
   marginTop: TOOLBAR_MARGIN_TOP,
+  paddingBottom: 6,
 },
 
 

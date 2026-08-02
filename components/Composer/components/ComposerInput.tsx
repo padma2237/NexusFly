@@ -50,7 +50,8 @@ export default function ComposerInput({
   styles.input,
   {
     color: theme.text,
-    minHeight: inputHeight,
+    height: inputHeight,
+    maxHeight: inputHeight,
 
     textAlignVertical: isExpanded ? "top" : "center",
 

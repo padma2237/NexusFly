@@ -1,81 +1,49 @@
-import { useRef, useState } from "react";
+import { useState, useCallback } from "react";
 import {
   MAX_INPUT_HEIGHT,
   MIN_INPUT_HEIGHT,
 } from "../config/constants";
 
+const EXPAND_THRESHOLD = 34;
+const COLLAPSE_THRESHOLD = 22;
+
 export default function useComposerState() {
   const [inputHeight, setInputHeight] =
     useState(MIN_INPUT_HEIGHT);
 
-  const expandedRef = useRef(false);
+  const [isExpanded, setIsExpanded] =
+    useState(false);
 
-  /*
-  |--------------------------------------------------------------------------
-  | Expansion thresholds
-  |--------------------------------------------------------------------------
-  |
-  | Use hysteresis:
-  |
-  | 34px -> expand
-  | 22px -> collapse
-  |
-  | This prevents the layout from switching back and forth when
-  | TextInput reports slightly different heights around line 2.
-  |
-  */
-
-  const EXPAND_THRESHOLD = 34;
-  const COLLAPSE_THRESHOLD = 22;
-
-  /*
-  |--------------------------------------------------------------------------
-  | Derived state
-  |--------------------------------------------------------------------------
-  */
-
-  if (!expandedRef.current && inputHeight >= EXPAND_THRESHOLD) {
-    expandedRef.current = true;
-  } else if (
-    expandedRef.current &&
-    inputHeight <= COLLAPSE_THRESHOLD
-  ) {
-    expandedRef.current = false;
-  }
-
-  const isExpanded = expandedRef.current;
-
-  const isMultiline = isExpanded;
-
-  const scrollEnabled =
-    inputHeight >= MAX_INPUT_HEIGHT;
-
-  /*
-  |--------------------------------------------------------------------------
-  | Actions
-  |--------------------------------------------------------------------------
-  */
-
-  const focus = () => {};
-
-  const blur = () => {};
-
-  const updateContentHeight = (height: number) => {
+  const updateContentHeight = useCallback((height: number) => {
     const nextHeight = Math.max(
       MIN_INPUT_HEIGHT,
       Math.min(MAX_INPUT_HEIGHT, height)
     );
 
-    if (nextHeight !== inputHeight) {
-      setInputHeight(nextHeight);
-    }
-  };
+    setInputHeight(nextHeight);
 
-  /*
-  |--------------------------------------------------------------------------
-  | Public API
-  |--------------------------------------------------------------------------
-  */
+    setIsExpanded((prevExpanded) => {
+      if (!prevExpanded && nextHeight >= EXPAND_THRESHOLD) {
+        return true;
+      }
+
+      if (prevExpanded && nextHeight <= COLLAPSE_THRESHOLD) {
+        return false;
+      }
+
+      return prevExpanded;
+    });
+  }, []);
+
+  const reset = useCallback(() => {
+    setInputHeight(MIN_INPUT_HEIGHT);
+    setIsExpanded(false);
+  }, []);
+
+  const isMultiline = isExpanded;
+
+  const scrollEnabled =
+    inputHeight >= MAX_INPUT_HEIGHT;
 
   return {
     state: {
@@ -87,8 +55,7 @@ export default function useComposerState() {
 
     actions: {
       updateContentHeight,
-      focus,
-      blur,
+      reset,
     },
   };
 }

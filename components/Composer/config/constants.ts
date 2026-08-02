@@ -7,7 +7,7 @@ export const INPUT_FONT_SIZE = 16;
 
 
 export const MIN_INPUT_HEIGHT = INPUT_LINE_HEIGHT;
-export const MAX_INPUT_HEIGHT = 176; // ≈ 8 visible lines
+export const MAX_INPUT_HEIGHT = 110; // ≈ 5 visible lines
 
 //
 // CONTAINER

@@ -23,6 +23,14 @@ export default function ComposerBody(props: any) {
 
   const hasText = value.trim().length > 0;
   const expanded = composer.state.isExpanded;
+  
+  const handleSend = () => {
+  if (!hasText) return;
+
+  onSend();
+
+  composer.actions.reset();
+};
  
  return (
   <View
@@ -67,7 +75,7 @@ export default function ComposerBody(props: any) {
         hasText={hasText}
         isLoading={isLoading}
         webSearchEnabled={webSearchEnabled}
-        onSend={onSend}
+        onSend={handleSend}
         onAttachmentPress={onAttachmentPress}
         onToggleWebSearch={onToggleWebSearch}
       />
@@ -75,7 +83,7 @@ export default function ComposerBody(props: any) {
       <RightActions
         hasText={hasText}
         isLoading={isLoading}
-        onSend={onSend}
+        onSend={handleSend}
       />
     )}
   </View>
