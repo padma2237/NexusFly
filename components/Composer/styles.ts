@@ -73,7 +73,7 @@ input: {
   flexDirection: "row",
   alignItems: "center",
   justifyContent: "center",
-  gap: ACTION_GAP,
+  gap: 2,
   
 },
 

@@ -88,12 +88,13 @@ export default function useComposerAnimation({
   */
 
 
+
 const toolbarStyle = useAnimatedStyle(() => {
   return {
     marginTop: 6,
+
   };
 });
-
 
   /*
   |--------------------------------------------------------------------------

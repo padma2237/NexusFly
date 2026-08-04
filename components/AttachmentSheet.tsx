@@ -1,8 +1,28 @@
-import React, { forwardRef, useMemo } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { BottomSheetModal, BottomSheetView } from "@gorhom/bottom-sheet";
-import { Camera, Image, FileText, Copy, Mic } from "lucide-react-native";
-import { useTheme } from "../theme/useTheme";
+import React, {
+  forwardRef,
+  useMemo
+} from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet
+} from "react-native";
+import {
+  BottomSheetModal,
+  BottomSheetView,
+  BottomSheetBackdrop
+} from "@gorhom/bottom-sheet";
+import {
+  Camera,
+  Image,
+  FileText,
+  Copy,
+  Mic
+} from "lucide-react-native";
+import {
+  useTheme
+} from "../theme/useTheme";
 
 interface Props {
   onCamera: () => void;
@@ -11,13 +31,28 @@ interface Props {
   onClipboard: () => void;
 }
 
-const AttachmentSheet = forwardRef<BottomSheetModal, Props>(
-  ({ onCamera, onGallery, onFile, onClipboard }, ref) => {
-    const { colors } = useTheme();
-    const snapPoints = useMemo(() => ["25%"], []); 
+const AttachmentSheet = forwardRef < BottomSheetModal, Props > (
+  ({
+    onCamera, onGallery, onFile, onClipboard
+  }, ref) => {
+    const {
+      colors
+    } = useTheme();
+
     const styles = createStyles(colors);
 
-    const Item = ({ icon, title, onPress }: any) => (
+    const renderBackdrop = (props: any) => (
+      <BottomSheetBackdrop
+        {...props}
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+        pressBehavior="close"
+        />
+    );
+
+    const Item = ({
+      icon, title, onPress
+    }: any) => (
       <TouchableOpacity style={styles.item} activeOpacity={0.85} onPress={onPress}>
         {/* The icon container now has the circle style */}
         <View style={styles.iconContainer}>{icon}</View>
@@ -30,52 +65,46 @@ const AttachmentSheet = forwardRef<BottomSheetModal, Props>(
     return (
       <BottomSheetModal
         ref={ref}
-        
-        
-        
+        enableDynamicSizing={true}
+        backdropComponent={renderBackdrop}
+        enablePanDownToClose
+        enableDismissOnClose
+
         android_keyboardInputMode="adjustResize"
-        
-      detached={true}
-      bottomInset={15}
-        
-        
-        
-       
-        keyboardBehavior="interactive"
-keyboardBlurBehavior="restore"
-enableHandlePanningGesture={false}
-handleComponent={null}
-        
-        
-        backgroundStyle={{
+        detached={true}
+        bottomInset={15}
+
+        keyboardBehavior="fillParent"
+        keyboardBlurBehavior="restore"
+        enableHandlePanningGesture={false}
+        handleComponent={null}
+
+        backgroundStyle={ {
           backgroundColor: colors.surface,
           borderRadius: 24,
         }}
         // ADD THESE TWO LINES TO FLOAT IT
-        style={{
+        style={ {
           marginLeft: 15,
-          
-          
+
+
           width: "75%",
-alignSelf: "flex-start",
+          alignSelf: "flex-start",
         }}
-      >
+        >
         <BottomSheetView style={styles.container}>
-          <Item icon={<Camera color={colors.text} size={20} />} title="Camera" 
-          onPress={onCamera}
-          
-/>
-          <Item icon={<Image color={colors.text} size={20} />} 
-          title="Photos" 
-          onPress={onGallery}
-          
-          />
-          
-          
+          <Item icon={<Camera color={colors.text} size={20} />} title="Camera"
+            onPress={onCamera}
+
+            />
+          <Item icon={<Image color={colors.text} size={20} />}
+            title="Photos"
+            onPress={onGallery}
+            />
+
           <Item icon={<FileText color={colors.text} size={20} />} title="Files" onPress={onFile} />
           <Item icon={<Copy color={colors.text} size={20} />} title="Clipboard" onPress={onClipboard} />
-          
-        
+
         </BottomSheetView>
       </BottomSheetModal>
     );
@@ -85,33 +114,35 @@ alignSelf: "flex-start",
 
 export default AttachmentSheet;
 
-const createStyles = (colors: any) =>
+  const createStyles = (colors: any) =>
   StyleSheet.create({
     container: {
       padding: 10,
-      
+
       shadowColor: "#000",
-shadowOpacity: 0.15,
-shadowRadius: 20,
-shadowOffset: {
-  width: 0,
-  height: 12,
-},
-elevation: 12,
+      shadowOpacity: 0.15,
+      shadowRadius: 20,
+      shadowOffset: {
+        width: 0,
+        height: 12,
+      },
+      elevation: 12,
     },
-    
-    
+
+
     item: {
       flexDirection: "row",
       alignItems: "center",
       paddingVertical: 11,
       paddingHorizontal: 15,
-      transform: [{ scale: 1 }],
+      transform: [{
+        scale: 1
+      }],
     },
     // This is the new circular icon background
     iconContainer: {
       marginRight: 16,
-      backgroundColor: colors.primary + "10", 
+      backgroundColor: colors.primary + "10",
       padding: 8,
       borderRadius: 50,
     },
@@ -121,6 +152,4 @@ elevation: 12,
       fontWeight: "500",
       marginLeft: 8,
     },
-    
-    
   });

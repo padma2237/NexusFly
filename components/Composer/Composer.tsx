@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { Keyboard } from "react-native";
 
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 
@@ -39,9 +40,15 @@ export default function Composer({
         webSearchEnabled={webSearchEnabled}
         onChangeText={onChangeText}
         onSend={onSend}
-        onAttachmentPress={() =>
-          attachmentSheetRef.current?.present()
-        }
+        
+        
+        onAttachmentPress={() => {
+  Keyboard.dismiss();
+
+  requestAnimationFrame(() => {
+    attachmentSheetRef.current?.present();
+  });
+}}
         onToggleWebSearch={onToggleWebSearch}
       />
     </ComposerCard>
