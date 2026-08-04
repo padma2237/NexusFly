@@ -1,5 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 import { Menu, Search, Settings } from "lucide-react-native";
 import { useTheme } from "../theme/useTheme";
 
@@ -19,12 +21,22 @@ export default function Header({
   onSettingsPress,
 }: HeaderProps) {
   const { colors } = useTheme();
-  const styles = createStyles(colors);
+  const styles = React.useMemo(
+  () => createStyles(colors),
+  [colors]
+);
+  
+  const insets = useSafeAreaInsets();
 
   return (
-    <View style={styles.container}>
+    
       
-      
+      <View
+  style={[
+    styles.container,
+    { top: insets.top + 8 },
+  ]}
+>
 
   <TouchableOpacity
     style={styles.leftButton}
@@ -64,7 +76,7 @@ const createStyles = (colors: any) =>
   container: {
   position: "absolute",
 
-  top: 30,
+  
   left: 18,
   right: 18,
 

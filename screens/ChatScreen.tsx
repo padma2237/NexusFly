@@ -15,8 +15,6 @@ import {
 } from "react-native";
 import EmptyState from "../components/EmptyState";
 
-
-
 import {
   SafeAreaView
 } from "react-native-safe-area-context";
@@ -29,8 +27,9 @@ import ChatBubble from "../components/ChatBubble";
 
 import Composer from "../components/Composer";
 
-
-import { useTheme } from "../theme/useTheme";
+import {
+  useTheme
+} from "../theme/useTheme";
 
 import {
   sendMessage
@@ -57,13 +56,17 @@ export default function ChatScreen() {
   } = useConversation();
 
   const navigation = useNavigation();
-  
-  const { colors, themeName, setTheme } = useTheme();
-  
+
+  const {
+    colors,
+    themeName,
+    setTheme
+  } = useTheme();
+
   const styles = React.useMemo(
-  () => createStyles(colors),
-  [colors]
-);
+    () => createStyles(colors),
+    [colors]
+  );
 
   const messages = currentConversation?.messages ?? [];
 
@@ -105,9 +108,9 @@ export default function ChatScreen() {
   }, [currentConversationId]);
 
   const handleSend = async () => {
-    if (!inputText.trim() || isLoading) 
-    
-    return;
+    if (!inputText.trim() || isLoading)
+
+      return;
 
     let activeConversation = currentConversation;
 
@@ -145,9 +148,7 @@ export default function ChatScreen() {
     setIsLoading(true);
 
     try {
-
       const result = await sendMessage(updatedMessages, webSearchEnabled);
-
 
       const assistantMessage: Message = {
         id: Date.now().toString(),
@@ -173,12 +174,10 @@ export default function ChatScreen() {
           animated: true,
         });
       }, 50);
-
     }
 
     catch (error) {
       console.error(error);
-
       const errorMessage: Message = {
         id: Date.now().toString(),
         role: "assistant",
@@ -282,7 +281,11 @@ export default function ChatScreen() {
 
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container}
+      edges={["left",
+        "right",
+        "bottom"]}
+      >
       <StatusBar style="light" />
 
       <Header
@@ -291,13 +294,13 @@ export default function ChatScreen() {
         navigation.dispatch(DrawerActions.openDrawer())
         }
         onNewChatPress={() => {
-  createNewConversation();
-  Keyboard.dismiss();
-  flatListRef.current?.scrollToOffset({
-    offset: 0,
-    animated: true,
-  });
-}}
+          createNewConversation();
+          Keyboard.dismiss();
+          flatListRef.current?.scrollToOffset({
+            offset: 0,
+            animated: true,
+          });
+        }}
         onSettingsPress={() =>
         navigation.navigate("Settings" as never)
         }
@@ -316,8 +319,8 @@ export default function ChatScreen() {
           >
           <FlatList
             ref={flatListRef}
-            
-            data={messages.length === 0 ? [{ id: "empty" } as any] : messages}
+
+            data={messages.length === 0 ? [{ id: "empty" } as any]: messages}
             initialNumToRender={12}
             maxToRenderPerBatch={8}
             windowSize={7}
@@ -325,21 +328,21 @@ export default function ChatScreen() {
             keyExtractor={(item) => item.id}
 
             renderItem={({ item, index }) => {
-  if (messages.length === 0) {
-    return (
-      <EmptyState
-        onPromptPress={(prompt) => {
-          setInputText(prompt);
-        }}
-      />
-    );
-  }
+              if (messages.length === 0) {
+                return (
+                  <EmptyState
+                    onPromptPress={(prompt) => {
+                      setInputText(prompt);
+                    }}
+                    />
+                );
+              }
 
-  return renderItem({
-    item,
-    index,
-  } as any);
-}}
+              return renderItem( {
+                item,
+                index,
+              } as any);
+            }}
 
             contentContainerStyle={[
               styles.chatScroll,
@@ -350,7 +353,6 @@ export default function ChatScreen() {
 
             keyboardShouldPersistTaps="handled"
             scrollEventThrottle={16}
-
             onScroll={({
               nativeEvent
             }) => {
@@ -371,36 +373,31 @@ export default function ChatScreen() {
 
             onContentSizeChange={(width, height) => {
               contentHeight.current = height;
-
               if (isLoading) {
                 scrollToLatest();
               }
             }}
-
             />
-          
-          
 
-<Composer
-  value={inputText}
-  onChangeText={setInputText}
-  onSend={handleSend}
-  isLoading={isLoading}
-  webSearchEnabled={webSearchEnabled}
-  onToggleWebSearch={() =>
-  setWebSearchEnabled(!webSearchEnabled)
-  }
-  
-/>
-            
+          <Composer
+            value={inputText}
+            onChangeText={setInputText}
+            onSend={handleSend}
+            isLoading={isLoading}
+            webSearchEnabled={webSearchEnabled}
+            onToggleWebSearch={() =>
+            setWebSearchEnabled(!webSearchEnabled)
+            }
+            />
+
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 }
-  
+
   const createStyles = (colors: any) =>
-  
+
   StyleSheet.create({
     container: {
       flex: 1,

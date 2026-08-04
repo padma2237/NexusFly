@@ -14,7 +14,7 @@ import {
   ACTION_GAP,
   INPUT_PADDING_TOP,
   INPUT_PADDING_BOTTOM,
-  
+  INPUT_LEFT_GAP,
   TOOLBAR_MARGIN_TOP,
 } from "./config/measurements";
 
@@ -50,6 +50,7 @@ inputContainer: {
 
 inputContainerCollapsed: {
   flex: 1,
+  marginLeft: INPUT_LEFT_GAP,
 },
 
 inputContainerExpanded: {

@@ -14,7 +14,6 @@ import { ThemeProvider } from "./theme/ThemeContext";
 
 
 
-
 function AppContent() {
   const { isLoading } = useConversation();
 
@@ -39,6 +38,7 @@ export default function App() {
           </ConversationProvider>
         </ThemeProvider>
       </BottomSheetModalProvider>
+      
     </GestureHandlerRootView>
   );
 }
