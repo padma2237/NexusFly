@@ -1,5 +1,12 @@
-import React from "react";
-import { FlatList, Platform } from "react-native";
+
+
+import React, { useCallback } from "react";
+import {
+  FlatList,
+  Platform,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
+} from "react-native";
 
 import EmptyState from "../EmptyState";
 import TypingIndicator from "../TypingIndicator";
@@ -10,7 +17,7 @@ interface ChatListProps {
   flatListRef: React.RefObject<FlatList<Message>>;
   messages: Message[];
 
-  Height: number;
+  
   isLoading: boolean;
 
   renderItem: ({
@@ -32,7 +39,6 @@ interface ChatListProps {
 export default function ChatList({
   flatListRef,
   messages,
-  composerHeight,
   isLoading,
   renderItem,
   contentHeight,
@@ -40,10 +46,40 @@ export default function ChatList({
   scrollToLatest,
   setInputText,
 }: ChatListProps) {
+  
+  
+  const renderEmpty = useCallback(
+  () => (
+    <EmptyState
+      onPromptPress={setInputText}
+    />
+  ),
+  [setInputText]
+);
+
+const handleScroll = (
+  event: NativeSyntheticEvent<NativeScrollEvent>
+) => {
+  const {
+    layoutMeasurement,
+    contentOffset,
+    contentSize,
+  } = event.nativeEvent;
+
+  isUserNearBottom.current =
+    layoutMeasurement.height +
+      contentOffset.y >=
+    contentSize.height - 120;
+};
+  
+  
   return (
     <FlatList
       ref={flatListRef}
-      data={messages.length === 0 ? [{ id: "empty" } as any] : messages}
+      
+      data={messages}
+      
+      
       keyExtractor={(item) => item.id}
       initialNumToRender={12}
       maxToRenderPerBatch={8}
@@ -51,36 +87,24 @@ export default function ChatList({
       removeClippedSubviews={Platform.OS === "android"}
       keyboardShouldPersistTaps="handled"
       scrollEventThrottle={16}
-      renderItem={({ item, index }) => {
-        if (messages.length === 0) {
-          return (
-            <EmptyState
-              onPromptPress={(prompt) => setInputText(prompt)}
-            />
-          );
-        }
-
-        return renderItem({
-          item,
-          index,
-        });
-      }}
+      
+      renderItem={({ item, index }) =>
+  renderItem({
+    item,
+    index,
+  })
+}
+      ListEmptyComponent={renderEmpty}
+      
+      
       contentContainerStyle={{
         paddingHorizontal: 20,
         paddingTop: 100,
-        paddingBottom: composerHeight,
+        paddingBottom: 100,
       }}
-      onScroll={({ nativeEvent }) => {
-        const {
-          layoutMeasurement,
-          contentOffset,
-          contentSize,
-        } = nativeEvent;
-
-        isUserNearBottom.current =
-          layoutMeasurement.height + contentOffset.y >=
-          contentSize.height - 120;
-      }}
+      
+      onScroll={handleScroll}
+      
       ListFooterComponent={
         isLoading ? <TypingIndicator /> : null
       }

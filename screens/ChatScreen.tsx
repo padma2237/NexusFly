@@ -76,10 +76,7 @@ export default function ChatScreen() {
   const contentHeight = useRef(0);
 
   const isUserNearBottom = useRef(true);
-
-  const [inputHeight,
-    setInputHeight] = useState(0);
-  const [composerHeight, setComposerHeight] = useState(0);
+  
 
   const [listHeight,
     setListHeight] = useState(0);
@@ -96,7 +93,7 @@ export default function ChatScreen() {
     setTimeout(() => {
       const offset = Math.max(
         0,
-        contentHeight.current - listHeight + inputHeight + 32
+        contentHeight.current - listHeight + 32
       );
 
       flatListRef.current?.scrollToOffset({
@@ -325,7 +322,7 @@ export default function ChatScreen() {
       flatListRef={flatListRef}
       messages={messages}
       isLoading={isLoading}
-      composerHeight={composerHeight}
+      
       renderItem={renderItem}
       setInputText={setInputText}
       contentHeight={contentHeight}
@@ -341,9 +338,6 @@ export default function ChatScreen() {
   webSearchEnabled={webSearchEnabled}
   onToggleWebSearch={() =>
     setWebSearchEnabled(!webSearchEnabled)
-  }
-  onLayout={(e) =>
-    setComposerHeight(e.nativeEvent.layout.height)
   }
 />
     

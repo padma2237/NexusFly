@@ -7,9 +7,11 @@ export const getStyles = (colors: any) =>
     card: {
       
       
-      
-marginHorizontal: 16,
-marginBottom: 6,
+      position: "absolute",
+left: 16,
+right: 16,
+bottom: 16,
+
       
       borderRadius: COLLAPSED_RADIUS || 28,
       minHeight: COMPOSER_MIN_HEIGHT || 52,
