@@ -1,4 +1,5 @@
 import React from "react";
+import { LayoutChangeEvent } from "react-native";
 
 export interface ComposerInputProps {
   value: string;
@@ -90,4 +91,6 @@ export interface ComposerProps {
 
 
   onToggleWebSearch: () => void;
+  
+  onLayout?: (event: LayoutChangeEvent) => void;
 }

@@ -5,8 +5,12 @@ import { COLLAPSED_RADIUS, COMPOSER_MIN_HEIGHT } from "./config/constants";
 export const getStyles = (colors: any) =>
   StyleSheet.create({
     card: {
-      marginHorizontal: 16,
-      marginBottom: 16,
+      
+      
+      
+marginHorizontal: 16,
+marginBottom: 6,
+      
       borderRadius: COLLAPSED_RADIUS || 28,
       minHeight: COMPOSER_MIN_HEIGHT || 52,
       backgroundColor: colors?.surface || "#0f172a", // Safe access with fallback

@@ -13,7 +13,6 @@ import {
   View,
   TouchableWithoutFeedback,
 } from "react-native";
-import EmptyState from "../components/EmptyState";
 
 import {
   SafeAreaView
@@ -23,7 +22,6 @@ import {
 } from "expo-status-bar";
 
 import Header from "../components/Header";
-import ChatBubble from "../components/ChatBubble";
 
 import Composer from "../components/Composer";
 
@@ -41,11 +39,15 @@ import {
 import {
   useConversation
 } from "../context/ConversationContext";
-import TypingIndicator from "../components/TypingIndicator";
+
 import {
   useNavigation,
   DrawerActions
 } from "@react-navigation/native";
+
+import ChatList from "../components/Chat/ChatList";
+
+import ChatBubble from "../components/ChatBubble";
 
 export default function ChatScreen() {
   const {
@@ -77,6 +79,7 @@ export default function ChatScreen() {
 
   const [inputHeight,
     setInputHeight] = useState(0);
+  const [composerHeight, setComposerHeight] = useState(0);
 
   const [listHeight,
     setListHeight] = useState(0);
@@ -306,92 +309,50 @@ export default function ChatScreen() {
         }
         />
 
-      <TouchableWithoutFeedback
-        onPress={Keyboard.dismiss}
-        accessible={false}
-        >
-        <KeyboardAvoidingView
-          style={styles.chatWrapper}
-          onLayout={(e) => {
-            setListHeight(e.nativeEvent.layout.height);
-          }}
-          behavior={Platform.OS === "ios" ? "padding": "height"}
-          >
-          <FlatList
-            ref={flatListRef}
-
-            data={messages.length === 0 ? [{ id: "empty" } as any]: messages}
-            initialNumToRender={12}
-            maxToRenderPerBatch={8}
-            windowSize={7}
-            removeClippedSubviews={Platform.OS === "android"}
-            keyExtractor={(item) => item.id}
-
-            renderItem={({ item, index }) => {
-              if (messages.length === 0) {
-                return (
-                  <EmptyState
-                    onPromptPress={(prompt) => {
-                      setInputText(prompt);
-                    }}
-                    />
-                );
-              }
-
-              return renderItem( {
-                item,
-                index,
-              } as any);
-            }}
-
-            contentContainerStyle={[
-              styles.chatScroll,
-              {
-                paddingBottom: inputHeight + 24,
-              },
-            ]}
-
-            keyboardShouldPersistTaps="handled"
-            scrollEventThrottle={16}
-            onScroll={({
-              nativeEvent
-            }) => {
-              const {
-                layoutMeasurement,
-                contentOffset,
-                contentSize
-              } = nativeEvent;
-
-              isUserNearBottom.current =
-              layoutMeasurement.height + contentOffset.y >=
-              contentSize.height - 120;
-            }}
-
-            ListFooterComponent={
-            isLoading ? <TypingIndicator />: null
-            }
-
-            onContentSizeChange={(width, height) => {
-              contentHeight.current = height;
-              if (isLoading) {
-                scrollToLatest();
-              }
-            }}
-            />
-
-          <Composer
-            value={inputText}
-            onChangeText={setInputText}
-            onSend={handleSend}
-            isLoading={isLoading}
-            webSearchEnabled={webSearchEnabled}
-            onToggleWebSearch={() =>
-            setWebSearchEnabled(!webSearchEnabled)
-            }
-            />
-
-        </KeyboardAvoidingView>
-      </TouchableWithoutFeedback>
+      
+    <TouchableWithoutFeedback
+  onPress={Keyboard.dismiss}
+  accessible={false}
+>
+  <View
+    style={styles.chatWrapper}
+    onLayout={(e) => {
+      setListHeight(e.nativeEvent.layout.height);
+    }}
+  >
+    
+    <ChatList
+      flatListRef={flatListRef}
+      messages={messages}
+      isLoading={isLoading}
+      composerHeight={composerHeight}
+      renderItem={renderItem}
+      setInputText={setInputText}
+      contentHeight={contentHeight}
+      isUserNearBottom={isUserNearBottom}
+      scrollToLatest={scrollToLatest}
+    />
+    
+    <Composer
+  value={inputText}
+  onChangeText={setInputText}
+  onSend={handleSend}
+  isLoading={isLoading}
+  webSearchEnabled={webSearchEnabled}
+  onToggleWebSearch={() =>
+    setWebSearchEnabled(!webSearchEnabled)
+  }
+  onLayout={(e) =>
+    setComposerHeight(e.nativeEvent.layout.height)
+  }
+/>
+    
+    
+    
+  </View>
+</TouchableWithoutFeedback>
+      
+      
     </SafeAreaView>
   );
 }
@@ -406,11 +367,6 @@ export default function ChatScreen() {
 
     chatWrapper: {
       flex: 1,
-    },
-
-    chatScroll: {
-      paddingHorizontal: 20,
-      paddingTop: 80,
     },
   }
   );
