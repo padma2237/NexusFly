@@ -338,7 +338,14 @@ const renderItem = useCallback(
 
     
 return (
-  <SafeAreaView style={styles.container}>
+  
+  
+  
+  
+  
+  
+  
+  <SafeAreaView style={styles.container} edges={["left", "right", "bottom"]}>
     <StatusBar style="light" />
     <Header
       title="NexusFly"
@@ -393,6 +400,17 @@ renderItem={({ item, index }) => (
       
       onMessageLayout={handleMessageLayout}
     />
+    
+    <Composer
+    value={inputText}
+    onChangeText={setInputText}
+    onSend={handleSend}
+    isLoading={isLoading}
+    webSearchEnabled={webSearchEnabled}
+    onToggleWebSearch={() =>
+      setWebSearchEnabled(!webSearchEnabled)
+    }
+  />
 
   </View>
 </TouchableWithoutFeedback>
