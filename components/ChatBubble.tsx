@@ -224,13 +224,13 @@ const createStyles = (colors: any) =>
     },
 
     userBubble: {
-      alignSelf: "flex-end",
+      
       backgroundColor: colors.primary,
       borderBottomRightRadius: 6,
     },
 
     aiBubble: {
-      alignSelf: "flex-start",
+      
       backgroundColor: colors.surface,
       borderBottomLeftRadius: 6,
       borderWidth: 1,

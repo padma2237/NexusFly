@@ -17,6 +17,11 @@ interface ChatListProps {
   flatListRef: React.RefObject<FlatList<Message>>;
   messages: Message[];
 
+onMessageLayout: (
+  id: string,
+  y: number,
+  height: number
+) => void;
   
   isLoading: boolean;
 
@@ -45,6 +50,7 @@ export default function ChatList({
   isUserNearBottom,
   scrollToLatest,
   setInputText,
+  onMessageLayout,
 }: ChatListProps) {
   
   
@@ -80,6 +86,22 @@ const handleScroll = (
       data={messages}
       
       
+
+onScrollToIndexFailed={(info) => {
+  flatListRef.current?.scrollToOffset({
+    offset: info.averageItemLength * info.index,
+    animated: false,
+  });
+
+  setTimeout(() => {
+    flatListRef.current?.scrollToIndex({
+      index: info.index,
+      animated: true,
+      viewPosition: 0,
+    });
+  }, 100);
+}}
+      
       keyExtractor={(item) => item.id}
       initialNumToRender={12}
       maxToRenderPerBatch={8}
@@ -113,6 +135,9 @@ const handleScroll = (
 
         if (isLoading) {
           scrollToLatest();
+          
+          
+          
         }
       }}
     />
