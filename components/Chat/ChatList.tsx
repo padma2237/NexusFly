@@ -132,13 +132,11 @@ onScrollToIndexFailed={(info) => {
       }
       onContentSizeChange={(w, h) => {
         contentHeight.current = h;
-
+        
         if (isLoading) {
-          scrollToLatest();
-          
-          
-          
-        }
+    scrollToLatest();
+  }
+
       }}
     />
   );

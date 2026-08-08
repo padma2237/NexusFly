@@ -58,7 +58,7 @@ const WINDOW_HEIGHT =
 Dimensions.get("window").height;
 
 const USER_ANCHOR =
-WINDOW_HEIGHT * 0.20;
+WINDOW_HEIGHT * 0.45;
 
 const {
 currentConversation,
@@ -204,12 +204,10 @@ setConversations((prev) =>
     }: chat  
   )  
 );  
-  
-  
-requestAnimationFrame(() => {
 
-anchorUserMessage(userMessage.id);
-});
+setTimeout(() => {
+  anchorUserMessage(userMessage.id);
+}, 250);
 
 setInputText("");  
 Keyboard.dismiss();  
@@ -346,7 +344,7 @@ return (
   
   
   <SafeAreaView style={styles.container} edges={["left", "right", "bottom"]}>
-    <StatusBar style="light" />
+    <StatusBar style="auto" />
     <Header
       title="NexusFly"
       onMenuPress={() =>
