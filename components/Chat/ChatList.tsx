@@ -1,9 +1,9 @@
 
-
 import React, { useCallback } from "react";
 import {
   FlatList,
   Platform,
+  View,
   NativeSyntheticEvent,
   NativeScrollEvent,
 } from "react-native";
@@ -23,6 +23,8 @@ onMessageLayout: (
   height: number
 ) => void;
   
+  onContentSizeChange?: (height: number) => void;
+  shouldScrollToLatest?: boolean;
   isLoading: boolean;
 
   renderItem: ({
@@ -37,6 +39,8 @@ onMessageLayout: (
   isUserNearBottom: React.MutableRefObject<boolean>;
 
   scrollToLatest: () => void;
+  
+listHeight: number;
 
   setInputText: (text: string) => void;
 }
@@ -51,6 +55,9 @@ export default function ChatList({
   scrollToLatest,
   setInputText,
   onMessageLayout,
+  onContentSizeChange,
+  shouldScrollToLatest,
+  listHeight,
 }: ChatListProps) {
   
   
@@ -84,7 +91,6 @@ const handleScroll = (
       ref={flatListRef}
       
       data={messages}
-      
       
 
 onScrollToIndexFailed={(info) => {
@@ -122,21 +128,37 @@ onScrollToIndexFailed={(info) => {
       contentContainerStyle={{
         paddingHorizontal: 20,
         paddingTop: 100,
-        paddingBottom: 100,
+        paddingBottom: Math.max(200, listHeight),
       }}
       
       onScroll={handleScroll}
       
-      ListFooterComponent={
-        isLoading ? <TypingIndicator /> : null
-      }
+    
+      
+    
+ListFooterComponent={
+  <View style={{ paddingBottom: 50 }}>
+    {isLoading ? <TypingIndicator /> : null}
+  </View>
+}
+
+      
+      
       onContentSizeChange={(w, h) => {
         contentHeight.current = h;
         
-        if (isLoading) {
-    scrollToLatest();
+        
+        
+        if (onContentSizeChange) {
+    onContentSizeChange(h);
   }
-
+        console.log(
+    "CONTENT SIZE",
+    h,
+    "loading:",
+    isLoading
+  );
+  
       }}
     />
   );
