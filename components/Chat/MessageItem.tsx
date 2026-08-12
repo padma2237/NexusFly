@@ -6,11 +6,17 @@ import { Message } from "../../types/chat";
 interface Props {
   message: Message;
   onRegenerate?: () => void;
+  onLayout?: (
+    id: string,
+    y: number,
+    height: number
+  ) => void;
 }
 
 export default React.memo(function MessageItem({
   message,
   onRegenerate,
+  onLayout,
 }: Props) {
   
   return (
@@ -21,6 +27,13 @@ export default React.memo(function MessageItem({
           ? styles.userRow
           : styles.aiRow,
       ]}
+      onLayout={(event) => {
+        if (message.role !== "user" || !onLayout) return;
+
+        const { y, height } = event.nativeEvent.layout;
+
+        onLayout(message.id, y, height);
+      }}
     >
       <ChatBubble
         message={message}

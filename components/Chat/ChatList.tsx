@@ -1,8 +1,6 @@
-
 import React, { useCallback } from "react";
 import {
   FlatList,
-  Platform,
   View,
   NativeSyntheticEvent,
   NativeScrollEvent,
@@ -17,32 +15,21 @@ interface ChatListProps {
   flatListRef: React.RefObject<FlatList<Message>>;
   messages: Message[];
 
-onMessageLayout: (
-  id: string,
-  y: number,
-  height: number
-) => void;
-  
-  onContentSizeChange?: (height: number) => void;
-  shouldScrollToLatest?: boolean;
   isLoading: boolean;
+  composerHeight: number;
 
   renderItem: ({
-  item,
-  index,
-}: {
-  item: Message;
-  index: number;
-}) => React.ReactElement;
+    item,
+    index,
+  }: {
+    item: Message;
+    index: number;
+  }) => React.ReactElement;
 
-  contentHeight: React.MutableRefObject<number>;
   isUserNearBottom: React.MutableRefObject<boolean>;
 
-  scrollToLatest: () => void;
-  
-listHeight: number;
-
   setInputText: (text: string) => void;
+  onContentSizeChange?: (height: number) => void;
 }
 
 export default function ChatList({
@@ -50,116 +37,103 @@ export default function ChatList({
   messages,
   isLoading,
   renderItem,
-  contentHeight,
   isUserNearBottom,
-  scrollToLatest,
   setInputText,
-  onMessageLayout,
+  composerHeight,
   onContentSizeChange,
-  shouldScrollToLatest,
-  listHeight,
 }: ChatListProps) {
-  
-  
   const renderEmpty = useCallback(
-  () => (
-    <EmptyState
-      onPromptPress={setInputText}
-    />
-  ),
-  [setInputText]
-);
+    () => (
+      <EmptyState
+        onPromptPress={setInputText}
+      />
+    ),
+    [setInputText]
+  );
 
-const handleScroll = (
-  event: NativeSyntheticEvent<NativeScrollEvent>
-) => {
-  const {
-    layoutMeasurement,
-    contentOffset,
-    contentSize,
-  } = event.nativeEvent;
+  const handleScroll = useCallback(
+    (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+      const {
+        layoutMeasurement,
+        contentOffset,
+        contentSize,
+      } = event.nativeEvent;
 
-  isUserNearBottom.current =
-    layoutMeasurement.height +
-      contentOffset.y >=
-    contentSize.height - 120;
-};
-  
-  
+      const distanceFromBottom =
+        contentSize.height -
+        (layoutMeasurement.height + contentOffset.y);
+
+      isUserNearBottom.current =
+        distanceFromBottom <= 120;
+    },
+    [isUserNearBottom]
+  );
+
   return (
     <FlatList
       ref={flatListRef}
-      
+
       data={messages}
-      
 
-onScrollToIndexFailed={(info) => {
-  flatListRef.current?.scrollToOffset({
-    offset: info.averageItemLength * info.index,
-    animated: false,
-  });
-
-  setTimeout(() => {
-    flatListRef.current?.scrollToIndex({
-      index: info.index,
-      animated: true,
-      viewPosition: 0,
-    });
-  }, 100);
-}}
-      
       keyExtractor={(item) => item.id}
+
       initialNumToRender={12}
       maxToRenderPerBatch={8}
       windowSize={7}
-      removeClippedSubviews={Platform.OS === "android"}
+
+      /*
+       * Keep this disabled while we establish
+       * reliable scrolling behavior.
+       */
+      removeClippedSubviews={false}
+
       keyboardShouldPersistTaps="handled"
+
       scrollEventThrottle={16}
-      
+
       renderItem={({ item, index }) =>
-  renderItem({
-    item,
-    index,
-  })
-}
+        renderItem({
+          item,
+          index,
+        })
+      }
+
       ListEmptyComponent={renderEmpty}
-      
-      
+
       contentContainerStyle={{
         paddingHorizontal: 20,
         paddingTop: 100,
-        paddingBottom: Math.max(200, listHeight),
+        paddingBottom: composerHeight + 24,
       }}
-      
-      onScroll={handleScroll}
-      
-    
-      
-    
-ListFooterComponent={
-  <View style={{ paddingBottom: 50 }}>
-    {isLoading ? <TypingIndicator /> : null}
-  </View>
-}
 
-      
-      
-      onContentSizeChange={(w, h) => {
-        contentHeight.current = h;
-        
-        
-        
-        if (onContentSizeChange) {
-    onContentSizeChange(h);
-  }
-        console.log(
-    "CONTENT SIZE",
-    h,
-    "loading:",
-    isLoading
-  );
-  
+      onScroll={handleScroll}
+      onContentSizeChange={onContentSizeChange}
+
+      onScrollToIndexFailed={(info) => {
+        /*
+         * FlatList may not have rendered the requested
+         * item yet. First move approximately to the
+         * requested area, then retry.
+         */
+        flatListRef.current?.scrollToOffset({
+          offset: info.averageItemLength * info.index,
+          animated: false,
+        });
+
+        setTimeout(() => {
+          flatListRef.current?.scrollToIndex({
+            index: info.index,
+            animated: true,
+            viewPosition: 0.35,
+          });
+        }, 100);
       }}
+
+      ListFooterComponent={
+        <View>
+          {isLoading ? <TypingIndicator /> : null}
+        </View>
+      }
     />
   );
 }
