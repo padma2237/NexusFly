@@ -46,7 +46,7 @@ export default function Header({
 
   <View style={styles.logoContainer}>
     <Text style={styles.logoIcon}>✦Padma</Text>
-    <Text style={styles.title}>Nexus
+    <Text style={styles.title}>Personal AI
     
     </Text>
 </View>

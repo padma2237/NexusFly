@@ -46,9 +46,6 @@ import MessageRow from "../components/Chat/MessageRow";
 
 
 
-
-
-
 export default function ChatScreen() {
   
 
@@ -69,9 +66,21 @@ export default function ChatScreen() {
 
   const messages = currentConversation?.messages ?? [];
   const flatListRef = useRef < FlatList < Message>>(null);
+  const messageLayouts = useRef<
+  Record<string, { y: number; height: number }>
+>({});
+
 const chatListRef = useRef<ChatListHandle>(null);
   
-  
+  const handleMessageLayout = useCallback(
+  (id: string, y: number, height: number) => {
+    messageLayouts.current[id] = {
+      y,
+      height,
+    };
+  },
+  []
+);
   
   
 
@@ -84,6 +93,7 @@ const chatListRef = useRef<ChatListHandle>(null);
     setIsLoading] = useState(false);
     
     const [composerHeight, setComposerHeight] = useState(0);
+    const [listHeight, setListHeight] = useState(0);
     
     const handleComposerLayout = useCallback((event: any) => {
   const height = event.nativeEvent.layout.height;
@@ -97,105 +107,131 @@ const chatListRef = useRef<ChatListHandle>(null);
     setInputText("");
   }, [currentConversationId]);
 
+  
   const handleSend = async () => {
-    if (!inputText.trim() || isLoading) return;
+  if (!inputText.trim() || isLoading) return;
 
-    let activeConversation = currentConversation;
-    if (!activeConversation) {
-      activeConversation = createNewConversation();
-    }
+  let activeConversation = currentConversation;
 
-    const userMessage: Message = {
+  if (!activeConversation) {
+    activeConversation = createNewConversation();
+  }
+
+  const userMessage: Message = {
+    id: Date.now().toString(),
+    role: "user",
+    text: inputText,
+    createdAt: Date.now(),
+  };
+
+  const updatedMessages = [
+    ...messages,
+    userMessage,
+  ];
+
+  const newMessageIndex =
+    updatedMessages.length - 1;
+
+  const newTitle =
+    activeConversation.title === "New Chat"
+      ? inputText.slice(0, 30)
+      : activeConversation.title;
+
+  setConversations((prev) =>
+    prev.map((chat) =>
+      chat.id === activeConversation.id
+        ? {
+            ...chat,
+            title: newTitle,
+            messages: updatedMessages,
+            updatedAt: Date.now(),
+          }
+        : chat
+    )
+  );
+  
+  setInputText("");
+
+Keyboard.dismiss();
+setIsLoading(true);
+
+// Wait until the new user message has actually
+// been rendered by FlatList, then anchor it at 25%.
+requestAnimationFrame(() => {
+  requestAnimationFrame(() => {
+    chatListRef.current?.scrollToMessage(
+      newMessageIndex,
+      0.25
+    );
+  });
+});
+  
+
+  try {
+    const result = await sendMessage(
+      updatedMessages,
+      webSearchEnabled
+    );
+
+    const assistantMessage: Message = {
       id: Date.now().toString(),
-      role: "user",
-      text: inputText,
+      role: "assistant",
+      text: result.answer,
+      sources: result.sources,
       createdAt: Date.now(),
     };
-    
 
-    const updatedMessages = [...messages,
-      userMessage];
-      
-      const newMessageIndex = updatedMessages.length - 1;
-      
-    const newTitle =
-    activeConversation.title === "New Chat"
-    ? inputText.slice(0, 30): activeConversation.title;
+    const finalMessages = [
+      ...updatedMessages,
+      assistantMessage,
+    ];
 
     setConversations((prev) =>
       prev.map((chat) =>
         chat.id === activeConversation.id
-        ? {
-          ...chat,
-          title: newTitle,
-          messages: updatedMessages,
-          updatedAt: Date.now(),
-        }: chat
+          ? {
+              ...chat,
+              messages: finalMessages,
+              updatedAt: Date.now(),
+            }
+          : chat
       )
     );
 
-    setInputText("");
-    
-    chatListRef.current?.scrollToMessage(newMessageIndex);
-    Keyboard.dismiss();
-    setIsLoading(true);
 
 
+  } catch (error) {
+    console.error(error);
 
-    try {
-      const result = 
-      await sendMessage(
-        updatedMessages, 
-      webSearchEnabled);
+    const errorMessage: Message = {
+      id: Date.now().toString(),
+      role: "assistant",
+      text: "Error connecting to AI.",
+      createdAt: Date.now(),
+    };
 
-      const assistantMessage:
-      Message = {
-        id: Date.now().toString(),
-        role: "assistant",
-        text: result.answer,
-        sources: result.sources,
-        createdAt: Date.now(),
-      };
-
-
-      setConversations((prev) =>
-        prev.map((chat) =>
-          chat.id === activeConversation.id
+    setConversations((prev) =>
+      prev.map((chat) =>
+        chat.id === activeConversation.id
           ? {
-            ...chat,
-            messages: [...chat.messages, assistantMessage],
-            updatedAt: Date.now(),
-          }: chat
-        )
-      );
-      
-      chatListRef.current?.scrollToLatest();
-      
-      
-
-    } catch (error) {
-      console.error(error);
-      const errorMessage: Message = {
-        id: Date.now().toString(),
-        role: "assistant",
-        text: "Error connecting to AI.",
-        createdAt: Date.now(),
-      };
-
-      setConversations((prev) =>
-        prev.map((chat) =>
-          chat.id === activeConversation.id
-          ? {
-            ...chat,
-            messages: [...chat.messages, errorMessage],
-            updatedAt: Date.now(),
-          }: chat
-        )
-      );
-    } finally {
-      setIsLoading(false);
-    }
-  };
+              ...chat,
+              messages: [
+                ...chat.messages,
+                errorMessage,
+              ],
+              updatedAt: Date.now(),
+            }
+          : chat
+      )
+    );
+  } finally {
+    setIsLoading(false);
+  }
+};
+  
+  
+  
+  
 
   const handleRegenerate = useCallback(async () => {
     if (messages.length < 2 || isLoading) return;
@@ -221,8 +257,6 @@ const chatListRef = useRef<ChatListHandle>(null);
     );
 
     setIsLoading(true);
-    
-    chatListRef.current?.scrollToMessage(userIndex);
 
     try {
       const result = await sendMessage(updatedMessages, webSearchEnabled);
@@ -249,6 +283,9 @@ const chatListRef = useRef<ChatListHandle>(null);
       setIsLoading(false);
     }
   },
+  
+  
+  
     [messages,
       currentConversationId,
       webSearchEnabled,
@@ -272,28 +309,39 @@ const chatListRef = useRef<ChatListHandle>(null);
         
         <View style={styles.chatWrapper}>
 
-          
-  <ChatList
+          <ChatList
   ref={chatListRef}
   flatListRef={flatListRef}
+
   messages={messages}
+
+  messageLayouts={messageLayouts}
+  listHeight={listHeight}
+
   isLoading={isLoading}
-  
+
   setInputText={setInputText}
+
   composerHeight={composerHeight}
+
+  onListLayout={setListHeight}
 
   renderItem={({ item, index }) => (
     <MessageRow
       item={item}
-      
+
       isLastAssistant={
         index === messages.length - 1 &&
         item.role === "assistant"
       }
+
       handleRegenerate={handleRegenerate}
+
+      onLayout={handleMessageLayout}
     />
   )}
 />
+  
         <Composer
           value={inputText}
           onChangeText={setInputText}

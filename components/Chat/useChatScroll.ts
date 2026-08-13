@@ -1,26 +1,42 @@
-import { useCallback, useRef } from "react";
+import {
+  useCallback,
+  useRef
+} from "react";
 import {
   FlatList,
   NativeSyntheticEvent,
   NativeScrollEvent,
 } from "react-native";
 
-import { Message } from "../../types/chat";
+import {
+  Message
+} from "../../types/chat";
 
 interface UseChatScrollProps {
-  flatListRef: React.RefObject<FlatList<Message>>;
+  flatListRef: React.RefObject < FlatList < Message>>;
+  messageLayouts: React.MutableRefObject <
+  Record < string,
+  {
+    y: number; height: number
+  } > >;
+  messages: Message[];
+  listHeight: number;
 }
 
 export default function useChatScroll({
   flatListRef,
+  messageLayouts,
+  messages,
+  listHeight,
 }: UseChatScrollProps) {
-  const isUserNearBottom = useRef(true);
+
+const isUserNearBottom = useRef(true);
 
   /**
-   * Track whether the user is close to the bottom.
-   */
+  * Track whether the user is close to the bottom.
+  */
   const handleScroll = useCallback(
-    (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    (event: NativeSyntheticEvent < NativeScrollEvent >) => {
       const {
         layoutMeasurement,
         contentOffset,
@@ -28,39 +44,59 @@ export default function useChatScroll({
       } = event.nativeEvent;
 
       const distanceFromBottom =
-        contentSize.height -
-        (layoutMeasurement.height + contentOffset.y);
+      contentSize.height -
+      (layoutMeasurement.height + contentOffset.y);
 
       isUserNearBottom.current =
-        distanceFromBottom <= 120;
+      distanceFromBottom <= 120;
     },
     []
   );
 
   /**
-   * Scroll to a particular message.
-   *
-   * viewPosition 0.35 means the message is positioned
-   * around 35% down the visible FlatList area.
-   */
+  * Scroll to a particular message.
+  *
+  * viewPosition 0.35 means the message is positioned
+  * around 35% down the visible FlatList area.
+  */
   const scrollToMessage = useCallback(
-    (index: number) => {
+    (
+      index: number,
+      viewPosition: number = 0.25
+    ) => {
+      const attempt = (tries = 0) => {
+        if (tries > 20) {
+          return;
+        }
+
+        const list = flatListRef.current;
+
+        if (!list || !messages[index]) {
+          setTimeout(() => attempt(tries + 1), 50);
+          return;
+        }
+
+        list.scrollToIndex({
+          index,
+          animated: true,
+          viewPosition,
+          viewOffset: 0,
+        });
+      };
+
       requestAnimationFrame(() => {
-        setTimeout(() => {
-          flatListRef.current?.scrollToIndex({
-            index,
-            animated: true,
-            viewPosition: 0.35,
-          });
-        }, 50);
+        requestAnimationFrame(() => {
+          attempt();
+        });
       });
     },
-    [flatListRef]
+    [flatListRef,
+      messages]
   );
 
   /**
-   * Scroll to the newest content.
-   */
+  * Scroll to the newest content.
+  */
   const scrollToLatest = useCallback(() => {
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -69,41 +105,50 @@ export default function useChatScroll({
         });
       });
     });
-  }, [flatListRef]);
-  
+  },
+    [flatListRef]);
+
   const scrollToTop = useCallback(() => {
-  requestAnimationFrame(() => {
-    flatListRef.current?.scrollToOffset({
-      offset: 0,
-      animated: true,
+    requestAnimationFrame(() => {
+      flatListRef.current?.scrollToOffset({
+        offset: 0,
+        animated: true,
+      });
     });
-  });
-}, [flatListRef]);
-  
-  
+  },
+    [flatListRef]);
 
   /**
-   * FlatList sometimes hasn't rendered the requested
-   * item yet. Move approximately to it, then retry.
-   */
+  * FlatList sometimes hasn't rendered the requested
+  * item yet. Move approximately to it, then retry.
+  */
+
   const handleScrollToIndexFailed = useCallback(
     (info: {
       index: number;
       averageItemLength: number;
     }) => {
-      flatListRef.current?.scrollToOffset({
-        offset:
-          info.averageItemLength * info.index,
+      const list = flatListRef.current;
+
+      if (!list) {
+        return;
+      }
+
+      list.scrollToOffset({
+        offset: Math.max(
+          0,
+          info.averageItemLength * info.index
+        ),
         animated: false,
       });
 
       setTimeout(() => {
-        flatListRef.current?.scrollToIndex({
+        list.scrollToIndex({
           index: info.index,
           animated: true,
-          viewPosition: 0.35,
+          viewPosition: 0.25,
         });
-      }, 100);
+      }, 150);
     },
     [flatListRef]
   );
@@ -111,7 +156,7 @@ export default function useChatScroll({
   return {
     isUserNearBottom,
     handleScroll,
-    
+
     scrollToMessage,
     scrollToLatest,
     scrollToTop,
