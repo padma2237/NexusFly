@@ -36,37 +36,16 @@ import {
   DrawerActions
 } from "@react-navigation/native";
 import MessageItem from "../components/Chat/MessageItem";
-import ChatList from "../components/Chat/ChatList";
+
+import ChatList, {
+  ChatListHandle,
+} from "../components/Chat/ChatList";
 
 
-const MessageRow = React.memo(
-  ({
-    item,
-    index,
-    isLastAssistant,
-    handleRegenerate,
-  }: any) => {
-    return (
-      <View>
-        <MessageItem
-          message={item}
-          onRegenerate={
-            isLastAssistant
-              ? handleRegenerate
-              : undefined
-          }
-        />
-      </View>
-    );
-  },
-  (prevProps, nextProps) => {
-    return (
-      prevProps.item.id === nextProps.item.id &&
-      prevProps.isLastAssistant === nextProps.isLastAssistant &&
-      prevProps.index === nextProps.index
-    );
-  }
-);
+import MessageRow from "../components/Chat/MessageRow";
+
+
+
 
 
 
@@ -90,21 +69,11 @@ export default function ChatScreen() {
 
   const messages = currentConversation?.messages ?? [];
   const flatListRef = useRef < FlatList < Message>>(null);
-
+const chatListRef = useRef<ChatListHandle>(null);
   
-  const isUserNearBottom = useRef(true);
   
-  const scrollToMessage = useCallback((index: number) => {
-  requestAnimationFrame(() => {
-    setTimeout(() => {
-      flatListRef.current?.scrollToIndex({
-        index,
-        animated: true,
-        viewPosition: 0.35,
-      });
-    }, 50);
-  });
-}, []);
+  
+  
 
   
   const [webSearchEnabled,
@@ -166,16 +135,21 @@ export default function ChatScreen() {
     );
 
     setInputText("");
-    scrollToMessage(newMessageIndex);
+    
+    chatListRef.current?.scrollToMessage(newMessageIndex);
     Keyboard.dismiss();
     setIsLoading(true);
 
 
 
     try {
-      const result = await sendMessage(updatedMessages, webSearchEnabled);
+      const result = 
+      await sendMessage(
+        updatedMessages, 
+      webSearchEnabled);
 
-      const assistantMessage: Message = {
+      const assistantMessage:
+      Message = {
         id: Date.now().toString(),
         role: "assistant",
         text: result.answer,
@@ -195,13 +169,9 @@ export default function ChatScreen() {
         )
       );
       
-      requestAnimationFrame(() => {
-  requestAnimationFrame(() => {
-    flatListRef.current?.scrollToEnd({
-      animated: true,
-    });
-  });
-});
+      chatListRef.current?.scrollToLatest();
+      
+      
 
     } catch (error) {
       console.error(error);
@@ -251,7 +221,8 @@ export default function ChatScreen() {
     );
 
     setIsLoading(true);
-    scrollToMessage(userIndex);
+    
+    chatListRef.current?.scrollToMessage(userIndex);
 
     try {
       const result = await sendMessage(updatedMessages, webSearchEnabled);
@@ -294,10 +265,7 @@ export default function ChatScreen() {
         onNewChatPress={() => {
           createNewConversation();
           Keyboard.dismiss();
-          flatListRef.current?.scrollToOffset({
-            offset: 0,
-            animated: true,
-          });
+          chatListRef.current?.scrollToTop();
         }}
         onSettingsPress={() => navigation.navigate("Settings" as never)}
         />
@@ -306,17 +274,18 @@ export default function ChatScreen() {
 
           
   <ChatList
+  ref={chatListRef}
   flatListRef={flatListRef}
   messages={messages}
   isLoading={isLoading}
-  isUserNearBottom={isUserNearBottom}
+  
   setInputText={setInputText}
   composerHeight={composerHeight}
 
   renderItem={({ item, index }) => (
     <MessageRow
       item={item}
-      index={index}
+      
       isLastAssistant={
         index === messages.length - 1 &&
         item.role === "assistant"

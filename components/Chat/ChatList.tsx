@@ -1,15 +1,25 @@
-import React, { useCallback } from "react";
+
+import React, {
+  forwardRef,
+  useCallback,
+  useImperativeHandle,
+} from "react";
 import {
   FlatList,
   View,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
 } from "react-native";
 
 import EmptyState from "../EmptyState";
 import TypingIndicator from "../TypingIndicator";
 
 import { Message } from "../../types/chat";
+import useChatScroll from "./useChatScroll";
+
+export interface ChatListHandle {
+  scrollToMessage: (index: number) => void;
+  scrollToLatest: () => void;
+  scrollToTop: () => void;
+}
 
 interface ChatListProps {
   flatListRef: React.RefObject<FlatList<Message>>;
@@ -26,22 +36,46 @@ interface ChatListProps {
     index: number;
   }) => React.ReactElement;
 
-  isUserNearBottom: React.MutableRefObject<boolean>;
-
   setInputText: (text: string) => void;
+
   onContentSizeChange?: (height: number) => void;
 }
 
-export default function ChatList({
+const ChatList = forwardRef<ChatListHandle, ChatListProps>(
+  ({
   flatListRef,
   messages,
   isLoading,
   renderItem,
-  isUserNearBottom,
   setInputText,
   composerHeight,
-  onContentSizeChange,
-}: ChatListProps) {
+  
+    onContentSizeChange,
+}, ref) => {
+  
+  
+  
+  
+  const {
+  handleScroll,
+  handleScrollToIndexFailed,
+  scrollToMessage,
+  scrollToLatest,
+  scrollToTop,
+} = useChatScroll({
+  flatListRef,
+  });
+  
+  useImperativeHandle(
+    ref,
+    () => ({
+      scrollToMessage,
+      scrollToLatest,
+      scrollToTop,
+    }),
+    [scrollToMessage, scrollToLatest, scrollToTop]
+  );
+  
   const renderEmpty = useCallback(
     () => (
       <EmptyState
@@ -49,24 +83,6 @@ export default function ChatList({
       />
     ),
     [setInputText]
-  );
-
-  const handleScroll = useCallback(
-    (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-      const {
-        layoutMeasurement,
-        contentOffset,
-        contentSize,
-      } = event.nativeEvent;
-
-      const distanceFromBottom =
-        contentSize.height -
-        (layoutMeasurement.height + contentOffset.y);
-
-      isUserNearBottom.current =
-        distanceFromBottom <= 120;
-    },
-    [isUserNearBottom]
   );
 
   return (
@@ -81,10 +97,6 @@ export default function ChatList({
       maxToRenderPerBatch={8}
       windowSize={7}
 
-      /*
-       * Keep this disabled while we establish
-       * reliable scrolling behavior.
-       */
       removeClippedSubviews={false}
 
       keyboardShouldPersistTaps="handled"
@@ -107,33 +119,19 @@ export default function ChatList({
       }}
 
       onScroll={handleScroll}
+
       onContentSizeChange={onContentSizeChange}
 
-      onScrollToIndexFailed={(info) => {
-        /*
-         * FlatList may not have rendered the requested
-         * item yet. First move approximately to the
-         * requested area, then retry.
-         */
-        flatListRef.current?.scrollToOffset({
-          offset: info.averageItemLength * info.index,
-          animated: false,
-        });
-
-        setTimeout(() => {
-          flatListRef.current?.scrollToIndex({
-            index: info.index,
-            animated: true,
-            viewPosition: 0.35,
-          });
-        }, 100);
-      }}
+      onScrollToIndexFailed={handleScrollToIndexFailed}
 
       ListFooterComponent={
         <View>
           {isLoading ? <TypingIndicator /> : null}
         </View>
       }
-    />
+          />
   );
-}
+});
+
+export default ChatList;
+    
