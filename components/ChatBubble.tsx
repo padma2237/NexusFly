@@ -28,8 +28,10 @@ import Markdown from "react-native-markdown-display";
 
 import {
   useEffect,
-  useRef
+  useRef,
+  useState
 } from "react";
+
 import {
   BottomSheetModal
 } from "@gorhom/bottom-sheet";
@@ -48,6 +50,12 @@ function ChatBubble({
 }: ChatBubbleProps) {
   const isUser = message.role === "user";
   const { colors } = useTheme();
+  
+  const [expanded, setExpanded] = useState(false);
+
+const LONG_MESSAGE_LENGTH = 500;
+const shouldCollapse =
+  isUser && message.text.length > LONG_MESSAGE_LENGTH;
   
   const styles = React.useMemo(
   () => createStyles(colors),
@@ -162,9 +170,34 @@ const markdownStyles = React.useMemo(
           isUser ? styles.userBubble: styles.aiBubble,
         ]}
         >
-        {isUser ? (
-          <Text style={styles.text}>{message.text}</Text>
-        ): (
+       
+       {isUser ? (
+  <>
+    <Text
+      style={styles.text}
+      numberOfLines={
+        shouldCollapse && !expanded
+          ? 8
+          : undefined
+      }
+      ellipsizeMode="tail"
+    >
+      {message.text}
+    </Text>
+
+    {shouldCollapse && (
+      <Pressable
+        onPress={() => setExpanded((prev) => !prev)}
+        hitSlop={8}
+      >
+        <Text style={styles.showMore}>
+          {expanded ? "Show less ↑" : "Show more ↓"}
+        </Text>
+      </Pressable>
+    )}
+  </>
+) : (
+       
           <>
             <Markdown
               style={markdownStyles}
@@ -267,6 +300,14 @@ const createStyles = (colors: any) =>
       marginTop: 4,
       fontSize: 13,
     },
+    
+    showMore: {
+  color: colors.text,
+  fontSize: 14,
+  fontWeight: "900",
+  marginTop: 8,
+},
+    
   });
 
 const createMarkdownStyles = (colors: any) =>

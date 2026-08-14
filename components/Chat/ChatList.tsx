@@ -143,7 +143,7 @@ const ChatList = forwardRef<ChatListHandle, ChatListProps>(
            * so the message can actually be moved to the
            * requested anchor position.
            */
-          paddingBottom: composerHeight + listHeight + 40,
+          paddingBottom: composerHeight + 300,
         }}
 
         onScroll={handleScroll}
