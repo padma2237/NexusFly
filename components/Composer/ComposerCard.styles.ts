@@ -10,7 +10,7 @@ export const getStyles = (colors: any) =>
       position: "absolute",
 left: 16,
 right: 16,
-bottom: 16,
+bottom: 10,
 
       
       borderRadius: COLLAPSED_RADIUS || 28,

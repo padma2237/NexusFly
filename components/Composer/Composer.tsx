@@ -1,5 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Keyboard, Platform } from "react-native";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+
+import {
+  Keyboard,
+  Platform,
+} from "react-native";
 
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 
@@ -24,25 +32,47 @@ export default function Composer({
 
   const composer = useComposer();
 
-  const attachmentSheetRef = useRef<BottomSheetModal>(null);
+  const attachmentSheetRef =
+    useRef<BottomSheetModal>(null);
 
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const [keyboardHeight, setKeyboardHeight] =
+    useState(0);
 
   useEffect(() => {
-    const show = Keyboard.addListener(
-      Platform.OS === "ios" ? "keyboardWillShow" : "keyboardDidShow",
-      (e) => setKeyboardHeight(e.endCoordinates.height)
-    );
 
-    const hide = Keyboard.addListener(
-      Platform.OS === "ios" ? "keyboardWillHide" : "keyboardDidHide",
-      () => setKeyboardHeight(0)
-    );
+    const showEvent =
+      Platform.OS === "ios"
+        ? "keyboardWillShow"
+        : "keyboardDidShow";
+
+    const hideEvent =
+      Platform.OS === "ios"
+        ? "keyboardWillHide"
+        : "keyboardDidHide";
+
+    const showSubscription =
+      Keyboard.addListener(
+        showEvent,
+        (event) => {
+          setKeyboardHeight(
+            event.endCoordinates.height
+          );
+        }
+      );
+
+    const hideSubscription =
+      Keyboard.addListener(
+        hideEvent,
+        () => {
+          setKeyboardHeight(0);
+        }
+      );
 
     return () => {
-      show.remove();
-      hide.remove();
+      showSubscription.remove();
+      hideSubscription.remove();
     };
+
   }, []);
 
   return (
@@ -50,10 +80,14 @@ export default function Composer({
       <ComposerCard
         animatedStyle={[
           composer.animation.containerStyle,
-          { bottom: keyboardHeight + 6 },
+
+          {
+            bottom: keyboardHeight + 6,
+          },
         ]}
         onLayout={onLayout}
       >
+
         <ComposerBody
           composer={composer}
           value={value}
@@ -61,6 +95,7 @@ export default function Composer({
           webSearchEnabled={webSearchEnabled}
           onChangeText={onChangeText}
           onSend={onSend}
+
           onAttachmentPress={() => {
             Keyboard.dismiss();
 
@@ -68,16 +103,26 @@ export default function Composer({
               attachmentSheetRef.current?.present();
             });
           }}
+
           onToggleWebSearch={onToggleWebSearch}
         />
+
       </ComposerCard>
 
       <AttachmentSheet
         ref={attachmentSheetRef}
-        onCamera={() => attachmentSheetRef.current?.dismiss()}
-        onGallery={() => attachmentSheetRef.current?.dismiss()}
-        onFile={() => attachmentSheetRef.current?.dismiss()}
-        onClipboard={() => attachmentSheetRef.current?.dismiss()}
+        onCamera={() =>
+          attachmentSheetRef.current?.dismiss()
+        }
+        onGallery={() =>
+          attachmentSheetRef.current?.dismiss()
+        }
+        onFile={() =>
+          attachmentSheetRef.current?.dismiss()
+        }
+        onClipboard={() =>
+          attachmentSheetRef.current?.dismiss()
+        }
       />
     </>
   );

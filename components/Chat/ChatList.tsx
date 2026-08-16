@@ -3,6 +3,7 @@ import React, {
   useCallback,
   useImperativeHandle,
 } from "react";
+
 import {
   FlatList,
   View,
@@ -11,7 +12,9 @@ import {
 import EmptyState from "../EmptyState";
 import TypingIndicator from "../TypingIndicator";
 
-import { Message } from "../../types/chat";
+import {
+  Message
+} from "../../types/chat";
 import useChatScroll from "./useChatScroll";
 
 export interface ChatListHandle {
@@ -25,15 +28,9 @@ export interface ChatListHandle {
 }
 
 interface ChatListProps {
-  flatListRef: React.RefObject<FlatList<Message>>;
+  flatListRef: React.RefObject < FlatList < Message>>;
 
   messages: Message[];
-
-  messageLayouts: React.MutableRefObject<
-    Record<string, { y: number; height: number }>
-  >;
-
-  listHeight: number;
 
   isLoading: boolean;
 
@@ -50,38 +47,34 @@ interface ChatListProps {
   setInputText: (text: string) => void;
 
   onContentSizeChange?: (height: number) => void;
-
-  onListLayout?: (height: number) => void;
 }
 
-const ChatList = forwardRef<ChatListHandle, ChatListProps>(
+const ChatList = forwardRef <
+ChatListHandle,
+ChatListProps > (
   (
     {
       flatListRef,
       messages,
-      messageLayouts,
-      listHeight,
       isLoading,
       renderItem,
       setInputText,
       composerHeight,
       onContentSizeChange,
-      onListLayout,
     },
     ref
   ) => {
+
     const {
       handleScroll,
       handleScrollToIndexFailed,
       scrollToMessage,
       scrollToLatest,
       scrollToTop,
-    } = useChatScroll({
-      flatListRef,
-      messageLayouts,
-      messages,
-      listHeight,
-    });
+    } = useChatScroll( {
+        flatListRef,
+        messages,
+      });
 
     useImperativeHandle(
       ref,
@@ -101,7 +94,7 @@ const ChatList = forwardRef<ChatListHandle, ChatListProps>(
       () => (
         <EmptyState
           onPromptPress={setInputText}
-        />
+          />
       ),
       [setInputText]
     );
@@ -125,49 +118,39 @@ const ChatList = forwardRef<ChatListHandle, ChatListProps>(
         scrollEventThrottle={16}
 
         renderItem={({ item, index }) =>
-          renderItem({
-            item,
-            index,
-          })
+        renderItem( {
+          item,
+          index,
+        })
         }
 
         ListEmptyComponent={renderEmpty}
 
-        contentContainerStyle={{
+        contentContainerStyle={ {
           paddingHorizontal: 20,
           paddingTop: 100,
-
-          /*
-           * Important:
-           * Leave enough room below the final message
-           * so the message can actually be moved to the
-           * requested anchor position.
-           */
           paddingBottom: composerHeight + 300,
         }}
 
+
         onScroll={handleScroll}
 
-        onLayout={(event) => {
-          onListLayout?.(
-            event.nativeEvent.layout.height
-          );
-        }}
-
-        onContentSizeChange={onContentSizeChange}
+        onContentSizeChange={
+        onContentSizeChange
+        }
 
         onScrollToIndexFailed={
-          handleScrollToIndexFailed
+        handleScrollToIndexFailed
         }
 
         ListFooterComponent={
-          <View>
-            {isLoading ? (
-              <TypingIndicator />
-            ) : null}
-          </View>
+        <View>
+          {isLoading ? (
+            <TypingIndicator />
+          ): null}
+        </View>
         }
-      />
+        />
     );
   }
 );
