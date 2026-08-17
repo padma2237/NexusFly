@@ -12,14 +12,15 @@ import {
 } from "react-native";
 
 import Animated, {
-  
   FadeInLeft,
   FadeInRight,
 } from "react-native-reanimated";
 
 import * as Clipboard from "expo-clipboard";
 
-import { useTheme } from "../theme/useTheme";
+import {
+  useTheme
+} from "../theme/useTheme";
 
 import {
   Message
@@ -37,6 +38,8 @@ import {
 } from "@gorhom/bottom-sheet";
 import MessageActionSheet from "./MessageActionSheet";
 
+import CodeBlock from "./CodeBlock";
+
 
 
 interface ChatBubbleProps {
@@ -49,24 +52,74 @@ function ChatBubble({
   onRegenerate,
 }: ChatBubbleProps) {
   const isUser = message.role === "user";
-  const { colors } = useTheme();
-  
-  const [expanded, setExpanded] = useState(false);
+  const {
+    colors
+  } = useTheme();
 
-const LONG_MESSAGE_LENGTH = 500;
-const shouldCollapse =
+  const [expanded,
+    setExpanded] = useState(false);
+
+  const LONG_MESSAGE_LENGTH = 500;
+  const shouldCollapse =
   isUser && message.text.length > LONG_MESSAGE_LENGTH;
-  
+
   const styles = React.useMemo(
-  () => createStyles(colors),
-  [colors]
+    () => createStyles(colors),
+    [colors]
+  );
+
+  const markdownStyles = React.useMemo(
+    () => createMarkdownStyles(colors),
+    [colors]
+  );
+
+  
+
+const markdownRules = React.useMemo(
+  () => ({
+    code_block: (
+      node: any,
+      children: React.ReactNode[],
+      parent: any[],
+      styles: any
+    ) => {
+      const code = String(node.content ?? "");
+
+      return (
+        <CodeBlock
+          key={node.key}
+          code={code}
+          language="text"
+        />
+      );
+    },
+
+    fence: (
+      node: any,
+      children: React.ReactNode[],
+      parent: any[],
+      styles: any
+    ) => {
+      const code = String(node.content ?? "");
+
+      const language =
+        typeof node.info === "string" && node.info.trim()
+          ? node.info.trim().split(/\s+/)[0]
+          : "text";
+
+      return (
+        <CodeBlock
+          key={node.key}
+          code={code}
+          language={language}
+        />
+      );
+    },
+  }),
+  []
 );
 
-const markdownStyles = React.useMemo(
-  () => createMarkdownStyles(colors),
-  [colors]
-);
-  
+
   const sheetRef = useRef < BottomSheetModal > (null);
 
   const [isSheetOpen,
@@ -143,95 +196,94 @@ const markdownStyles = React.useMemo(
 
   return (
     <>
-    
-     <Animated.View
-  entering={
-    isUser
-      ? FadeInRight.springify().damping(50)
-      : FadeInLeft.springify().damping(50)
-  }
->
-       
-  <Pressable
-        onLongPress={
-        !isUser
-        ? () => {
-          Keyboard.dismiss();
 
-          setTimeout(() => {
-            sheetRef.current?.present();
-          },
-            120);
-        }: undefined
+      <Animated.View
+        entering={
+        isUser
+        ? FadeInRight.springify().damping(50): FadeInLeft.springify().damping(50)
         }
-        delayLongPress={350}
-        style={[
-          styles.bubble,
-          isUser ? styles.userBubble: styles.aiBubble,
-        ]}
         >
-       
-       {isUser ? (
-  <>
-    <Text
-      style={styles.text}
-      numberOfLines={
-        shouldCollapse && !expanded
-          ? 8
-          : undefined
-      }
-      ellipsizeMode="tail"
-    >
-      {message.text}
-    </Text>
 
-    {shouldCollapse && (
-      <Pressable
-        onPress={() => setExpanded((prev) => !prev)}
-        hitSlop={8}
-      >
-        <Text style={styles.showMore}>
-          {expanded ? "Show less ↑" : "Show more ↓"}
-        </Text>
-      </Pressable>
-    )}
-  </>
-) : (
-       
-          <>
-            <Markdown
-              style={markdownStyles}
-              mergeStyle={true}
-              >
-              {message.text}
-            </Markdown>
+        <Pressable
+          onLongPress={
+          !isUser
+          ? () => {
+            Keyboard.dismiss();
 
-            {message.sources && message.sources.length > 0 && (
-              <>
-                <Text style={styles.sourceTitle}>
-                  📚 Sources
-                </Text>
+            setTimeout(() => {
+              sheetRef.current?.present();
+            },
+              120);
+          }: undefined
+          }
+          delayLongPress={350}
+          style={[
+            styles.bubble,
+            isUser ? styles.userBubble: styles.aiBubble,
+          ]}
+          >
 
-                {message.sources.map((source, index) => (
-                  <Pressable
-                    key={index}
-                    style={styles.sourceCard}
-                    onPress={() => Linking.openURL(source.url)}
-                    >
-                    <Text style={styles.sourceName}>
-                      🌐 {source.title}
-                    </Text>
+          {isUser ? (
+            <>
+              <Text
+                style={styles.text}
+                numberOfLines={
+                shouldCollapse && !expanded
+                ? 8: undefined
+                }
+                ellipsizeMode="tail"
+                >
+                {message.text}
+              </Text>
 
-                    <Text style={styles.sourceDomain}>
-                      {getDomain(source.url)}
-                    </Text>
-                  </Pressable>
-                ))}
-              </>
-            )}
-          </>
-        )}
-      </Pressable>
+              {shouldCollapse && (
+                <Pressable
+                  onPress={() => setExpanded((prev) => !prev)}
+                  hitSlop={8}
+                  >
+                  <Text style={styles.showMore}>
+                    {expanded ? "Show less ↑": "Show more ↓"}
+                  </Text>
+                </Pressable>
+              )}
+            </>
+          ): (
+
+            <>
+              <Markdown
+                style={markdownStyles}
+                rules={markdownRules}
+                mergeStyle={true}
+                >
+                {message.text}
+              </Markdown>
+
+              {message.sources && message.sources.length > 0 && (
+                <>
+                  <Text style={styles.sourceTitle}>
+                    📚 Sources
+                  </Text>
+
+                  {message.sources.map((source, index) => (
+                    <Pressable
+                      key={index}
+                      style={styles.sourceCard}
+                      onPress={() => Linking.openURL(source.url)}
+                      >
+                      <Text style={styles.sourceName}>
+                        🌐 {source.title}
+                      </Text>
+
+                      <Text style={styles.sourceDomain}>
+                        {getDomain(source.url)}
+                      </Text>
+                    </Pressable>
+                  ))}
+                </>
+              )}
+            </>
+          )}
+        </Pressable>
       </Animated.View>
 
       <MessageActionSheet
@@ -246,115 +298,140 @@ const markdownStyles = React.useMemo(
 }
 
 const createStyles = (colors: any) =>
-  StyleSheet.create({
-    bubble: {
-      maxWidth: "100%",
-      padding: 14,
-      borderRadius: 20,
-      
-    },
-    
-    userBubble: {
-      backgroundColor: colors.primary,
-      borderBottomRightRadius: 6,
-    },
+StyleSheet.create({
+  bubble: {
+    maxWidth: "100%",
+    padding: 14,
+    borderRadius: 20,
 
-    aiBubble: {
-      
-      backgroundColor: colors.surface,
-      borderBottomLeftRadius: 6,
-      borderWidth: 1,
-      borderColor: colors.border,
-    },
+  },
 
-    text: {
-      color: colors.text,
-      fontSize: 16,
-      lineHeight: 24,
-    },
+  userBubble: {
+    backgroundColor: colors.primary,
+    borderBottomRightRadius: 6,
+  },
 
-    sourceTitle: {
-      color: colors.text,
-      fontWeight: "bold",
-      marginTop: 14,
-      marginBottom: 8,
-    },
+  aiBubble: {
 
-    sourceCard: {
-      backgroundColor: colors.background,
-      borderRadius: 12,
-      padding: 12,
-      marginBottom: 10,
-      borderWidth: 1,
-      borderColor: colors.border,
-    },
+    backgroundColor: colors.surface,
+    borderBottomLeftRadius: 6,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
 
-    sourceName: {
-      color: colors.text,
-      fontWeight: "bold",
-      fontSize: 15,
-    },
+  text: {
+    color: colors.text,
+    fontSize: 16,
+    lineHeight: 24,
+  },
 
-    sourceDomain: {
-      color: colors.subText,
-      marginTop: 4,
-      fontSize: 13,
-    },
-    
-    showMore: {
-  color: colors.text,
-  fontSize: 14,
-  fontWeight: "900",
-  marginTop: 8,
-},
-    
-  });
+  sourceTitle: {
+    color: colors.text,
+    fontWeight: "bold",
+    marginTop: 14,
+    marginBottom: 8,
+  },
+
+  sourceCard: {
+    backgroundColor: colors.background,
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+
+  sourceName: {
+    color: colors.text,
+    fontWeight: "bold",
+    fontSize: 15,
+  },
+
+  sourceDomain: {
+    color: colors.subText,
+    marginTop: 4,
+    fontSize: 13,
+  },
+
+  showMore: {
+    color: colors.text,
+    fontSize: 14,
+    fontWeight: "900",
+    marginTop: 8,
+  },
+
+});
 
 const createMarkdownStyles = (colors: any) =>
-  StyleSheet.create({
-    body: {
-      color: colors.text,
-      fontSize: 16,
-      lineHeight: 24,
-    },
+StyleSheet.create({
+  body: {
+    color: colors.text,
+    fontSize: 16,
+    lineHeight: 24,
+  },
 
-    heading1: {
-      color: colors.text,
-    },
+  heading1: {
+    color: colors.text,
+    fontWeight: "700",
+  },
 
-    heading2: {
-      color: colors.text,
-    },
+  heading2: {
+    color: colors.text,
+    fontWeight: "700",
+  },
 
-    strong: {
-      color: colors.text,
-    },
+  heading3: {
+    color: colors.text,
+    fontWeight: "700",
+  },
 
-    em: {
-      color: colors.text,
-    },
+  strong: {
+    color: colors.text,
+    fontWeight: "700",
+  },
 
-    bullet_list: {
-      color: colors.text,
-    },
+  em: {
+    color: colors.text,
+  },
 
-    ordered_list: {
-      color: colors.text,
-    },
+  bullet_list: {
+    color: colors.text,
+  },
 
-    code_inline: {
-      backgroundColor: colors.background,
-      color: colors.primary,
-      paddingHorizontal: 4,
-      borderRadius: 4,
-    },
+  ordered_list: {
+    color: colors.text,
+  },
 
-    code_block: {
-      backgroundColor: colors.background,
-      color: colors.primary,
-      padding: 12,
-      borderRadius: 10,
-    },
-  });
+  list_item: {
+    color: colors.text,
+  },
+
+  paragraph: {
+    color: colors.text,
+    marginTop: 0,
+    marginBottom: 10,
+  },
+
+  code_inline: {
+    backgroundColor: colors.background,
+    color: colors.primary,
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    borderRadius: 5,
+  },
+
+  blockquote: {
+    backgroundColor: colors.background,
+    borderLeftWidth: 4,
+    borderLeftColor: colors.primary,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+
+  link: {
+    color: colors.primary,
+  },
+});
+
 
 export default React.memo(ChatBubble);

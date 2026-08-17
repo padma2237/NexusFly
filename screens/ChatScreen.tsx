@@ -293,7 +293,8 @@ export default function ChatScreen() {
 
     <SafeAreaView style={styles.container} edges={["left",
       "right",
-      "bottom"
+      "bottom",
+      "top"
     ]}>
       <StatusBar style="auto" />
       <Header

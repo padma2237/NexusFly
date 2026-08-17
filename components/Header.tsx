@@ -45,8 +45,8 @@ export default function Header({
   </TouchableOpacity>
 
   <View style={styles.logoContainer}>
-    <Text style={styles.logoIcon}>✦Padma</Text>
-    <Text style={styles.title}>Personal AI
+    <Text style={styles.logoIcon}>✦</Text>
+    <Text style={styles.title}>NexusFly
     
     </Text>
 </View>
