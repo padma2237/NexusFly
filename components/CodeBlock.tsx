@@ -1,17 +1,32 @@
-import React, { useMemo, useState } from "react";
+import React, {
+  useMemo,
+  useState
+} from "react";
 import {
   View,
   Text,
   StyleSheet,
   Pressable,
-  Alert,
   ScrollView,
   Modal,
 } from "react-native";
 
+import {
+  X,
+  Copy,
+  Check,
+} from "lucide-react-native";
+
 import * as Clipboard from "expo-clipboard";
 
-import { useTheme } from "../theme/useTheme";
+import {
+  useTheme
+} from "../theme/useTheme";
+
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 
 interface Props {
   code: string;
@@ -27,9 +42,14 @@ export default function CodeBlock({
   code,
   language = "Code",
 }: Props) {
-  const { colors } = useTheme();
+  const {
+    colors
+  } = useTheme();
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen,
+    setIsOpen] = useState(false);
+  const [copied,
+    setCopied] = useState(false);
 
   const styles = useMemo(
     () => createStyles(colors),
@@ -37,9 +57,11 @@ export default function CodeBlock({
   );
 
   const cleanLanguage = String(language || "Code")
-    .replace(/`/g, "")
-    .trim()
-    .toLowerCase();
+  .replace(/`/g, "")
+  .trim()
+  .toLowerCase();
+
+  const insets = useSafeAreaInsets();
 
   const safeCode = String(code ?? "");
 
@@ -48,22 +70,23 @@ export default function CodeBlock({
   const copyCode = async () => {
     await Clipboard.setStringAsync(safeCode);
 
-    Alert.alert(
-      "Copied",
-      "Code copied to clipboard."
-    );
+    setCopied(true);
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 1500);
   };
+
+
 
   return (
     <>
       {/* ================================================= */}
-      {/* INLINE CODE PREVIEW */}
+      {/* INLINE CODE CARD */}
       {/* ================================================= */}
 
-      <Pressable
-        onPress={() => setIsOpen(true)}
-        style={styles.container}
-      >
+      <View style={styles.container}>
+
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.language}>
@@ -73,20 +96,38 @@ export default function CodeBlock({
           <Pressable
             onPress={copyCode}
             hitSlop={8}
-          >
-            <Text style={styles.copy}>
-              Copy
-            </Text>
+            style={({ pressed }) => [
+              styles.inlineCopyButton,
+              pressed && styles.inlineCopyPressed,
+            ]}
+            >
+            {copied ? (
+              <Check
+                size={16}
+                color={colors.primary}
+                strokeWidth={2.5}
+                />
+            ): (
+              <Text style={styles.copy}>
+                Copy
+              </Text>
+            )}
           </Pressable>
         </View>
 
-        {/* Preview */}
-        <View style={styles.preview}>
+        {/* Preview is the tappable part */}
+        <Pressable
+          onPress={() => setIsOpen(true)}
+          style={({ pressed }) => [
+            styles.preview,
+            pressed && styles.previewPressed,
+          ]}
+          >
           {lines.slice(0, 10).map((line, index) => (
             <View
               key={index}
               style={styles.codeLine}
-            >
+              >
               <Text style={styles.lineNumber}>
                 {index + 1}
               </Text>
@@ -94,7 +135,7 @@ export default function CodeBlock({
               <Text
                 style={styles.codeText}
                 numberOfLines={1}
-              >
+                >
                 {tokenizeLine(line).map(
                   (token, tokenIndex) => (
                     <Text
@@ -103,7 +144,7 @@ export default function CodeBlock({
                         token.type,
                         colors
                       )}
-                    >
+                      >
                       {token.text}
                     </Text>
                   )
@@ -112,7 +153,6 @@ export default function CodeBlock({
             </View>
           ))}
 
-          {/* More indicator */}
           {lines.length > 10 && (
             <View style={styles.moreOverlay}>
               <Text style={styles.moreText}>
@@ -120,8 +160,9 @@ export default function CodeBlock({
               </Text>
             </View>
           )}
-        </View>
-      </Pressable>
+        </Pressable>
+      </View>
+
 
       {/* ================================================= */}
       {/* FULL SCREEN CODE VIEWER */}
@@ -131,95 +172,128 @@ export default function CodeBlock({
         visible={isOpen}
         animationType="slide"
         presentationStyle="fullScreen"
-        onRequestClose={() => setIsOpen(false)}
-      >
-        <View style={styles.modalContainer}>
 
-          {/* Modal Header */}
+        statusBarTranslucent={true}
+        transparent={false}
+        onRequestClose={() => setIsOpen(false)}
+        >
+
+        <View
+          style={[
+            styles.modalContainer,
+            {
+              paddingTop: insets.top,
+            },
+          ]}
+          >
+
+          {/* ================= HEADER ================= */}
+
           <View style={styles.modalHeader}>
 
+            {/* CLOSE */}
             <Pressable
               onPress={() => setIsOpen(false)}
-              hitSlop={10}
-              style={styles.backButton}
-            >
-              <Text style={styles.backText}>
-                ‹
-              </Text>
+              hitSlop={8}
+              style={({ pressed }) => [
+                styles.headerCircle,
+                pressed && styles.pressed,
+              ]}
+              >
+              <X
+                size={28}
+                color={colors.text}
+                strokeWidth={2.2}
+                />
             </Pressable>
 
-            <Text
-              style={styles.modalLanguage}
-              numberOfLines={1}
-            >
-              {cleanLanguage || "Code"}
-            </Text>
 
+            {/* CODE / PREVIEW */}
+            <View style={styles.segmentedControl}>
+
+              <View style={styles.segmentActive}>
+                <Text style={styles.segmentActiveText}>
+                  Code
+                </Text>
+              </View>
+
+              <Pressable
+                style={({ pressed }) => [
+                  styles.segment,
+                  pressed && styles.segmentPressed,
+                ]}
+                >
+                <Text style={styles.segmentText}>
+                  Preview
+                </Text>
+              </Pressable>
+
+            </View>
+
+
+            {/* COPY */}
             <Pressable
               onPress={copyCode}
-              hitSlop={10}
-              style={styles.modalCopyButton}
-            >
-              <Text style={styles.copy}>
-                Copy
-              </Text>
+              hitSlop={8}
+              style={({ pressed }) => [
+                styles.headerCircle,
+                pressed && styles.pressed,
+              ]}
+              >
+              {copied ? (
+                <Check
+                  size={27}
+                  color={colors.primary}
+                  strokeWidth={2.5}
+                  />
+              ): (
+                <Copy
+                  size={27}
+                  color={colors.text}
+                  strokeWidth={2}
+                  />
+              )}
             </Pressable>
 
           </View>
 
-          {/* Full code scrolling */}
+
+          {/* ================= CODE ================= */}
+
           <ScrollView
             style={styles.verticalCodeScroll}
-            contentContainerStyle={
-              styles.fullCodeContent
-            }
+            contentContainerStyle={styles.fullCodeContent}
             showsVerticalScrollIndicator
             nestedScrollEnabled
-          >
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator
-              nestedScrollEnabled
-              contentContainerStyle={
-                styles.horizontalCodeContent
-              }
             >
-              <View>
-                {lines.map((line, index) => (
-                  <View
-                    key={index}
-                    style={styles.codeLine}
+            <View>
+              {lines.map((line, index) => (
+                <View
+                  key={index}
+                  style={styles.codeLine}
                   >
-                    <Text
-                      style={styles.lineNumber}
-                    >
-                      {index + 1}
-                    </Text>
+                  <Text style={styles.lineNumber}>
+                    {index + 1}
+                  </Text>
 
-                    <Text
-                      style={styles.codeText}
-                    >
-                      {tokenizeLine(line).map(
-                        (
-                          token,
-                          tokenIndex
-                        ) => (
-                          <Text
-                            key={tokenIndex}
-                            style={getTokenStyle(
-                              token.type,
-                              colors
-                            )}
+                  <Text style={styles.codeText}>
+                    {tokenizeLine(line).map(
+                      (token, tokenIndex) => (
+                        <Text
+                          key={tokenIndex}
+                          style={getTokenStyle(
+                            token.type,
+                            colors
+                          )}
                           >
-                            {token.text}
-                          </Text>
-                        )
-                      )}
-                    </Text>
-                  </View>
-                ))}
-              </View>
-            </ScrollView>
+                          {token.text}
+                        </Text>
+                      )
+                    )}
+                  </Text>
+                </View>
+              ))}
+            </View>
           </ScrollView>
 
         </View>
@@ -228,200 +302,212 @@ export default function CodeBlock({
   );
 }
 
-/* ================================================= */
-/* TOKENIZER */
-/* ================================================= */
+  /* ================================================= */
+  /* TOKENIZER */
+  /* ================================================= */
 
-function tokenizeLine(
-  line: string
-): Token[] {
-  const tokens: Token[] = [];
+  function tokenizeLine(
+    line: string
+  ): Token[] {
+    const tokens: Token[] = [];
 
-  const regex =
+    const regex =
     /(\/\/.*|#.*|'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*"|`(?:\\.|[^`\\])*`|\b(?:const|let|var|function|return|if|else|for|while|import|from|export|default|class|extends|new|this|true|false|null|undefined|async|await|interface|type|public|private|def|in|and|or|not|None|True|False)\b|\b\d+(?:\.\d+)?\b)/g;
 
-  let lastIndex = 0;
-  let match: RegExpExecArray | null;
+    let lastIndex = 0;
+    let match: RegExpExecArray | null;
 
-  while (
-    (match = regex.exec(line)) !== null
-  ) {
-    if (match.index > lastIndex) {
+    while (
+      (match = regex.exec(line)) !== null
+    ) {
+      if (match.index > lastIndex) {
+        tokens.push({
+          text: line.slice(
+            lastIndex,
+            match.index
+          ),
+          type: "plain",
+        });
+      }
+
+      const value = match[0];
+
+      let type = "plain";
+
+      if (
+        value.startsWith("//") ||
+        value.startsWith("#")
+      ) {
+        type = "comment";
+      } else if (
+        value.startsWith("'") ||
+        value.startsWith('"') ||
+        value.startsWith("`")
+      ) {
+        type = "string";
+      } else if (/^\d/.test(value)) {
+        type = "number";
+      } else {
+        type = "keyword";
+      }
+
       tokens.push({
-        text: line.slice(
-          lastIndex,
-          match.index
-        ),
+        text: value,
+        type,
+      });
+
+      lastIndex = regex.lastIndex;
+    }
+
+    if (lastIndex < line.length) {
+      tokens.push({
+        text: line.slice(lastIndex),
         type: "plain",
       });
     }
 
-    const value = match[0];
-
-    let type = "plain";
-
-    if (
-      value.startsWith("//") ||
-      value.startsWith("#")
-    ) {
-      type = "comment";
-    } else if (
-      value.startsWith("'") ||
-      value.startsWith('"') ||
-      value.startsWith("`")
-    ) {
-      type = "string";
-    } else if (/^\d/.test(value)) {
-      type = "number";
-    } else {
-      type = "keyword";
+    if (tokens.length === 0) {
+      tokens.push({
+        text: line || " ",
+        type: "plain",
+      });
     }
 
-    tokens.push({
-      text: value,
-      type,
-    });
-
-    lastIndex = regex.lastIndex;
+    return tokens;
   }
 
-  if (lastIndex < line.length) {
-    tokens.push({
-      text: line.slice(lastIndex),
-      type: "plain",
-    });
-  }
+  /* ================================================= */
+  /* THEME-AWARE TOKEN COLORS */
+  /* ================================================= */
 
-  if (tokens.length === 0) {
-    tokens.push({
-      text: line || " ",
-      type: "plain",
-    });
-  }
-
-  return tokens;
-}
-
-/* ================================================= */
-/* THEME-AWARE TOKEN COLORS */
-/* ================================================= */
-
-function getTokenStyle(
-  type: string,
-  colors: any
-) {
-  const tokenColors: Record<
+  function getTokenStyle(
+    type: string,
+    colors: any
+  ) {
+    const tokenColors: Record <
     string,
-    string
-  > = {
-    plain:
+    string > = {
+      plain:
       colors.codeText ??
       colors.text,
 
-    keyword:
+      keyword:
       colors.codeKeyword ??
       colors.primary,
 
-    string:
+      string:
       colors.codeString ??
       colors.text,
 
-    number:
+      number:
       colors.codeNumber ??
       colors.primary,
 
-    comment:
+      comment:
       colors.codeComment ??
       colors.subText,
 
-    punctuation:
+      punctuation:
       colors.codePunctuation ??
       colors.subText,
-  };
+    };
 
-  return {
-    color:
+    return {
+      color:
       tokenColors[type] ??
       tokenColors.plain,
-  };
-}
+    };
+  }
 
-/* ================================================= */
-/* STYLES */
-/* ================================================= */
+  /* ================================================= */
+  /* STYLES */
+  /* ================================================= */
 
-const createStyles = (colors: any) =>
+  const createStyles = (colors: any) =>
   StyleSheet.create({
 
-    /* ----------------------------- */
-    /* INLINE CODE CARD */
-    /* ----------------------------- */
+    /* ========================================= */
+    /* INLINE CARD */
+    /* ========================================= */
 
     container: {
       backgroundColor:
-        colors.codeBackground ??
-        colors.background,
+      colors.codeBackground ??
+      colors.background,
 
       borderRadius: 12,
-
       marginVertical: 8,
 
       overflow: "hidden",
 
       borderWidth: 1,
-
       borderColor:
-        colors.codeBorder ??
-        colors.border,
+      colors.codeBorder ??
+      colors.border,
     },
 
     header: {
+      height: 42,
+
       flexDirection: "row",
-
-      justifyContent:
-        "space-between",
-
       alignItems: "center",
-
-      backgroundColor:
-        colors.codeHeader ??
-        colors.surface,
+      justifyContent: "space-between",
 
       paddingHorizontal: 14,
 
-      paddingVertical: 9,
+      backgroundColor:
+      colors.codeHeader ??
+      colors.surface,
 
       borderBottomWidth: 1,
-
       borderBottomColor:
-        colors.codeBorder ??
-        colors.border,
+      colors.codeBorder ??
+      colors.border,
     },
 
     language: {
       color:
-        colors.codeLanguage ??
-        colors.subText,
+      colors.codeLanguage ??
+      colors.subText,
 
       fontSize: 13,
-
       fontWeight: "600",
+    },
+
+    inlineCopyButton: {
+      minWidth: 40,
+      minHeight: 32,
+
+      alignItems: "center",
+      justifyContent: "center",
+
+      borderRadius: 8,
+    },
+
+    inlineCopyPressed: {
+      opacity: 0.55,
+      transform: [{
+        scale: 0.96
+      }],
     },
 
     copy: {
       color:
-        colors.codeCopy ??
-        colors.primary,
+      colors.codeCopy ??
+      colors.primary,
 
       fontSize: 13,
-
       fontWeight: "700",
     },
 
+    /* ========================================= */
+    /* PREVIEW */
+    /* ========================================= */
+
     preview: {
       backgroundColor:
-        colors.codeBackground ??
-        colors.background,
+      colors.codeBackground ??
+      colors.background,
 
       padding: 14,
 
@@ -430,12 +516,16 @@ const createStyles = (colors: any) =>
       overflow: "hidden",
     },
 
+    previewPressed: {
+      opacity: 0.88,
+    },
+
     codeLine: {
       flexDirection: "row",
-
       alignItems: "flex-start",
 
       minHeight: 21,
+      width: "100%",
     },
 
     lineNumber: {
@@ -444,13 +534,12 @@ const createStyles = (colors: any) =>
       marginRight: 12,
 
       color:
-        colors.codeLineNumber ??
-        colors.subText,
+      colors.codeLineNumber ??
+      colors.subText,
 
       fontFamily: "monospace",
 
       fontSize: 13,
-
       lineHeight: 21,
 
       textAlign: "right",
@@ -460,16 +549,17 @@ const createStyles = (colors: any) =>
 
     codeText: {
       color:
-        colors.codeText ??
-        colors.text,
+      colors.codeText ??
+      colors.text,
 
       fontFamily: "monospace",
 
       fontSize: 14,
-
       lineHeight: 21,
 
       includeFontPadding: false,
+
+      flexShrink: 1,
     },
 
     moreOverlay: {
@@ -482,110 +572,160 @@ const createStyles = (colors: any) =>
       height: 55,
 
       justifyContent: "flex-end",
-
       alignItems: "center",
 
       paddingBottom: 10,
 
       backgroundColor:
-        colors.codeBackground ??
-        colors.background,
+      colors.codeBackground ??
+      colors.background,
     },
 
     moreText: {
       color:
-        colors.codeCopy ??
-        colors.primary,
+      colors.codeCopy ??
+      colors.primary,
 
       fontSize: 13,
-
       fontWeight: "600",
     },
 
-    /* ----------------------------- */
-    /* FULL SCREEN */
-    /* ----------------------------- */
+    /* ========================================= */
+    /* FULLSCREEN MODAL */
+    /* ========================================= */
 
     modalContainer: {
       flex: 1,
 
       backgroundColor:
-        colors.codeBackground ??
-        colors.background,
+      colors.codeBackground ??
+      colors.background,
     },
+
+    /* ========================================= */
+    /* MODAL HEADER */
+    /* ========================================= */
 
     modalHeader: {
-      flexDirection: "row",
-
-      alignItems: "center",
-
       height: 60,
-
-      paddingHorizontal: 14,
-
+      flexDirection: "row",
+      alignItems: "center",
+      paddingHorizontal: 16,
       backgroundColor:
-        colors.codeHeader ??
-        colors.surface,
-
+      colors.codeHeader ??
+      colors.surface,
       borderBottomWidth: 1,
-
       borderBottomColor:
-        colors.codeBorder ??
-        colors.border,
+      colors.codeBorder ??
+      colors.border,
+
     },
 
-    backButton: {
-      width: 42,
+    headerCircle: {
+      width: 40,
+      height: 40,
 
-      height: 42,
+      borderRadius: 23,
 
       alignItems: "center",
+      justifyContent: "center",
 
+      backgroundColor:
+      colors.codeButton ??
+      colors.surface,
+
+      borderWidth: 1,
+      borderColor:
+      colors.codeBorder ??
+      colors.border,
+    },
+
+    pressed: {
+      opacity: 0.65,
+
+      transform: [{
+        scale: 0.94
+      },
+      ],
+    },
+
+    /* ========================================= */
+    /* SEGMENTED CONTROL */
+    /* ========================================= */
+
+    segmentedControl: {
+      flex: 1,
+
+      height: 46,
+
+      flexDirection: "row",
+      alignItems: "center",
+      marginHorizontal: 14,
+      padding: 4,
+      borderRadius: 23,
+      backgroundColor:
+      colors.codeSegmentBackground ??
+      colors.surface,
+    },
+
+    segmentActive: {
+      flex: 1,
+      height: 38,
+      borderRadius: 19,
+      alignItems: "center",
+      justifyContent: "center",
+
+      backgroundColor:
+      colors.codeSegmentActive ??
+      colors.codeBackground,
+    },
+
+    segmentActiveText: {
+      color:
+      colors.codeSegmentActiveText ??
+      colors.text,
+
+      fontSize: 14,
+      fontWeight: "700",
+    },
+
+    segment: {
+      flex: 1,
+      height: 38,
+      borderRadius: 19,
+      alignItems: "center",
       justifyContent: "center",
     },
 
-    backText: {
-      color: colors.text,
-
-      fontSize: 36,
-
-      fontWeight: "300",
-
-      lineHeight: 38,
+    segmentPressed: {
+      backgroundColor:
+      colors.codeSegmentPressed ??
+      colors.codeBackground,
     },
 
-    modalLanguage: {
-      flex: 1,
-
-      color: colors.text,
-
-      fontSize: 16,
-
-      fontWeight: "700",
-
-      marginHorizontal: 8,
+    segmentText: {
+      color:
+      colors.codeSegmentText ??
+      colors.subText,
+      fontSize: 14,
+      fontWeight: "600",
     },
 
-    modalCopyButton: {
-      paddingHorizontal: 8,
-    },
+    /* ========================================= */
+    /* FULLSCREEN CODE SCROLL */
+    /* ========================================= */
 
     verticalCodeScroll: {
       flex: 1,
-
       backgroundColor:
-        colors.codeBackground ??
-        colors.background,
+      colors.codeBackground ??
+      colors.background,
     },
 
     fullCodeContent: {
-      padding: 16,
-
-      paddingBottom: 40,
+      paddingTop: 22,
+      paddingLeft: 16,
+      paddingRight: 16,
+      paddingBottom: 60,
     },
-
-    horizontalCodeContent: {
-      paddingRight: 40,
-    },
-
   });
