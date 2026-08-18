@@ -305,50 +305,258 @@ statusBarTranslucent={true}
   /* ================================================= */
   /* TOKENIZER */
   /* ================================================= */
+function tokenizeLine(line: string): Token[] {
+  const tokens: Token[] = [];
 
-  function tokenizeLine(
-    line: string
-  ): Token[] {
-    const tokens: Token[] = [];
+  const keywords = new Set([
+    "const",
+    "let",
+    "var",
+    "function",
+    "return",
+    "if",
+    "else",
+    "for",
+    "while",
+    "do",
+    "switch",
+    "case",
+    "break",
+    "continue",
+    "try",
+    "catch",
+    "finally",
+    "throw",
 
-    const regex =
-    /(\/\/.*|#.*|'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*"|`(?:\\.|[^`\\])*`|\b(?:const|let|var|function|return|if|else|for|while|import|from|export|default|class|extends|new|this|true|false|null|undefined|async|await|interface|type|public|private|def|in|and|or|not|None|True|False)\b|\b\d+(?:\.\d+)?\b)/g;
+    "import",
+    "from",
+    "export",
+    "default",
+    "as",
 
-    let lastIndex = 0;
-    let match: RegExpExecArray | null;
+    "class",
+    "extends",
+    "implements",
+    "new",
+    "this",
+    "super",
 
-    while (
-      (match = regex.exec(line)) !== null
+    "async",
+    "await",
+
+    "interface",
+    "type",
+    "public",
+    "private",
+    "protected",
+    "readonly",
+    "abstract",
+
+    "typeof",
+    "instanceof",
+    "in",
+    "of",
+    "keyof",
+
+    "def",
+    "and",
+    "or",
+    "not",
+  ]);
+
+  const types = new Set([
+    "string",
+    "number",
+    "boolean",
+    "void",
+    "any",
+    "unknown",
+    "never",
+    "object",
+    "React",
+    "ReactNode",
+    "View",
+    "Text",
+    "TextInput",
+    "Pressable",
+    "ScrollView",
+    "StyleSheet",
+    "Modal",
+  ]);
+
+  const builtins = new Set([
+    "console",
+    "Math",
+    "JSON",
+    "Date",
+    "Array",
+    "Object",
+    "String",
+    "Number",
+    "Boolean",
+    "parseInt",
+    "parseFloat",
+    "setTimeout",
+    "setInterval",
+    "clearTimeout",
+    "clearInterval",
+  ]);
+
+  const constants = new Set([
+    "undefined",
+    "null",
+    "NaN",
+    "Infinity",
+  ]);
+
+  const booleans = new Set([
+    "true",
+    "false",
+    "True",
+    "False",
+    "None",
+  ]);
+
+  /*
+   * Order matters.
+   *
+   * Comments and strings must be detected before
+   * identifiers/operators inside them.
+   */
+  const regex =
+    /(\/\/.*|\/\*.*\*\/|#.*|'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*"|`(?:\\.|[^`\\])*`|\b\d+(?:\.\d+)?\b|[A-Za-z_$][\w$]*|===|!==|=>|==|!=|<=|>=|\+\+|--|\+=|-=|\*=|\/=|&&|\|\||\?\?|\.{3}|\?\.|[+\-*\/%=<>!&|?:.,;()[\]{}])/g;
+
+  let lastIndex = 0;
+  let match: RegExpExecArray | null = null;
+
+  // Used for basic JSX awareness.
+  let insideJsxTag = false;
+
+  while ((match = regex.exec(line)) !== null) {
+    const index = match.index;
+    const value = match[0];
+
+    // ----------------------------------------
+    // Plain text between tokens
+    // ----------------------------------------
+
+    if (index > lastIndex) {
+      tokens.push({
+        text: line.slice(lastIndex, index),
+        type: "plain",
+      });
+    }
+
+    // ----------------------------------------
+    // Comments
+    // ----------------------------------------
+
+    if (
+      value.startsWith("//") ||
+      value.startsWith("#") ||
+      value.startsWith("/*")
     ) {
-      if (match.index > lastIndex) {
-        tokens.push({
-          text: line.slice(
-            lastIndex,
-            match.index
-          ),
-          type: "plain",
-        });
-      }
+      tokens.push({
+        text: value,
+        type: "comment",
+      });
 
-      const value = match[0];
+      lastIndex = regex.lastIndex;
+      continue;
+    }
+
+    // ----------------------------------------
+    // Strings
+    // ----------------------------------------
+
+    if (
+      value.startsWith("'") ||
+      value.startsWith('"') ||
+      value.startsWith("`")
+    ) {
+      tokens.push({
+        text: value,
+        type: "string",
+      });
+
+      lastIndex = regex.lastIndex;
+      continue;
+    }
+
+    // ----------------------------------------
+    // Numbers
+    // ----------------------------------------
+
+    if (/^\d/.test(value)) {
+      tokens.push({
+        text: value,
+        type: "number",
+      });
+
+      lastIndex = regex.lastIndex;
+      continue;
+    }
+
+    // ----------------------------------------
+    // Identifier
+    // ----------------------------------------
+
+    if (/^[A-Za-z_$]/.test(value)) {
+      const before = line.slice(0, index);
+
+      const previousChar =
+        before.trimEnd().slice(-1);
+
+      const after = line.slice(
+        regex.lastIndex
+      );
+
+      const nextNonSpace =
+        after.match(/^\s*(.)/)?.[1] ?? "";
+
+      // JSX tag name
+      const looksLikeJsxTag =
+        previousChar === "<" ||
+        previousChar === "/" &&
+          before.trimEnd().slice(-2, -1) === "<";
+
+      // Property / member access
+      const isProperty =
+        previousChar === "." ||
+        before.trimEnd().endsWith("?.");
+
+      // Function declaration or function call
+      const isFunction =
+        nextNonSpace === "(" &&
+        !keywords.has(value);
+
+      // JSX attribute
+      const isAttribute =
+        insideJsxTag &&
+        nextNonSpace === "=";
 
       let type = "plain";
 
-      if (
-        value.startsWith("//") ||
-        value.startsWith("#")
-      ) {
-        type = "comment";
-      } else if (
-        value.startsWith("'") ||
-        value.startsWith('"') ||
-        value.startsWith("`")
-      ) {
-        type = "string";
-      } else if (/^\d/.test(value)) {
-        type = "number";
-      } else {
+      if (booleans.has(value)) {
+        type = "boolean";
+      } else if (constants.has(value)) {
+        type = "constant";
+      } else if (keywords.has(value)) {
         type = "keyword";
+      } else if (types.has(value)) {
+        type = "type";
+      } else if (builtins.has(value)) {
+        type = "builtin";
+      } else if (looksLikeJsxTag) {
+        type = "tag";
+      } else if (isAttribute) {
+        type = "attribute";
+      } else if (isProperty) {
+        type = "property";
+      } else if (isFunction) {
+        type = "function";
+      } else {
+        type = "variable";
       }
 
       tokens.push({
@@ -357,67 +565,180 @@ statusBarTranslucent={true}
       });
 
       lastIndex = regex.lastIndex;
+      continue;
     }
 
-    if (lastIndex < line.length) {
+    // ----------------------------------------
+    // Operators
+    // ----------------------------------------
+
+    if (
+      /^(===|!==|=>|==|!=|<=|>=|\+\+|--|\+=|-=|\*=|\/=|&&|\|\||\?\?|\.{3}|\?\.|[+\-*\/%=<>!&|?:])$/.test(
+        value
+      )
+    ) {
       tokens.push({
-        text: line.slice(lastIndex),
-        type: "plain",
+        text: value,
+        type: "operator",
       });
+
+      lastIndex = regex.lastIndex;
+      continue;
     }
 
-    if (tokens.length === 0) {
+    // ----------------------------------------
+    // Punctuation
+    // ----------------------------------------
+
+    if (
+      /^[.,;()[\]{}]$/.test(value)
+    ) {
       tokens.push({
-        text: line || " ",
-        type: "plain",
+        text: value,
+        type: "punctuation",
       });
+
+      lastIndex = regex.lastIndex;
+      continue;
     }
 
-    return tokens;
+    // ----------------------------------------
+    // JSX state
+    // ----------------------------------------
+
+    if (value === "<") {
+      insideJsxTag = true;
+
+      tokens.push({
+        text: value,
+        type: "punctuation",
+      });
+
+      lastIndex = regex.lastIndex;
+      continue;
+    }
+
+    if (value === ">") {
+      insideJsxTag = false;
+
+      tokens.push({
+        text: value,
+        type: "punctuation",
+      });
+
+      lastIndex = regex.lastIndex;
+      continue;
+    }
+
+    // ----------------------------------------
+    // Anything else
+    // ----------------------------------------
+
+    tokens.push({
+      text: value,
+      type: "plain",
+    });
+
+    lastIndex = regex.lastIndex;
   }
+
+  // Remaining text
+  if (lastIndex < line.length) {
+    tokens.push({
+      text: line.slice(lastIndex),
+      type: "plain",
+    });
+  }
+
+  if (tokens.length === 0) {
+    tokens.push({
+      text: line || " ",
+      type: "plain",
+    });
+  }
+
+  return tokens;
+}
 
   /* ================================================= */
   /* THEME-AWARE TOKEN COLORS */
   /* ================================================= */
-
-  function getTokenStyle(
-    type: string,
-    colors: any
-  ) {
-    const tokenColors: Record <
-    string,
-    string > = {
-      plain:
+function getTokenStyle(
+  type: string,
+  colors: any
+) {
+  const tokenColors: Record<string, string> = {
+    plain:
       colors.codeText ??
       colors.text,
 
-      keyword:
+    keyword:
       colors.codeKeyword ??
       colors.primary,
 
-      string:
+    function:
+      colors.codeFunction ??
+      colors.primary,
+
+    string:
       colors.codeString ??
       colors.text,
 
-      number:
+    number:
       colors.codeNumber ??
       colors.primary,
 
-      comment:
+    comment:
       colors.codeComment ??
       colors.subText,
 
-      punctuation:
+    variable:
+      colors.codeVariable ??
+      colors.text,
+
+    property:
+      colors.codeProperty ??
+      colors.text,
+
+    type:
+      colors.codeType ??
+      colors.secondary,
+
+    operator:
+      colors.codeOperator ??
+      colors.text,
+
+    punctuation:
       colors.codePunctuation ??
       colors.subText,
-    };
 
-    return {
-      color:
+    tag:
+      colors.codeTag ??
+      colors.primary,
+
+    attribute:
+      colors.codeAttribute ??
+      colors.primary,
+
+    constant:
+      colors.codeConstant ??
+      colors.secondary,
+
+    boolean:
+      colors.codeBoolean ??
+      colors.primary,
+
+    builtin:
+      colors.codeBuiltin ??
+      colors.primary,
+  };
+
+  return {
+    color:
       tokenColors[type] ??
       tokenColors.plain,
-    };
-  }
+  };
+}
 
   /* ================================================= */
   /* STYLES */
