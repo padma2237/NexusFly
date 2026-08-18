@@ -38,7 +38,8 @@ export default function SendButton({
         {hasText ? (
           <Send
             size={SEND_ICON_SIZE}
-            color="#FFFFFF"
+            
+            color={theme.sendIcon}
           />
         ) : (
           <Mic

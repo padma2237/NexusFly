@@ -1,4 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
 import {
   Modal,
   View,
@@ -8,7 +13,7 @@ import {
   TextInput,
 } from "react-native";
 
-import Colors from "../constants/colors";
+import { useTheme } from "../theme/useTheme";
 
 interface CustomModalProps {
   visible: boolean;
@@ -38,22 +43,32 @@ export default function CustomModal({
   inputValue = "",
   inputPlaceholder = "Enter name",
 }: CustomModalProps) {
-  
-const [text, setText] = useState(inputValue);
 
-useEffect(() => {
-  setText(inputValue);
-}, [inputValue, visible]);
+  const { colors } = useTheme();
 
-  
+  const styles = useMemo(
+    () => createStyles(colors),
+    [colors]
+  );
+
+  const [text, setText] = useState(inputValue);
+
+  useEffect(() => {
+    setText(inputValue);
+  }, [inputValue, visible]);
+
   return (
     <Modal
       transparent
       animationType="fade"
       visible={visible}
-      >
+      statusBarTranslucent
+onRequestClose={onCancel}
+    >
       <View style={styles.overlay}>
+
         <View style={styles.modal}>
+
           <Text style={styles.title}>
             {title}
           </Text>
@@ -61,22 +76,23 @@ useEffect(() => {
           <Text style={styles.message}>
             {message}
           </Text>
-          
+
           {showInput && (
-  <TextInput
-    style={styles.input}
-    value={text}
-    onChangeText={setText}
-    placeholder={inputPlaceholder}
-    placeholderTextColor="#64748b"
-  />
-)}
+            <TextInput
+              style={styles.input}
+              value={text}
+              onChangeText={setText}
+              placeholder={inputPlaceholder}
+              placeholderTextColor={colors.subText}
+            />
+          )}
 
           <View style={styles.buttons}>
+
             <TouchableOpacity
               style={styles.cancel}
               onPress={onCancel}
-              >
+            >
               <Text style={styles.cancelText}>
                 {cancelText}
               </Text>
@@ -85,80 +101,126 @@ useEffect(() => {
             <TouchableOpacity
               style={styles.confirm}
               onPress={() => onConfirm(text)}
-              >
+            >
               <Text style={styles.confirmText}>
                 {confirmText}
               </Text>
             </TouchableOpacity>
+
           </View>
+
         </View>
+
       </View>
     </Modal>
   );
 }
 
-  const styles = StyleSheet.create({
+const createStyles = (colors: any) =>
+  StyleSheet.create({
+
     overlay: {
       flex: 1,
-      backgroundColor: "rgba(0,0,0,0.65)",
+
+      backgroundColor:
+        "rgba(0,0,0,0.65)",
+
       justifyContent: "center",
       alignItems: "center",
     },
 
     modal: {
       width: "85%",
-      backgroundColor: "#111827",
+
+      backgroundColor:
+        colors.surface,
+
       borderRadius: 18,
       padding: 22,
+
+      borderWidth: 1,
+
+      borderColor:
+        colors.border,
     },
 
     title: {
-      color: "white",
+      color: colors.text,
+
       fontSize: 22,
       fontWeight: "700",
+
       marginBottom: 12,
     },
 
     message: {
-      color: "#cbd5e1",
+      color: colors.subText,
+
       fontSize: 15,
+
       marginBottom: 22,
     },
 
     buttons: {
-      flexDirection: "row",
-      justifyContent: "flex-end",
-    },
+  flexDirection: "row",
+  justifyContent: "flex-end",
+  alignItems: "center",
+},
 
-    cancel: {
-      marginRight: 12,
-    },
+cancel: {
+  height: 48,
+  minWidth: 90,
 
-    cancelText: {
-      color: "#94a3b8",
-      fontSize: 16,
-    },
+  alignItems: "center",
+  justifyContent: "center",
 
-    confirm: {
-      backgroundColor: "#ef4444",
-      paddingHorizontal: 18,
-      paddingVertical: 10,
-      borderRadius: 10,
-    },
+  marginRight: 12,
+},
+
+cancelText: {
+  color: colors.subText,
+
+  fontSize: 16,
+  fontWeight: "500",
+},
+
+confirm: {
+  height: 48,
+  minWidth: 110,
+
+  alignItems: "center",
+  justifyContent: "center",
+
+  backgroundColor: colors.error,
+
+  paddingHorizontal: 18,
+
+  borderRadius: 12,
+},
 
     confirmText: {
-      color: "white",
+      color: colors.text,
+
       fontWeight: "700",
     },
-    
+
     input: {
-  backgroundColor: "#1f2937",
-  color: "white",
-  borderRadius: 10,
-  paddingHorizontal: 14,
-  paddingVertical: 12,
-  marginBottom: 20,
-  borderWidth: 1,
-  borderColor: "#374151",
-},
+      backgroundColor:
+        colors.background,
+
+      color: colors.text,
+
+      borderRadius: 10,
+
+      paddingHorizontal: 14,
+      paddingVertical: 12,
+
+      marginBottom: 20,
+
+      borderWidth: 1,
+
+      borderColor:
+        colors.border,
+    },
+
   });

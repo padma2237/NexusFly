@@ -34,8 +34,8 @@ export default function SettingsScreen() {
       title: "🧪 Padma Experimental",
     },
     {
-      id: "aurora",
-      title: "🌌 Aurora",
+      id: "blossom",
+      title: "💮 Blossom",
     },
   ];
 

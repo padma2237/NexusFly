@@ -120,7 +120,7 @@ const createStyles = (colors: any) =>
 title: {
   alignSelf: "center",
 
-  fontSize: 25,
+  fontSize: 32,
 letterSpacing: 0.6,
   fontWeight: "900",
 

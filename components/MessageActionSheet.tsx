@@ -15,7 +15,7 @@ import {
   BottomSheetBackdrop,
 } from "@gorhom/bottom-sheet";
 
-import Colors from "../constants/colors";
+import { useTheme } from "../theme/useTheme";
 
 interface Props {
   onCopy: () => void;
@@ -26,18 +26,30 @@ interface Props {
 
 const MessageActionSheet = forwardRef<BottomSheetModal, Props>(
   ({ onCopy, onShare, onRegenerate, onChange }, ref) => {
-    const snapPoints = useMemo(() => ["35%"], []);
+    const { colors } = useTheme();
+
+    const snapPoints = useMemo(
+      () => ["35%"],
+      []
+    );
+
+    const styles = useMemo(
+      () => createStyles(colors),
+      [colors]
+    );
+
     const renderBackdrop = (props: any) => (
-  <BottomSheetBackdrop
-    {...props}
-    appearsOnIndex={0}
-    disappearsOnIndex={-1}
-    pressBehavior="close"
-  />
-);
+      <BottomSheetBackdrop
+        {...props}
+        appearsOnIndex={0}
+        disappearsOnIndex={-1}
+        pressBehavior="close"
+      />
+    );
 
     const dismiss = () => {
-      (ref as React.RefObject<BottomSheetModal>).current?.dismiss();
+      (ref as React.RefObject<BottomSheetModal>)
+        .current?.dismiss();
     };
 
     return (
@@ -49,7 +61,7 @@ const MessageActionSheet = forwardRef<BottomSheetModal, Props>(
         enableDismissOnClose={true}
         enablePanDownToClose={true}
         backgroundStyle={{
-          backgroundColor: Colors.surface,
+          backgroundColor: colors.surface,
         }}
       >
         <BottomSheetView style={styles.container}>
@@ -61,7 +73,9 @@ const MessageActionSheet = forwardRef<BottomSheetModal, Props>(
               onCopy();
             }}
           >
-            <Text style={styles.text}>📋 Copy</Text>
+            <Text style={styles.text}>
+              📋 Copy
+            </Text>
           </Pressable>
 
           <Pressable
@@ -71,7 +85,9 @@ const MessageActionSheet = forwardRef<BottomSheetModal, Props>(
               onShare();
             }}
           >
-            <Text style={styles.text}>📤 Share</Text>
+            <Text style={styles.text}>
+              📤 Share
+            </Text>
           </Pressable>
 
           {onRegenerate && (
@@ -82,7 +98,9 @@ const MessageActionSheet = forwardRef<BottomSheetModal, Props>(
                 onRegenerate();
               }}
             >
-              <Text style={styles.text}>🔄 Regenerate</Text>
+              <Text style={styles.text}>
+                🔄 Regenerate
+              </Text>
             </Pressable>
           )}
 
@@ -94,17 +112,18 @@ const MessageActionSheet = forwardRef<BottomSheetModal, Props>(
 
 export default MessageActionSheet;
 
-const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-  },
+const createStyles = (colors: any) =>
+  StyleSheet.create({
+    container: {
+      padding: 20,
+    },
 
-  item: {
-    paddingVertical: 18,
-  },
+    item: {
+      paddingVertical: 18,
+    },
 
-  text: {
-    fontSize: 18,
-    color: Colors.text,
-  },
-});
+    text: {
+      fontSize: 18,
+      color: colors.text,
+    },
+  });

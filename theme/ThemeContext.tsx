@@ -15,7 +15,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { themes, ThemeName } from "./index";
 
-const STORAGE_KEY = "nexusfly_theme_v2";
+const STORAGE_KEY = "nexusfly_theme_v5";
 
 type ThemeContextType = {
   themeName: ThemeName;
@@ -53,13 +53,18 @@ export function ThemeProvider({
         STORAGE_KEY
       )
       
+      
       if (
   savedTheme === "system" ||
   savedTheme in themes
 )
-      {
-        setThemeName(savedTheme as ThemeName);
-      }
+{
+  setThemeName(savedTheme as ThemeName);
+}
+      
+      
+      
+
     })();
   }, []);
 
