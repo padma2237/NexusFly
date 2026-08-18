@@ -23,6 +23,47 @@ const lightTheme = {
     cardOrange: "#FFF2D8",
     cardPurple: "#F4E8FF",
 
+    // ---------------------------------
+    // CODE BLOCK
+    // ---------------------------------
+
+    codeBackground: "#F8FAFC",
+    codeHeader: "#F1F5F9",
+    codeBorder: "#CBD5E1",
+
+    codeText: "#1E293B",
+    codeLineNumber: "#94A3B8",
+
+    codeKeyword: "#7C3AED",
+    codeFunction: "#2563EB",
+    codeString: "#047857",
+    codeNumber: "#B45309",
+    codeComment: "#64748B",
+
+    codeVariable: "#DB2777",
+    codeProperty: "#0891B2",
+    codeType: "#4F46E5",
+
+    codeOperator: "#DB2777",
+    codePunctuation: "#475569",
+
+    codeTag: "#DB2777",
+    codeAttribute: "#2563EB",
+
+    codeConstant: "#7C3AED",
+    codeBoolean: "#B45309",
+    codeBuiltin: "#0891B2",
+
+    codeCopy: "#2563EB",
+    codeLanguage: "#64748B",
+
+    codeButton: "#E2E8F0",
+
+    codeSegmentBackground: "#E2E8F0",
+    codeSegmentActive: "#FFFFFF",
+    codeSegmentActiveText: "#0F172A",
+    codeSegmentText: "#64748B",
+    codeSegmentPressed: "#CBD5E1",
   },
 };
 

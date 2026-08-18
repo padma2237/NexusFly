@@ -172,8 +172,8 @@ export default function CodeBlock({
         visible={isOpen}
         animationType="slide"
         presentationStyle="fullScreen"
-
-        statusBarTranslucent={true}
+statusBarTranslucent={true}
+        
         transparent={false}
         onRequestClose={() => setIsOpen(false)}
         >
@@ -529,7 +529,7 @@ export default function CodeBlock({
     },
 
     lineNumber: {
-      width: 32,
+      width: 36,
 
       marginRight: 12,
 
