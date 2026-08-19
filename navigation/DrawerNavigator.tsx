@@ -1,72 +1,316 @@
 import React from "react";
+import {
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+
 import { useTheme } from "../theme/useTheme";
+
 import ChatScreen from "../screens/ChatScreen";
 import SettingsScreen from "../screens/SettingsScreen";
-import CustomDrawer from "../components/CustomDrawer";
-import { Dimensions, StyleSheet, Text, View, ScrollView, TouchableOpacity } 
-from "react-native";
-
-
-
 import InteractiveScreen from "../screens/InteractiveScreen";
-
 import FeedScreen from "../screens/FeedScreen";
 
-
+import CustomDrawer from "../components/CustomDrawer";
 
 const Drawer = createDrawerNavigator();
 
-// --- THE NEW NEW ANALYTICS DASHBOARD UI SCREEN ---
+
+// ============================================================
+// DASHBOARD SCREEN
+// ============================================================
+
 function DashboardScreen() {
   const { colors } = useTheme();
 
   return (
-    <ScrollView style={[styles.dashboardContainer, { backgroundColor: colors.background }]} showsVerticalScrollIndicator={false}>
-      <Text style={[styles.mainHeading, { color: colors.text || '#111827' }]}>Performance</Text>
-      <Text style={styles.subText}>Real-time app statistics</Text>
+    <ScrollView
+      style={[
+        styles.dashboardContainer,
+        {
+          backgroundColor: colors.background,
+        },
+      ]}
+      contentContainerStyle={styles.dashboardContent}
+      showsVerticalScrollIndicator={false}
+    >
+      {/* -------------------------------------------------- */}
+      {/* HEADER */}
+      {/* -------------------------------------------------- */}
 
-      {/* Stats Grid */}
+      <Text
+        style={[
+          styles.mainHeading,
+          {
+            color: colors.text,
+          },
+        ]}
+      >
+        Performance
+      </Text>
+
+      <Text
+        style={[
+          styles.subText,
+          {
+            color: colors.subText,
+          },
+        ]}
+      >
+        Real-time app statistics
+      </Text>
+
+
+      {/* -------------------------------------------------- */}
+      {/* STATS GRID */}
+      {/* -------------------------------------------------- */}
+
       <View style={styles.grid}>
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Total Views</Text>
-          <Text style={styles.cardStat}>12.4K</Text>
-          <Text style={styles.cardTrend}>+14% this week</Text>
+
+        {/* Total Views */}
+
+        <View
+          style={[
+            styles.card,
+            {
+              backgroundColor: colors.surface,
+              borderColor: colors.border,
+            },
+          ]}
+        >
+          <Text
+            style={[
+              styles.cardTitle,
+              {
+                color: colors.subText,
+              },
+            ]}
+          >
+            Total Views
+          </Text>
+
+          <Text
+            style={[
+              styles.cardStat,
+              {
+                color: colors.text,
+              },
+            ]}
+          >
+            12.4K
+          </Text>
+
+          <Text
+            style={[
+              styles.cardTrend,
+              {
+                color: colors.success,
+              },
+            ]}
+          >
+            +14% this week
+          </Text>
         </View>
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>Active Users</Text>
-          <Text style={styles.cardStat}>1,105</Text>
-          <Text style={styles.cardTrendLive}>● Live Now</Text>
+
+
+        {/* Active Users */}
+
+        <View
+          style={[
+            styles.card,
+            {
+              backgroundColor: colors.surface,
+              borderColor: colors.border,
+            },
+          ]}
+        >
+          <Text
+            style={[
+              styles.cardTitle,
+              {
+                color: colors.subText,
+              },
+            ]}
+          >
+            Active Users
+          </Text>
+
+          <Text
+            style={[
+              styles.cardStat,
+              {
+                color: colors.text,
+              },
+            ]}
+          >
+            1,105
+          </Text>
+
+          <Text
+            style={[
+              styles.cardTrendLive,
+              {
+                color: colors.error,
+              },
+            ]}
+          >
+            ● Live Now
+          </Text>
         </View>
+
       </View>
 
-      {/* Detailed List Item */}
-      <Text style={[styles.sectionHeading, { color: colors.text || '#111827' }]}>Recent Activity</Text>
-      <TouchableOpacity style={styles.listItem}>
-        <View style={styles.avatarPlaceholder} />
+
+      {/* -------------------------------------------------- */}
+      {/* RECENT ACTIVITY */}
+      {/* -------------------------------------------------- */}
+
+      <Text
+        style={[
+          styles.sectionHeading,
+          {
+            color: colors.text,
+          },
+        ]}
+      >
+        Recent Activity
+      </Text>
+
+
+      {/* Premium Subscription */}
+
+      <TouchableOpacity
+        activeOpacity={0.8}
+        style={[
+          styles.listItem,
+          {
+            backgroundColor: colors.surface,
+            borderColor: colors.border,
+          },
+        ]}
+      >
+        <View
+          style={[
+            styles.avatarPlaceholder,
+            {
+              backgroundColor: colors.border,
+            },
+          ]}
+        />
+
         <View style={styles.listTextContainer}>
-          <Text style={styles.listTitle}>New premium subscription</Text>
-          <Text style={styles.listTime}>2 minutes ago</Text>
+          <Text
+            style={[
+              styles.listTitle,
+              {
+                color: colors.text,
+              },
+            ]}
+          >
+            New premium subscription
+          </Text>
+
+          <Text
+            style={[
+              styles.listTime,
+              {
+                color: colors.subText,
+              },
+            ]}
+          >
+            2 minutes ago
+          </Text>
         </View>
-        <Text style={styles.listAmount}>+$9.99</Text>
+
+        <Text
+          style={[
+            styles.listAmount,
+            {
+              color: colors.success,
+            },
+          ]}
+        >
+          +$9.99
+        </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.listItem}>
-        <View style={styles.avatarPlaceholder} />
+
+      {/* Server Update */}
+
+      <TouchableOpacity
+        activeOpacity={0.8}
+        style={[
+          styles.listItem,
+          {
+            backgroundColor: colors.surface,
+            borderColor: colors.border,
+          },
+        ]}
+      >
+        <View
+          style={[
+            styles.avatarPlaceholder,
+            {
+              backgroundColor: colors.border,
+            },
+          ]}
+        />
+
         <View style={styles.listTextContainer}>
-          <Text style={styles.listTitle}>Server update deployment</Text>
-          <Text style={styles.listTime}>1 hour ago</Text>
+          <Text
+            style={[
+              styles.listTitle,
+              {
+                color: colors.text,
+              },
+            ]}
+          >
+            Server update deployment
+          </Text>
+
+          <Text
+            style={[
+              styles.listTime,
+              {
+                color: colors.subText,
+              },
+            ]}
+          >
+            1 hour ago
+          </Text>
         </View>
-        <Text style={styles.listStatusText}>Success</Text>
+
+        <Text
+          style={[
+            styles.listStatusText,
+            {
+              color: colors.primary,
+              backgroundColor: colors.background,
+              borderColor: colors.border,
+            },
+          ]}
+        >
+          Success
+        </Text>
       </TouchableOpacity>
+
     </ScrollView>
   );
 }
 
-// --- YOUR MAIN NAVIGATOR ---
+
+// ============================================================
+// DRAWER NAVIGATOR
+// ============================================================
+
 export default function DrawerNavigator() {
   const { colors } = useTheme();
-  
+
   return (
     <Drawer.Navigator
       drawerContent={(props) => (
@@ -76,134 +320,192 @@ export default function DrawerNavigator() {
       initialRouteName="Chat"
       screenOptions={{
         headerShown: false,
+
         drawerType: "back",
+
         drawerStyle: {
           width: Dimensions.get("window").width * 0.86,
           backgroundColor: colors.background,
         },
       }}
     >
+
+      {/* Chat */}
+
       <Drawer.Screen
         name="Chat"
         component={ChatScreen}
       />
 
-      {/* NEWLY CONNECTED DASHBOARD INTERFACE */}
+
+      {/* Dashboard */}
+
       <Drawer.Screen
         name="Dashboard"
         component={DashboardScreen}
       />
-      
-      <Drawer.Screen name="Interactive" component={InteractiveScreen} />
-  
-  <Drawer.Screen name="Feed" component={FeedScreen} />
+
+
+      {/* Interactive */}
+
+      <Drawer.Screen
+        name="Interactive"
+        component={InteractiveScreen}
+      />
+
+
+      {/* Feed */}
+
+      <Drawer.Screen
+        name="Feed"
+        component={FeedScreen}
+      />
+
+
+      {/* Settings */}
 
       <Drawer.Screen
         name="Settings"
         component={SettingsScreen}
       />
+
     </Drawer.Navigator>
   );
 }
 
-// Modern styles for the dashboard items
+
+// ============================================================
+// STATIC LAYOUT STYLES
+// ============================================================
+//
+// IMPORTANT:
+// No theme colors belong here.
+//
+// Colors are applied dynamically inside the component using
+// colors from useTheme().
+//
+// ============================================================
+
 const styles = StyleSheet.create({
+
   dashboardContainer: {
     flex: 1,
-    padding: 20,
-    paddingTop: 50, // Added padding to clear potential device camera notches
   },
+
+  dashboardContent: {
+    padding: 20,
+    paddingTop: 50,
+    paddingBottom: 40,
+  },
+
+
+  // ----------------------------------------------------------
+  // HEADER
+  // ----------------------------------------------------------
+
   mainHeading: {
     fontSize: 28,
-    fontWeight: '800',
+    fontWeight: "800",
   },
+
   subText: {
     fontSize: 14,
-    color: '#6B7280',
     marginTop: 4,
     marginBottom: 20,
   },
+
+
+  // ----------------------------------------------------------
+  // STATS
+  // ----------------------------------------------------------
+
+  grid: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+
+  card: {
+    width: "48%",
+    padding: 15,
+    borderRadius: 12,
+    borderWidth: 1,
+  },
+
+  cardTitle: {
+    fontSize: 12,
+    fontWeight: "600",
+  },
+
+  cardStat: {
+    fontSize: 24,
+    fontWeight: "800",
+    marginVertical: 4,
+  },
+
+  cardTrend: {
+    fontSize: 11,
+    fontWeight: "600",
+  },
+
+  cardTrendLive: {
+    fontSize: 11,
+    fontWeight: "600",
+  },
+
+
+  // ----------------------------------------------------------
+  // RECENT ACTIVITY
+  // ----------------------------------------------------------
+
   sectionHeading: {
     fontSize: 18,
-    fontWeight: '700',
+    fontWeight: "700",
     marginTop: 25,
     marginBottom: 10,
   },
-  grid: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  card: {
-    backgroundColor: '#FFFFFF',
-    width: '48%',
-    padding: 15,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
-  },
-  cardTitle: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#6B7280',
-  },
-  cardStat: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: '#111827',
-    marginVertical: 4,
-  },
-  cardTrend: {
-    fontSize: 11,
-    color: '#10B981',
-    fontWeight: '600',
-  },
-  cardTrendLive: {
-    fontSize: 11,
-    color: '#EF4444',
-    fontWeight: '600',
-  },
+
   listItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    flexDirection: "row",
+    alignItems: "center",
     padding: 15,
     borderRadius: 12,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
   },
+
   avatarPlaceholder: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: '#E5E7EB',
   },
+
   listTextContainer: {
     flex: 1,
     marginLeft: 12,
   },
+
   listTitle: {
     fontSize: 14,
-    fontWeight: '600',
-    color: '#111827',
+    fontWeight: "600",
   },
+
   listTime: {
     fontSize: 12,
-    color: '#9CA3AF',
     marginTop: 2,
   },
+
   listAmount: {
     fontSize: 14,
-    fontWeight: '700',
-    color: '#10B981',
+    fontWeight: "700",
   },
+
   listStatusText: {
     fontSize: 12,
-    fontWeight: '600',
-    color: '#3B82F6',
-    backgroundColor: '#EFF6FF',
+    fontWeight: "600",
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 6,
+    borderWidth: 1,
   },
+
 });

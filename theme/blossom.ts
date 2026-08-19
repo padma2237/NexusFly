@@ -1,77 +1,82 @@
 const blossomTheme = {
-  name: "blossom",
+  name: "blossom-light",
 
   colors: {
     // ---------------------------------
     // CORE
     // ---------------------------------
 
-    background: "#120D18",
-    surface: "#1D1424",
+    background: "#FFF2F6",     // Soft, warm pink-tinged background
+    surface: "#FFFFFF",        // Clean white card surfaces
+    surfaceElevated: "#FFE5EE",// Warm pink floating containers
 
-    primary: "#F472B6",
-    secondary: "#C084FC",
+    primary: "#FF2A85",        // Vibrant Hot Pink
+    secondary: "#FF6B35",      // Bright Sunset Orange accent
 
-    text: "#FFF7FC",
-    subText: "#D8C4D3",
-    textSecondary: "#D8C4D3",
+    primarySoft: "#FFCCE1",    // Soft pastel pink fill
+    primaryGlow: "#FF2A854D",  // Soft hot pink glow
+    secondaryGlow: "#FF6B354D",// Soft orange glow
 
-    border: "#3A2740",
+    text: "#2E1522",           // Deep plum-gray (crisp reading text)
+    subText: "#7A5768",        // Soft pinkish-gray subtext
+    textSecondary: "#7A5768",
 
-    success: "#34D399",
-    warning: "#FBBF24",
-    error: "#FB7185",
+    border: "#FFC2D8",         // Bright pink border highlight
 
-    // ---------------------------------
-    // CARDS
-    // ---------------------------------
-
-    cardGreen: "#17352B",
-    cardBlue: "#202D45",
-    cardOrange: "#45301D",
-    cardPurple: "#352342",
+    success: "#00B87C",
+    warning: "#FF922D",        // Cheerful orange warning
+    error: "#FF3358",
 
     // ---------------------------------
-    // CODE BLOCK
+    // CARDS (Pink & Orange Focused)
     // ---------------------------------
 
-    codeBackground: "#100B16",
-    codeHeader: "#1A1121",
-    codeBorder: "#3B2642",
+    cardGreen: "#E6F8F3",     // Minty Fresh (keeps good contrast)
+    cardBlue: "#FFEBF2",      // Soft Rose Pink
+    cardOrange: "#FFF0E5",    // Creamy Peach / Soft Apricot
+    cardPurple: "#FFE5F1",    // Bright Blossom Pink / Magenta Tint
 
-    codeText: "#FCEFF7",
-    codeLineNumber: "#947F91",
+    // ---------------------------------
+    // CODE BLOCK (Light Pink & Warm Orange Accents)
+    // ---------------------------------
 
-    codeKeyword: "#E879F9",
-    codeFunction: "#67E8F9",
-    codeString: "#86EFAC",
-    codeNumber: "#FCD34D",
-    codeComment: "#947F91",
+    codeBackground: "#FFF5F8",
+    codeHeader: "#FFDFEB",
+    codeBorder: "#FFA3C5",
 
-    codeVariable: "#F9A8D4",
-    codeProperty: "#A5F3FC",
-    codeType: "#C4B5FD",
+    codeText: "#2E1522",
+    codeLineNumber: "#B8869E",
 
-    codeOperator: "#F0ABFC",
-    codePunctuation: "#D8C4D3",
+    codeKeyword: "#FF006E",    // Vivid Pink
+    codeFunction: "#E85D04",   // Warm Orange
+    codeString: "#00875A",    // Fresh Emerald
+    codeNumber: "#FF6B35",    // Bright Orange
+    codeComment: "#A3788E",
 
-    codeTag: "#FB7185",
-    codeAttribute: "#67E8F9",
+    codeVariable: "#E60067",   // Deep Rose Pink
+    codeProperty: "#D94800",   // Burnt Orange
+    codeType: "#B5179E",       // Pink-Purple
 
-    codeConstant: "#E879F9",
-    codeBoolean: "#FCD34D",
-    codeBuiltin: "#5EEAD4",
+    codeOperator: "#FF3385",   // Mid-Pink
+    codePunctuation: "#7A5768",
 
-    codeCopy: "#F472B6",
-    codeLanguage: "#D8C4D3",
+    codeTag: "#FF006E",
+    codeAttribute: "#E85D04",
 
-    codeButton: "#2A1A32",
+    codeConstant: "#FF6B35",
+    codeBoolean: "#FF6B35",
+    codeBuiltin: "#00897B",
 
-    codeSegmentBackground: "#1A1121",
-    codeSegmentActive: "#38203F",
-    codeSegmentActiveText: "#FFF7FC",
-    codeSegmentText: "#BFA9BB",
-    codeSegmentPressed: "#4A2B50",
+    codeCopy: "#FF2A85",
+    codeLanguage: "#7A5768",
+
+    codeButton: "#FFD6E5",
+
+    codeSegmentBackground: "#FFDFEB",
+    codeSegmentActive: "#FFFFFF",
+    codeSegmentActiveText: "#2E1522",
+    codeSegmentText: "#7A5768",
+    codeSegmentPressed: "#FFC2D8",
   },
 };
 

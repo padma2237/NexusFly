@@ -9,47 +9,46 @@ import {
   StyleSheet,
   Keyboard,
   View,
-
 } from "react-native";
 import {
-  SafeAreaView
+  SafeAreaView,
 } from "react-native-safe-area-context";
 import {
-  StatusBar
+  StatusBar,
 } from "expo-status-bar";
 
 import Header from "../components/Header";
 import Composer from "../components/Composer";
+
 import {
-  useTheme
+  useTheme,
 } from "../theme/useTheme";
+
 import {
-  sendMessage
+  sendMessage,
 } from "../services/api";
+
 import {
-  Message
+  Message,
 } from "../types/chat";
+
 import {
-  useConversation
+  useConversation,
 } from "../context/ConversationContext";
+
 import {
   useNavigation,
-  DrawerActions
+  DrawerActions,
 } from "@react-navigation/native";
-
 
 import ChatList, {
   ChatListHandle,
 } from "../components/Chat/ChatList";
 
-
 import MessageRow from "../components/Chat/MessageRow";
 
 
-
 export default function ChatScreen() {
-
-
   const {
     currentConversation,
     currentConversationId,
@@ -58,39 +57,56 @@ export default function ChatScreen() {
   } = useConversation();
 
   const navigation = useNavigation();
+
   const {
     colors,
     themeName,
-    setTheme
   } = useTheme();
-  const styles = React.useMemo(() => createStyles(colors), [colors]);
 
-  const messages = currentConversation?.messages ?? [];
-  const flatListRef = useRef < FlatList < Message>>(null);
+  const styles = React.useMemo(
+    () => createStyles(colors),
+    [colors]
+  );
 
+  const messages =
+    currentConversation?.messages ?? [];
 
-  const chatListRef = useRef < ChatListHandle > (null);
+  const flatListRef =
+    useRef<FlatList<Message>>(null);
 
-
-
-
-
-  const [webSearchEnabled,
-    setWebSearchEnabled] = useState(false);
-  const [inputText,
-    setInputText] = useState("");
-  const [isLoading,
-    setIsLoading] = useState(false);
-
-  const [composerHeight,
-    setComposerHeight] = useState(0);
+  const chatListRef =
+    useRef<ChatListHandle>(null);
 
 
-  const handleComposerLayout = useCallback((event: any) => {
-    const height = event.nativeEvent.layout.height;
+  const [
+    webSearchEnabled,
+    setWebSearchEnabled,
+  ] = useState(false);
 
-    setComposerHeight(height);
-  }, []);
+  const [
+    inputText,
+    setInputText,
+  ] = useState("");
+
+  const [
+    isLoading,
+    setIsLoading,
+  ] = useState(false);
+
+  const [
+    composerHeight,
+    setComposerHeight,
+  ] = useState(0);
+
+
+  const handleComposerLayout =
+    useCallback((event: any) => {
+      const height =
+        event.nativeEvent.layout.height;
+
+      setComposerHeight(height);
+    }, []);
+
 
   useEffect(() => {
     setInputText("");
@@ -102,21 +118,20 @@ export default function ChatScreen() {
     }, 300);
 
     return () => clearTimeout(timer);
-  },
-    [currentConversationId]);
-
-
-
-
+  }, [currentConversationId]);
 
 
   const handleSend = async () => {
-    if (!inputText.trim() || isLoading) return;
+    if (!inputText.trim() || isLoading) {
+      return;
+    }
 
-    let activeConversation = currentConversation;
+    let activeConversation =
+      currentConversation;
 
     if (!activeConversation) {
-      activeConversation = createNewConversation();
+      activeConversation =
+        createNewConversation();
     }
 
     const userMessage: Message = {
@@ -132,21 +147,23 @@ export default function ChatScreen() {
     ];
 
     const newMessageIndex =
-    updatedMessages.length - 1;
+      updatedMessages.length - 1;
 
     const newTitle =
-    activeConversation.title === "New Chat"
-    ? inputText.slice(0, 30): activeConversation.title;
+      activeConversation.title === "New Chat"
+        ? inputText.slice(0, 30)
+        : activeConversation.title;
 
     setConversations((prev) =>
       prev.map((chat) =>
         chat.id === activeConversation.id
-        ? {
-          ...chat,
-          title: newTitle,
-          messages: updatedMessages,
-          updatedAt: Date.now(),
-        }: chat
+          ? {
+              ...chat,
+              title: newTitle,
+              messages: updatedMessages,
+              updatedAt: Date.now(),
+            }
+          : chat
       )
     );
 
@@ -155,8 +172,6 @@ export default function ChatScreen() {
     Keyboard.dismiss();
     setIsLoading(true);
 
-    // Wait until the new user message has actually
-    // been rendered by FlatList, then anchor it at 25%.
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         chatListRef.current?.scrollToMessage(
@@ -189,16 +204,14 @@ export default function ChatScreen() {
       setConversations((prev) =>
         prev.map((chat) =>
           chat.id === activeConversation.id
-          ? {
-            ...chat,
-            messages: finalMessages,
-            updatedAt: Date.now(),
-          }: chat
+            ? {
+                ...chat,
+                messages: finalMessages,
+                updatedAt: Date.now(),
+              }
+            : chat
         )
       );
-
-
-
     } catch (error) {
       console.error(error);
 
@@ -212,14 +225,15 @@ export default function ChatScreen() {
       setConversations((prev) =>
         prev.map((chat) =>
           chat.id === activeConversation.id
-          ? {
-            ...chat,
-            messages: [
-              ...chat.messages,
-              errorMessage,
-            ],
-            updatedAt: Date.now(),
-          }: chat
+            ? {
+                ...chat,
+                messages: [
+                  ...chat.messages,
+                  errorMessage,
+                ],
+                updatedAt: Date.now(),
+              }
+            : chat
         )
       );
     } finally {
@@ -228,88 +242,157 @@ export default function ChatScreen() {
   };
 
 
+  const handleRegenerate =
+    useCallback(async () => {
+      if (
+        messages.length < 2 ||
+        isLoading
+      ) {
+        return;
+      }
 
+      const lastUserIndex =
+        [...messages]
+          .reverse()
+          .findIndex(
+            (m) => m.role === "user"
+          );
 
+      if (lastUserIndex === -1) {
+        return;
+      }
 
-  const handleRegenerate = useCallback(async () => {
-    if (messages.length < 2 || isLoading) return;
+      const userIndex =
+        messages.length -
+        1 -
+        lastUserIndex;
 
-    const lastUserIndex = [...messages]
-    .reverse()
-    .findIndex((m) => m.role === "user");
-
-    if (lastUserIndex === -1) return;
-
-    const userIndex = messages.length - 1 - lastUserIndex;
-    const updatedMessages = messages.slice(0, userIndex + 1);
-
-    setConversations((prev) =>
-      prev.map((chat) =>
-        chat.id === currentConversationId
-        ? {
-          ...chat,
-          messages: updatedMessages,
-          updatedAt: Date.now(),
-        }: chat
-      )
-    );
-
-    setIsLoading(true);
-
-    try {
-      const result = await sendMessage(updatedMessages, webSearchEnabled);
-
-      const assistantMessage: Message = {
-        id: Date.now().toString(),
-        role: "assistant",
-        text: result.answer,
-        sources: result.sources,
-        createdAt: Date.now(),
-      };
+      const updatedMessages =
+        messages.slice(0, userIndex + 1);
 
       setConversations((prev) =>
         prev.map((chat) =>
           chat.id === currentConversationId
-          ? {
-            ...chat,
-            messages: [...updatedMessages, assistantMessage],
-            updatedAt: Date.now(),
-          }: chat
+            ? {
+                ...chat,
+                messages: updatedMessages,
+                updatedAt: Date.now(),
+              }
+            : chat
         )
       );
-    } finally {
-      setIsLoading(false);
-    }
-  },
 
+      setIsLoading(true);
 
+      try {
+        const result = await sendMessage(
+          updatedMessages,
+          webSearchEnabled
+        );
 
-    [messages,
+        const assistantMessage: Message = {
+          id: Date.now().toString(),
+          role: "assistant",
+          text: result.answer,
+          sources: result.sources,
+          createdAt: Date.now(),
+        };
+
+        setConversations((prev) =>
+          prev.map((chat) =>
+            chat.id === currentConversationId
+              ? {
+                  ...chat,
+                  messages: [
+                    ...updatedMessages,
+                    assistantMessage,
+                  ],
+                  updatedAt: Date.now(),
+                }
+              : chat
+          )
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    }, [
+      messages,
       currentConversationId,
       webSearchEnabled,
-      isLoading]);
+      isLoading,
+    ]);
+
 
   return (
-
-    <SafeAreaView style={styles.container} edges={["left",
-      "right",
-      "bottom",
-      "top"
-    ]}>
+    <SafeAreaView
+      style={styles.container}
+      edges={[
+        "left",
+        "right",
+        "bottom",
+        "top",
+      ]}
+    >
       <StatusBar style="auto" />
+
+      {/* ---------------------------------
+          BLOSSOM ATMOSPHERE
+          ---------------------------------
+          Only enabled for Blossom.
+
+          These soft translucent layers create
+          a subtle gradient-like depth without
+          adding another dependency.
+      */}
+      {themeName === "blossom" && (
+        <View
+          pointerEvents="none"
+          style={styles.blossomAtmosphere}
+        >
+          <View
+            style={[
+              styles.blossomGlowTop,
+              {
+                backgroundColor:
+                  colors.primary,
+              },
+            ]}
+          />
+
+          <View
+            style={[
+              styles.blossomGlowBottom,
+              {
+                backgroundColor:
+                  colors.secondary,
+              },
+            ]}
+          />
+        </View>
+      )}
+
+
       <Header
         title="NexusFly"
-        onMenuPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+        onMenuPress={() =>
+          navigation.dispatch(
+            DrawerActions.openDrawer()
+          )
+        }
         onNewChatPress={() => {
           createNewConversation();
           Keyboard.dismiss();
           chatListRef.current?.scrollToTop();
         }}
-        onSettingsPress={() => navigation.navigate("Settings" as never)}
-        />
+        onSettingsPress={() =>
+          navigation.navigate(
+            "Settings" as never
+          )
+        }
+      />
+
 
       <View style={styles.chatWrapper}>
-
         <ChatList
           ref={chatListRef}
           flatListRef={flatListRef}
@@ -317,43 +400,87 @@ export default function ChatScreen() {
           isLoading={isLoading}
           setInputText={setInputText}
           composerHeight={composerHeight}
-          renderItem={({ item, index }) => (
+          renderItem={({
+            item,
+            index,
+          }) => (
             <MessageRow
               item={item}
               isLastAssistant={
-              index === messages.length - 1 &&
-              item.role === "assistant"
+                index === messages.length - 1 &&
+                item.role === "assistant"
               }
-              handleRegenerate={handleRegenerate}
-              />
+              handleRegenerate={
+                handleRegenerate
+              }
+            />
           )}
-          />
+        />
 
         <Composer
           value={inputText}
           onChangeText={setInputText}
           onSend={handleSend}
           isLoading={isLoading}
-          webSearchEnabled={webSearchEnabled}
-          onToggleWebSearch={() =>
-          setWebSearchEnabled(!webSearchEnabled)
+          webSearchEnabled={
+            webSearchEnabled
           }
-          onLayout={handleComposerLayout}
-          />
-
+          onToggleWebSearch={() =>
+            setWebSearchEnabled(
+              !webSearchEnabled
+            )
+          }
+          onLayout={
+            handleComposerLayout
+          }
+        />
       </View>
-
     </SafeAreaView>
-
   );
 }
-  const createStyles = (colors: any) =>
+
+
+const createStyles = (colors: any) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: colors.background,
+      backgroundColor:
+        colors.background,
     },
+
     chatWrapper: {
       flex: 1,
+      zIndex: 1,
     },
+
+    // ---------------------------------
+    // BLOSSOM ATMOSPHERE
+    // ---------------------------------
+
+    blossomAtmosphere: {
+      ...StyleSheet.absoluteFillObject,
+      overflow: "hidden",
+      zIndex: 0,
+    },
+
+blossomGlowTop: {
+  position: "absolute",
+  width: 420,
+  height: 420,
+  borderRadius: 310,
+  top: -250,
+  left: -150,
+  opacity: 0.10,
+},
+
+blossomGlowBottom: {
+  position: "absolute",
+  width: 480,
+  height: 480,
+  borderRadius: 240,
+  bottom: -330,
+  right: -180,
+  opacity: 0.05,
+},
+    
   });
