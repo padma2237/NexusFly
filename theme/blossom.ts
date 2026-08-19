@@ -6,10 +6,10 @@ const blossomTheme = {
     // CORE
     // ---------------------------------
 
-    background: "#FFF2F6",     // Soft, warm pink-tinged background
-    surface: "#FFFFFF",        // Clean white card surfaces
+    background: "#FFE2F6",     // Soft, warm pink-tinged background
+    surface: "#FFF2F6",        // Clean white card surfaces
     surfaceElevated: "#FFE5EE",// Warm pink floating containers
-
+     cyan: "#00FFFF",
     primary: "#FF2A85",        // Vibrant Hot Pink
     secondary: "#FF6B35",      // Bright Sunset Orange accent
 

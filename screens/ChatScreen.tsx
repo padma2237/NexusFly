@@ -358,16 +358,68 @@ export default function ChatScreen() {
               },
             ]}
           />
+          
+           <View
+            style={[
+              styles.blossomGlowTop1,
+              {
+                backgroundColor:
+                  colors.primary,
+              },
+            ]}
+          />
+          
+           <View
+            style={[
+              styles.blossomGlowMid,
+              {
+                backgroundColor:
+                  colors.border,
+              },
+            ]}
+          />
+          
+          <View
+            style={[
+              styles.blossomGlowMid1,
+              {
+                backgroundColor:
+                  colors.primary,
+              },
+            ]}
+          />
 
           <View
             style={[
               styles.blossomGlowBottom,
               {
                 backgroundColor:
+                  colors.border,
+              },
+            ]}
+          />
+          
+          
+          <View
+            style={[
+              styles.blossomTopLeft,
+              {
+                backgroundColor:
+                  colors.primary,
+              },
+            ]}
+          />
+          
+          <View
+            style={[
+              styles.blossomBottomRight,
+              {
+                backgroundColor:
                   colors.secondary,
               },
             ]}
           />
+          
         </View>
       )}
 
@@ -469,18 +521,77 @@ blossomGlowTop: {
   height: 420,
   borderRadius: 310,
   top: -250,
-  left: -150,
+  left: -80,
   opacity: 0.10,
 },
 
+blossomGlowTop1: {
+  position: "absolute",
+  width: 420,
+  height: 420,
+  borderRadius: 310,
+  top: -250,
+  right: -150,
+  opacity: 0.50,
+},
+
+blossomGlowMid: {
+  position: "absolute",
+  width: 620,
+  height: 620,
+  borderRadius: 360,
+  bottom:-100,
+  right:150,
+  
+  opacity: 0.8,
+},
+
+blossomGlowMid1: {
+  position: "absolute",
+  width: 620,
+  height: 620,
+  borderRadius: 360,
+  top: -100,
+  left:220,
+  
+  opacity: 0.7,
+
+},
+
+
 blossomGlowBottom: {
   position: "absolute",
-  width: 480,
-  height: 480,
-  borderRadius: 240,
-  bottom: -330,
-  right: -180,
-  opacity: 0.05,
+  width: 80,
+  height:80,
+  borderRadius: 360,
+  top:360,
+  left:260,
+  
+  
+  
+  opacity: 1,
 },
+
+blossomTopLeft: {
+  position: "absolute",
+  width: 420,
+  height: 420,
+  borderRadius: 310,
+  top: -150,
+  left: -220,
+  opacity: 0.1,
+},
+
+blossomBottomRight: {
+  position: "absolute",
+  width: 420,
+  height: 420,
+  borderRadius: 310,
+  bottom: -150,
+  left: 120,
+  opacity: 0.10,
+},
+
+
     
   });
