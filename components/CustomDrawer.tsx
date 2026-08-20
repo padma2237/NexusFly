@@ -91,8 +91,8 @@ export default function CustomDrawer(props: any) {
         >
           <Ionicons
             name="add"
-            size={22}
-            color={colors.text}
+            size={24}
+            color={colors.surface}
           />
 
           <Text style={styles.newChatText}>
@@ -126,7 +126,7 @@ export default function CustomDrawer(props: any) {
                   }
 
                   activeTintColor={
-                    colors.text
+                    colors.surface
                   }
 
                   inactiveTintColor={
@@ -139,7 +139,7 @@ export default function CustomDrawer(props: any) {
                     styles.label,
                     {
                       color: isActive
-                        ? colors.text
+                        ? colors.surface
                         : colors.text,
 
                       fontWeight:
@@ -197,7 +197,7 @@ export default function CustomDrawer(props: any) {
                   setDeleteModalVisible(true);
                 }}
                 style={{
-                  paddingHorizontal: 15,
+                  paddingHorizontal: 10,
                 }}
               >
                 <Ionicons
@@ -394,8 +394,8 @@ const createStyles = (colors: any) =>
   StyleSheet.create({
 
     logo: {
-      color: colors.text,
-      fontSize: 30,
+      color: colors.primary,
+      fontSize: 35,
       fontWeight: "bold",
       marginTop: 25,
       marginLeft: 20,
@@ -409,14 +409,14 @@ const createStyles = (colors: any) =>
       backgroundColor:
         colors.primary,
 
-      marginHorizontal: 15,
+      marginHorizontal: 1,
       padding: 14,
       borderRadius: 14,
       marginBottom: 25,
     },
 
     newChatText: {
-      color: colors.text,
+      color: colors.surface,
       marginLeft: 10,
       fontWeight: "600",
       fontSize: 16,

@@ -2,68 +2,68 @@ const experimentalTheme = {
   name: "experimental",
 
   colors: {
-    background: "#0b1020",
-    surface: "#151b33",
+    background: "#FFF3E0",
+    surface: "#FFE0B2",
 
-    primary: "#00d4ff",
-    secondary: "#8b5cf6",
+    primary: "#E65100",
+    secondary: "#F57C00",
 
-    text: "#f8fafc",
-    subText: "#9ca3af",
-    textSecondary: "#9ca3af",
+    text: "#3E2723",
+    subText: "#5D4037",
+    textSecondary: "#795548",
 
-    border: "#2d3b63",
+    border: "#FFB74D",
 
-    success: "#22c55e",
-    warning: "#f59e0b",
-    error: "#ef4444",
+    success: "#2E7D32",
+    warning: "#EF6C00",
+    error: "#C62828",
 
-    cardGreen: "#163C2C",
-    cardBlue: "#1A3550",
-    cardOrange: "#4A3818",
-    cardPurple: "#3A2648",
+    cardGreen: "#E8F5E9",
+    cardBlue: "#E3F2FD",
+    cardOrange: "#FFE0B2",
+    cardPurple: "#F3E5F5",
 
     // ---------------------------------
-    // CODE BLOCK
+    // CODE BLOCK (Creamy Orange Style)
     // ---------------------------------
 
-    codeBackground: "#0A1022",
-    codeHeader: "#111A32",
-    codeBorder: "#2D3B63",
+    codeBackground: "#FFF8E1",
+    codeHeader: "#FFE0B2",
+    codeBorder: "#FFE082",
 
-    codeText: "#F8FAFC",
-    codeLineNumber: "#64748B",
+    codeText: "#4E342E",
+    codeLineNumber: "#A1887F",
 
-    codeKeyword: "#C084FC",
-    codeFunction: "#38BDF8",
-    codeString: "#6EE7B7",
-    codeNumber: "#FBBF24",
-    codeComment: "#64748B",
+    codeKeyword: "#D84315",
+    codeFunction: "#E65100",
+    codeString: "#2E7D32",
+    codeNumber: "#AD1457",
+    codeComment: "#8D6E63",
 
-    codeVariable: "#F0ABFC",
-    codeProperty: "#67E8F9",
-    codeType: "#A5B4FC",
+    codeVariable: "#1565C0",
+    codeProperty: "#6A1B9A",
+    codeType: "#283593",
 
-    codeOperator: "#22D3EE",
-    codePunctuation: "#CBD5E1",
+    codeOperator: "#D84315",
+    codePunctuation: "#5D4037",
 
-    codeTag: "#F472B6",
-    codeAttribute: "#38BDF8",
+    codeTag: "#E65100",
+    codeAttribute: "#1565C0",
 
-    codeConstant: "#C084FC",
-    codeBoolean: "#FBBF24",
-    codeBuiltin: "#2DD4BF",
+    codeConstant: "#6A1B9A",
+    codeBoolean: "#AD1457",
+    codeBuiltin: "#00838F",
 
-    codeCopy: "#22D3EE",
-    codeLanguage: "#9CA3AF",
+    codeCopy: "#E65100",
+    codeLanguage: "#795548",
 
-    codeButton: "#1B2947",
+    codeButton: "#FFE0B2",
 
-    codeSegmentBackground: "#111A32",
-    codeSegmentActive: "#1E2D4D",
-    codeSegmentActiveText: "#F8FAFC",
-    codeSegmentText: "#9CA3AF",
-    codeSegmentPressed: "#243B63",
+    codeSegmentBackground: "#FFE0B2",
+    codeSegmentActive: "#FFB74D",
+    codeSegmentActiveText: "#3E2723",
+    codeSegmentText: "#795548",
+    codeSegmentPressed: "#FFA726",
   },
 };
 

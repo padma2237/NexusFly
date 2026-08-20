@@ -69,13 +69,13 @@ export default function ChatScreen() {
   );
 
   const messages =
-    currentConversation?.messages ?? [];
+  currentConversation?.messages ?? [];
 
   const flatListRef =
-    useRef<FlatList<Message>>(null);
+  useRef < FlatList < Message>>(null);
 
   const chatListRef =
-    useRef<ChatListHandle>(null);
+  useRef < ChatListHandle > (null);
 
 
   const [
@@ -100,26 +100,33 @@ export default function ChatScreen() {
 
 
   const handleComposerLayout =
-    useCallback((event: any) => {
-      const height =
-        event.nativeEvent.layout.height;
+  useCallback((event: any) => {
+    const height =
+    event.nativeEvent.layout.height;
 
-      setComposerHeight(height);
-    }, []);
+    setComposerHeight(height);
+  }, []);
+
+
+
 
 
   useEffect(() => {
     setInputText("");
 
-    if (!messages.length) return;
-
     const timer = setTimeout(() => {
-      chatListRef.current?.scrollToLatest();
-    }, 300);
+      if (messages.length === 0) {
+        // New/empty conversation → always return to the top.
+        chatListRef.current?.scrollToTop();
+      } else {
+        // Existing conversation → show the latest messages.
+        chatListRef.current?.scrollToLatest();
+      }
+    },
+      100);
 
     return () => clearTimeout(timer);
   }, [currentConversationId]);
-
 
   const handleSend = async () => {
     if (!inputText.trim() || isLoading) {
@@ -127,11 +134,11 @@ export default function ChatScreen() {
     }
 
     let activeConversation =
-      currentConversation;
+    currentConversation;
 
     if (!activeConversation) {
       activeConversation =
-        createNewConversation();
+      createNewConversation();
     }
 
     const userMessage: Message = {
@@ -147,23 +154,21 @@ export default function ChatScreen() {
     ];
 
     const newMessageIndex =
-      updatedMessages.length - 1;
+    updatedMessages.length - 1;
 
     const newTitle =
-      activeConversation.title === "New Chat"
-        ? inputText.slice(0, 30)
-        : activeConversation.title;
+    activeConversation.title === "New Chat"
+    ? inputText.slice(0, 30): activeConversation.title;
 
     setConversations((prev) =>
       prev.map((chat) =>
         chat.id === activeConversation.id
-          ? {
-              ...chat,
-              title: newTitle,
-              messages: updatedMessages,
-              updatedAt: Date.now(),
-            }
-          : chat
+        ? {
+          ...chat,
+          title: newTitle,
+          messages: updatedMessages,
+          updatedAt: Date.now(),
+        }: chat
       )
     );
 
@@ -204,12 +209,11 @@ export default function ChatScreen() {
       setConversations((prev) =>
         prev.map((chat) =>
           chat.id === activeConversation.id
-            ? {
-                ...chat,
-                messages: finalMessages,
-                updatedAt: Date.now(),
-              }
-            : chat
+          ? {
+            ...chat,
+            messages: finalMessages,
+            updatedAt: Date.now(),
+          }: chat
         )
       );
     } catch (error) {
@@ -225,15 +229,14 @@ export default function ChatScreen() {
       setConversations((prev) =>
         prev.map((chat) =>
           chat.id === activeConversation.id
-            ? {
-                ...chat,
-                messages: [
-                  ...chat.messages,
-                  errorMessage,
-                ],
-                updatedAt: Date.now(),
-              }
-            : chat
+          ? {
+            ...chat,
+            messages: [
+              ...chat.messages,
+              errorMessage,
+            ],
+            updatedAt: Date.now(),
+          }: chat
         )
       );
     } finally {
@@ -243,79 +246,78 @@ export default function ChatScreen() {
 
 
   const handleRegenerate =
-    useCallback(async () => {
-      if (
-        messages.length < 2 ||
-        isLoading
-      ) {
-        return;
-      }
+  useCallback(async () => {
+    if (
+      messages.length < 2 ||
+      isLoading
+    ) {
+      return;
+    }
 
-      const lastUserIndex =
-        [...messages]
-          .reverse()
-          .findIndex(
-            (m) => m.role === "user"
-          );
+    const lastUserIndex =
+    [...messages]
+    .reverse()
+    .findIndex(
+      (m) => m.role === "user"
+    );
 
-      if (lastUserIndex === -1) {
-        return;
-      }
+    if (lastUserIndex === -1) {
+      return;
+    }
 
-      const userIndex =
-        messages.length -
-        1 -
-        lastUserIndex;
+    const userIndex =
+    messages.length -
+    1 -
+    lastUserIndex;
 
-      const updatedMessages =
-        messages.slice(0, userIndex + 1);
+    const updatedMessages =
+    messages.slice(0, userIndex + 1);
+
+    setConversations((prev) =>
+      prev.map((chat) =>
+        chat.id === currentConversationId
+        ? {
+          ...chat,
+          messages: updatedMessages,
+          updatedAt: Date.now(),
+        }: chat
+      )
+    );
+
+    setIsLoading(true);
+
+    try {
+      const result = await sendMessage(
+        updatedMessages,
+        webSearchEnabled
+      );
+
+      const assistantMessage: Message = {
+        id: Date.now().toString(),
+        role: "assistant",
+        text: result.answer,
+        sources: result.sources,
+        createdAt: Date.now(),
+      };
 
       setConversations((prev) =>
         prev.map((chat) =>
           chat.id === currentConversationId
-            ? {
-                ...chat,
-                messages: updatedMessages,
-                updatedAt: Date.now(),
-              }
-            : chat
+          ? {
+            ...chat,
+            messages: [
+              ...updatedMessages,
+              assistantMessage,
+            ],
+            updatedAt: Date.now(),
+          }: chat
         )
       );
-
-      setIsLoading(true);
-
-      try {
-        const result = await sendMessage(
-          updatedMessages,
-          webSearchEnabled
-        );
-
-        const assistantMessage: Message = {
-          id: Date.now().toString(),
-          role: "assistant",
-          text: result.answer,
-          sources: result.sources,
-          createdAt: Date.now(),
-        };
-
-        setConversations((prev) =>
-          prev.map((chat) =>
-            chat.id === currentConversationId
-              ? {
-                  ...chat,
-                  messages: [
-                    ...updatedMessages,
-                    assistantMessage,
-                  ],
-                  updatedAt: Date.now(),
-                }
-              : chat
-          )
-        );
-      } finally {
-        setIsLoading(false);
-      }
-    }, [
+    } finally {
+      setIsLoading(false);
+    }
+  },
+    [
       messages,
       currentConversationId,
       webSearchEnabled,
@@ -332,7 +334,7 @@ export default function ChatScreen() {
         "bottom",
         "top",
       ]}
-    >
+      >
       <StatusBar style="auto" />
 
       {/* ---------------------------------
@@ -344,82 +346,91 @@ export default function ChatScreen() {
           a subtle gradient-like depth without
           adding another dependency.
       */}
-      {themeName === "blossom" && (
+      {(themeName === "blossom" || themeName === "light" || themeName === "experimental") && (
         <View
           pointerEvents="none"
           style={styles.blossomAtmosphere}
-        >
+          >
           <View
             style={[
               styles.blossomGlowTop,
               {
                 backgroundColor:
-                  colors.primary,
+                colors.primary,
               },
             ]}
-          />
-          
-           <View
+            />
+
+          <View
+            style={[
+              styles.blossomGlowSide,
+              {
+                backgroundColor:
+                colors.primary,
+              },
+            ]}
+            />
+
+          <View
             style={[
               styles.blossomGlowTop1,
               {
                 backgroundColor:
-                  colors.primary,
+                colors.primary,
               },
             ]}
-          />
-          
-           <View
+            />
+
+          <View
             style={[
               styles.blossomGlowMid,
               {
                 backgroundColor:
-                  colors.border,
+                colors.border,
               },
             ]}
-          />
-          
+            />
+
           <View
             style={[
               styles.blossomGlowMid1,
               {
                 backgroundColor:
-                  colors.primary,
+                colors.primary,
               },
             ]}
-          />
+            />
 
           <View
             style={[
               styles.blossomGlowBottom,
               {
                 backgroundColor:
-                  colors.border,
+                colors.border,
               },
             ]}
-          />
-          
-          
+            />
+
           <View
             style={[
               styles.blossomTopLeft,
               {
                 backgroundColor:
-                  colors.primary,
+                colors.primary,
               },
             ]}
-          />
-          
+            />
+
           <View
             style={[
               styles.blossomBottomRight,
               {
                 backgroundColor:
-                  colors.secondary,
+                colors.secondary,
               },
             ]}
-          />
-          
+            />
+
         </View>
       )}
 
@@ -427,9 +438,9 @@ export default function ChatScreen() {
       <Header
         title="NexusFly"
         onMenuPress={() =>
-          navigation.dispatch(
-            DrawerActions.openDrawer()
-          )
+        navigation.dispatch(
+          DrawerActions.openDrawer()
+        )
         }
         onNewChatPress={() => {
           createNewConversation();
@@ -437,11 +448,11 @@ export default function ChatScreen() {
           chatListRef.current?.scrollToTop();
         }}
         onSettingsPress={() =>
-          navigation.navigate(
-            "Settings" as never
-          )
+        navigation.navigate(
+          "Settings" as never
+        )
         }
-      />
+        />
 
 
       <View style={styles.chatWrapper}>
@@ -459,15 +470,15 @@ export default function ChatScreen() {
             <MessageRow
               item={item}
               isLastAssistant={
-                index === messages.length - 1 &&
-                item.role === "assistant"
+              index === messages.length - 1 &&
+              item.role === "assistant"
               }
               handleRegenerate={
-                handleRegenerate
+              handleRegenerate
               }
-            />
+              />
           )}
-        />
+          />
 
         <Composer
           value={inputText}
@@ -475,29 +486,29 @@ export default function ChatScreen() {
           onSend={handleSend}
           isLoading={isLoading}
           webSearchEnabled={
-            webSearchEnabled
+          webSearchEnabled
           }
           onToggleWebSearch={() =>
-            setWebSearchEnabled(
-              !webSearchEnabled
-            )
+          setWebSearchEnabled(
+            !webSearchEnabled
+          )
           }
           onLayout={
-            handleComposerLayout
+          handleComposerLayout
           }
-        />
+          />
       </View>
     </SafeAreaView>
   );
 }
 
 
-const createStyles = (colors: any) =>
+  const createStyles = (colors: any) =>
   StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor:
-        colors.background,
+      colors.background,
     },
 
     chatWrapper: {
@@ -515,83 +526,85 @@ const createStyles = (colors: any) =>
       zIndex: 0,
     },
 
-blossomGlowTop: {
-  position: "absolute",
-  width: 420,
-  height: 420,
-  borderRadius: 310,
-  top: -250,
-  left: -80,
-  opacity: 0.10,
-},
+    blossomGlowTop: {
+      position: "absolute",
+      width: 420,
+      height: 420,
+      borderRadius: 310,
+      top: -250,
+      left: -80,
+      opacity: 0.10,
+    },
 
-blossomGlowTop1: {
-  position: "absolute",
-  width: 420,
-  height: 420,
-  borderRadius: 310,
-  top: -250,
-  right: -150,
-  opacity: 0.50,
-},
+    blossomGlowTop1: {
+      position: "absolute",
+      width: 420,
+      height: 420,
+      borderRadius: 310,
+      top: -250,
+      right: -150,
+      opacity: 0.50,
+    },
 
-blossomGlowMid: {
-  position: "absolute",
-  width: 620,
-  height: 620,
-  borderRadius: 360,
-  bottom:-100,
-  right:150,
-  
-  opacity: 0.8,
-},
+    blossomGlowSide: {
+      position: "absolute",
+      width: 140,
+      height: 140,
+      borderRadius: 310,
+      top: 220,
+      left: -65,
+      opacity: 0.05,
+    },
 
-blossomGlowMid1: {
-  position: "absolute",
-  width: 620,
-  height: 620,
-  borderRadius: 360,
-  top: -100,
-  left:220,
-  
-  opacity: 0.7,
+    blossomGlowMid: {
+      position: "absolute",
+      width: 620,
+      height: 620,
+      borderRadius: 360,
+      bottom: -100,
+      right: 150,
+      opacity: 0.8,
+    },
 
-},
-
-
-blossomGlowBottom: {
-  position: "absolute",
-  width: 80,
-  height:80,
-  borderRadius: 360,
-  top:360,
-  left:260,
-  
-  
-  
-  opacity: 1,
-},
-
-blossomTopLeft: {
-  position: "absolute",
-  width: 420,
-  height: 420,
-  borderRadius: 310,
-  top: -150,
-  left: -220,
-  opacity: 0.1,
-},
-
-blossomBottomRight: {
-  position: "absolute",
-  width: 420,
-  height: 420,
-  borderRadius: 310,
-  bottom: -150,
-  left: 120,
-  opacity: 0.10,
-},
+    blossomGlowMid1: {
+      position: "absolute",
+      width: 620,
+      height: 620,
+      borderRadius: 360,
+      top: -100,
+      left: 220,
+      opacity: 0.7,
+    },
 
 
-    
+    blossomGlowBottom: {
+      position: "absolute",
+      width: 80,
+      height: 80,
+      borderRadius: 360,
+      top: 360,
+      left: 260,
+      opacity: 1,
+    },
+
+    blossomTopLeft: {
+      position: "absolute",
+      width: 420,
+      height: 420,
+      borderRadius: 310,
+      top: -150,
+      left: -220,
+      opacity: 0.1,
+    },
+
+    blossomBottomRight: {
+      position: "absolute",
+      width: 420,
+      height: 420,
+      borderRadius: 310,
+      bottom: -150,
+      left: 120,
+      opacity: 0.10,
+    },
+
   });

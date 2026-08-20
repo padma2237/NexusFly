@@ -203,7 +203,7 @@ statusBarTranslucent={true}
               >
               <X
                 size={28}
-                color={colors.text}
+                color={colors.primary}
                 strokeWidth={2.2}
                 />
             </Pressable>
@@ -250,7 +250,7 @@ statusBarTranslucent={true}
               ): (
                 <Copy
                   size={27}
-                  color={colors.text}
+                  color={colors.primary}
                   strokeWidth={2}
                   />
               )}
