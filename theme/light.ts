@@ -2,11 +2,18 @@ const lightTheme = {
   name: "light",
 
   colors: {
-    background: "#F1F9F9", // Soft mint-teal background
+    background: // "#FFFFFF",
+    
+     "#F1F9F9", // Soft mint-teal background
+    
     surface: "#F1F9F9", // "#FFFFFF",    // Clean white for cards/modals
 
-    primary: // "#FFFFFF",    // 
-    "#FCDCA8", //"#FFC2A6", // "#FBCB98",   // Warm orange (chat bubbles, primary buttons)
+    primary: // "#FFFFFF",    
+      // "#F1F9F9",
+    
+    "#FCDCA8", 
+    
+    //"#FFC2A6", // "#FBCB98",   // Warm orange (chat bubbles, primary buttons)
     secondary: "#3B82F6", // Muted slate blue (accents, secondary buttons)
 
     text: "#0F172A",          // Dark slate for high-contrast, readable main text

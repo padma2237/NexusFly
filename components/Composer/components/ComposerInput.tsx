@@ -38,7 +38,7 @@ export default function ComposerInput({
       scrollEnabled={scrollEnabled}
       underlineColorAndroid="transparent"
       
-      placeholder="Message NexusFly..."
+      placeholder="Ask NexusFly..."
       placeholderTextColor={theme.placeholder}
       onChangeText={onChangeText}
       onFocus={onFocus}

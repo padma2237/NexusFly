@@ -1,14 +1,112 @@
 const experimentalTheme = {
   name: "experimental",
+  useGradient: true,
+  colors: {
+    background: "#F0FDF4",
+    backgroundGradient: [
+      "#CCFBFF", 
+      "#ECEBA7", 
+      "#ABF1C1"
+    ] as const,
+
+    surface: "#DCFCE7",
+    primary: "#22C55E",
+    //"#4ADE80",
+             //"#15803D",
+    secondary: "#166534",
+    text: "#14532D",
+    subText: "#166534",
+    textSecondary: "#3F6212",
+    border: "#BBF7D0",
+    success: "#166534",
+    warning: "#B45309",
+    error: "#991B1B",
+
+    cardGreen: "#DCFCE7",
+    cardBlue: "#E0F2FE",
+    cardOrange: "#FFEDD5",
+    cardPurple: "#F3E8FF",
+
+    codeBackground: "#F8FAFC",
+    codeHeader: "#F1F5F9",
+    codeBorder: "#E2E8F0",
+    codeText: "#334155",
+    codeLineNumber: "#94A3B8",
+    codeKeyword: "#0284C7",
+    codeFunction: "#15803D",
+    codeString: "#16A34A",
+    codeNumber: "#EA580C",
+    codeComment: "#64748B",
+    codeVariable: "#2563EB",
+    codeProperty: "#7C3AED",
+    codeType: "#0369A1",
+    codeOperator: "#EA580C",
+    codePunctuation: "#475569",
+    codeTag: "#15803D",
+    codeAttribute: "#2563EB",
+    codeConstant: "#7C3AED",
+    codeBoolean: "#EA580C",
+    codeBuiltin: "#0891B2",
+    codeCopy: "#15803D",
+    codeLanguage: "#475569",
+    codeButton: "#E2E8F0",
+    codeSegmentBackground: "#E2E8F0",
+    codeSegmentActive: "#BBF7D0",
+    codeSegmentActiveText: "#14532D",
+    codeSegmentText: "#475569",
+    codeSegmentPressed: "#86EFAC",
+  },
+};
+
+export default experimentalTheme;
+
+
+
+
+
+
+
+{/* const experimentalTheme = {
+  name: "experimental",
+
+  useGradient: true,
 
   colors: {
     background: "#FFF3E0",
+
+
+
+
+    backgroundGradient: [
+
+// "#B3EEFA", "#B7D2F7", "#C0BEF2", "#D8B5EC"
+
+// "#A5F3FC", "#C084FC", "#F472B6", "#FB923C"
+      "#CCFBFF", "#ECEBA7", "#ABF1C1"
+// "#FFEDD5", "#FED7AA", "#FBCFE8", "#E9D5FF" Orange
+
+//  "#E0F2FE", "#BAE6FD", "#7DD3FC", "#38BDF8" Blue
+
+// "#54E38E", "#00A8FF"
+
+// "#E0F2FE", "#BAE6FD", "#F5D0FE", "#FCE7F3"
+
+ // "#E0F7FA", "#B2EBF2", "#80CBC4", "#A5D6A7", //Green
+
+
+
+    ] as const,
+
+
+    // header: "FF000F",
+
     surface: "#FFE0B2",
 
     primary: "#E65100",
     secondary: "#F57C00",
 
-    text: "#3E2723",
+    text: 
+    "#3E2723",
     subText: "#5D4037",
     textSecondary: "#795548",
 
@@ -67,4 +165,4 @@ const experimentalTheme = {
   },
 };
 
-export default experimentalTheme;
+export default experimentalTheme; */}

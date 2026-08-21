@@ -129,7 +129,7 @@ ChatListProps > (
         contentContainerStyle={ {
           paddingHorizontal: 20,
           paddingTop: 100,
-          paddingBottom: composerHeight + 300,
+          paddingBottom: composerHeight + 500,
         }}
 
 

@@ -1,5 +1,7 @@
-const blossomTheme = {
-  name: "blossom-light",
+const sleekTheme = {
+  name: "sleek",
+
+useGradient: true,
 
   colors: {
     // ---------------------------------
@@ -7,18 +9,43 @@ const blossomTheme = {
     // ---------------------------------
 
     background: "#FFE2F6",     // Soft, warm pink-tinged background
+    
+    backgroundGradient: [
+      
+      
+  //"#F3E8FF", "#DDD6FE", "#C7D2FE", "#BAE6FD"
+
+
+  "#FFEDD5", "#FED7AA", "#FBCFE8", "#E9D5FF"
+
+
+      
+     //"#051937", "#004D7A", "#008793", "#00BF72",
+      
+ //"#ffdbdb", //"#480082",//"#F2FBF9",
+ //"#f4d6df", //"#703CFF", //"#F4F7FF",
+ //"#e9d1e3", //"#FF409D", //"#F8F2FC",
+ //"#decce7" //"#FFD200",
+  
+] as const,
+
     surface: "#FFF2F6",        // Clean white card surfaces
     surfaceElevated: "#FFE5EE",// Warm pink floating containers
-     cyan: "#00FFFF",
-    primary: "#FF2A85",        // Vibrant Hot Pink
+     
+    primary: "#FF5DA3",
+    
+    // "#F3E8FF",
+    
+    // "#7DD3FC",
+    
+   //  "#FF2A85",        // Vibrant Hot Pink
     secondary: "#FF6B35",      // Bright Sunset Orange accent
 
     primarySoft: "#FFCCE1",    // Soft pastel pink fill
     primaryGlow: "#FF2A854D",  // Soft hot pink glow
     secondaryGlow: "#FF6B354D",// Soft orange glow
 
-    text:  // "#0000FF",
-   "#2E1522",           // Deep plum-gray (crisp reading text)
+    text: "#2E1522",           // Deep plum-gray (crisp reading text)
     subText: "#7A5768",        // Soft pinkish-gray subtext
     textSecondary: "#7A5768",
 
@@ -81,4 +108,6 @@ const blossomTheme = {
   },
 };
 
-export default blossomTheme;
+
+
+export default sleekTheme;

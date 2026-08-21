@@ -31,11 +31,16 @@ export default function SettingsScreen() {
     },
     {
       id: "experimental",
-      title: "🧪 Padma Experimental",
+      title: "🧪 Experimental (Padma)",
     },
     {
       id: "blossom",
       title: "💮 Blossom",
+    },
+    
+        {
+      id: "sleek",
+      title: "🛸 Sleek",
     },
   ];
 

@@ -124,7 +124,7 @@ title: {
 letterSpacing: 0.6,
   fontWeight: "900",
 
-  color: colors.text,
+  color: colors.primary,
 },
 
 rightButtons: {

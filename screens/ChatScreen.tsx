@@ -17,6 +17,8 @@ import {
   StatusBar,
 } from "expo-status-bar";
 
+import { LinearGradient } from "expo-linear-gradient";
+
 import Header from "../components/Header";
 import Composer from "../components/Composer";
 
@@ -61,11 +63,12 @@ export default function ChatScreen() {
   const {
     colors,
     themeName,
+    useGradient,
   } = useTheme();
 
   const styles = React.useMemo(
-    () => createStyles(colors),
-    [colors]
+    () => createStyles(colors, useGradient ),
+    [colors, useGradient ]
   );
 
   const messages =
@@ -106,9 +109,6 @@ export default function ChatScreen() {
 
     setComposerHeight(height);
   }, []);
-
-
-
 
 
   useEffect(() => {
@@ -326,15 +326,35 @@ export default function ChatScreen() {
 
 
   return (
-    <SafeAreaView
-      style={styles.container}
-      edges={[
-        "left",
-        "right",
-        "bottom",
-        "top",
-      ]}
-      >
+    
+      
+      
+      <SafeAreaView
+  style={styles.container}
+  edges={["left", "right", "bottom", "top"]}
+>
+  
+
+
+{useGradient ? (
+  <LinearGradient
+    colors={colors.backgroundGradient}
+    start={{ x: 0, y: 0 }}
+    end={{ x: 1, y: 1 }}
+    style={StyleSheet.absoluteFill}
+  />
+) : (
+  <View
+    pointerEvents="none"
+    style={[
+      StyleSheet.absoluteFill,
+      {
+        backgroundColor: colors.background,
+      },
+    ]}
+  />
+)}
+      
       <StatusBar style="auto" />
 
       {/* ---------------------------------
@@ -346,7 +366,12 @@ export default function ChatScreen() {
           a subtle gradient-like depth without
           adding another dependency.
       */}
-      {(themeName === "blossom" || themeName === "light" || themeName === "experimental") && (
+      
+      {themeName === "blossom"  && (
+      
+          // {(themeName === "blossom" || themeName === "light" || themeName === "sleek") && (
+      
+      
         <View
           pointerEvents="none"
           style={styles.blossomAtmosphere}
@@ -366,7 +391,7 @@ export default function ChatScreen() {
               styles.blossomGlowSide,
               {
                 backgroundColor:
-                colors.primary,
+                colors.surface,
               },
             ]}
             />
@@ -503,12 +528,14 @@ export default function ChatScreen() {
 }
 
 
-  const createStyles = (colors: any) =>
+  const createStyles = (colors: any, 
+  useGradient: boolean) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor:
-      colors.background,
+      backgroundColor: useGradient
+    ?"transparent"
+      : colors.background,
     },
 
     chatWrapper: {
@@ -543,7 +570,7 @@ export default function ChatScreen() {
       borderRadius: 310,
       top: -250,
       right: -150,
-      opacity: 0.50,
+      opacity: 0.20,
     },
 
     blossomGlowSide: {
@@ -553,7 +580,7 @@ export default function ChatScreen() {
       borderRadius: 310,
       top: 220,
       left: -65,
-      opacity: 0.05,
+      opacity: 0.1,
     },
 
     blossomGlowMid: {
@@ -563,7 +590,7 @@ export default function ChatScreen() {
       borderRadius: 360,
       bottom: -100,
       right: 150,
-      opacity: 0.8,
+      opacity: 0.50,
     },
 
     blossomGlowMid1: {
@@ -573,7 +600,7 @@ export default function ChatScreen() {
       borderRadius: 360,
       top: -100,
       left: 220,
-      opacity: 0.7,
+      opacity: 0.4,
     },
 
 
@@ -584,7 +611,7 @@ export default function ChatScreen() {
       borderRadius: 360,
       top: 360,
       left: 260,
-      opacity: 1,
+      opacity: 0.10,
     },
 
     blossomTopLeft: {
@@ -594,7 +621,7 @@ export default function ChatScreen() {
       borderRadius: 310,
       top: -150,
       left: -220,
-      opacity: 0.1,
+      opacity: 0.10,
     },
 
     blossomBottomRight: {

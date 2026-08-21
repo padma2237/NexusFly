@@ -3,7 +3,8 @@ const darkTheme = {
 
   colors: {
     background: "#020617",
-    surface: "#0f172a",
+    surface: // "#00FFFF", 
+    "#0f172a",
 
     primary: "#2563eb",
     secondary: "#7c3aed",

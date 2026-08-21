@@ -300,7 +300,7 @@ const markdownRules = React.useMemo(
 const createStyles = (colors: any) =>
 StyleSheet.create({
   bubble: {
-    maxWidth: "100%",
+    maxWidth: "95%",
     padding: 14,
     borderRadius: 20,
 
@@ -413,8 +413,8 @@ StyleSheet.create({
   },
 
   code_inline: {
-    backgroundColor: colors.background,
-    color: colors.primary,
+    backgroundColor: colors.primary,
+    color: colors.text,
     paddingHorizontal: 5,
     paddingVertical: 2,
     borderRadius: 5,
