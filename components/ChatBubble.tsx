@@ -307,7 +307,7 @@ StyleSheet.create({
   },
 
   userBubble: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.userBubble || colors.primary,
     borderBottomRightRadius: 6,
   },
 
@@ -413,7 +413,7 @@ StyleSheet.create({
   },
 
   code_inline: {
-    backgroundColor: colors.primary,
+    backgroundColor: colors.background,
     color: colors.text,
     paddingHorizontal: 5,
     paddingVertical: 2,

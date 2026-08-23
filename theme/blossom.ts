@@ -12,6 +12,7 @@ const blossomTheme = {
      cyan: "#00FFFF",
     primary: "#FF2A85",        // Vibrant Hot Pink
     secondary: "#FF6B35",      // Bright Sunset Orange accent
+userBubble: "#FF5DA3",
 
     primarySoft: "#FFCCE1",    // Soft pastel pink fill
     primaryGlow: "#FF2A854D",  // Soft hot pink glow

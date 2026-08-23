@@ -29,6 +29,10 @@ useGradient: true,
   
 ] as const,
 
+brandTitle: "#F8FAFC",
+    brandAccent: "#38BDF8",
+    brandGradient: ["#38BDF8", "#818CF8", "#C084FC"] as const,
+
     surface: "#FFF2F6",        // Clean white card surfaces
     surfaceElevated: "#FFE5EE",// Warm pink floating containers
      
@@ -63,6 +67,10 @@ useGradient: true,
     cardBlue: "#FFEBF2",      // Soft Rose Pink
     cardOrange: "#FFF0E5",    // Creamy Peach / Soft Apricot
     cardPurple: "#FFE5F1",    // Bright Blossom Pink / Magenta Tint
+
+cardBg: "rgba(30, 41, 59, 0.7)",
+    cardBorder: "rgba(51, 65, 85, 0.8)",
+    cardAccent: "#38BDF822",
 
     // ---------------------------------
     // CODE BLOCK (Light Pink & Warm Orange Accents)

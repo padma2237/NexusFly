@@ -345,7 +345,7 @@ statusBarTranslucent={true}
       colors.codeHeader ??
       colors.surface,
 
-      borderBottomWidth: 1,
+     // borderBottomWidth: 1,
       borderBottomColor:
       colors.codeBorder ??
       colors.border,

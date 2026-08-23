@@ -3,6 +3,7 @@ const experimentalTheme = {
   useGradient: true,
   colors: {
     background: "#F0FDF4",
+    
     backgroundGradient: [
       "#CCFBFF", 
       "#ECEBA7", 
@@ -29,7 +30,8 @@ const experimentalTheme = {
 
     codeBackground: "#F8FAFC",
     codeHeader: "#F1F5F9",
-    codeBorder: "#E2E8F0",
+    codeBorder: "#DCFCE7",
+                // "#E2E8F0",
     codeText: "#334155",
     codeLineNumber: "#94A3B8",
     codeKeyword: "#0284C7",

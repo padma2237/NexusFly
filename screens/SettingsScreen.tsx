@@ -42,6 +42,13 @@ export default function SettingsScreen() {
       id: "sleek",
       title: "🛸 Sleek",
     },
+    
+            {
+      id: "oracle",
+      title: "𖡼 Oracle",
+    },
+    
+    
   ];
 
   return (
