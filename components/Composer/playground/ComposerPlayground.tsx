@@ -11,6 +11,7 @@ export default function ComposerPlayground() {
       <View style={styles.content} />
 
       <Composer
+      currentConversationId={null}
         value={text}
         onChangeText={setText}
         isLoading={false}

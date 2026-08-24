@@ -1,17 +1,124 @@
-import {
-  Message
-} from "../types/chat";
-import {
-  ApiResponse
-} from "./search/types";
+import { Message } from "../types/chat";
+import { ApiResponse } from "./search/types";
 
-const API_URL = "https://nexusfly-backend.onrender.com/ask";
+import * as ImageManipulator from "expo-image-manipulator";
+
+const API_URL =
+  "https://nexusfly-backend.onrender.com/ask";
+
+{/*
+async function uriToBase64(uri: string) {
+  const response = await fetch(uri);
+  const blob = await response.blob();
+
+  return new Promise<{
+    base64: string;
+    mimeType: string;
+  }>((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      const result = reader.result as string;
+
+      const commaIndex = result.indexOf(",");
+
+      resolve({
+        base64:
+          commaIndex >= 0
+            ? result.substring(commaIndex + 1)
+            : result,
+        mimeType:
+          blob.type || "image/jpeg",
+      });
+    };
+
+    reader.onerror = reject;
+
+    reader.readAsDataURL(blob);
+  });
+}
+
+*/}
+
+async function uriToBase64(uri: string) {
+  const manipulated =
+    await ImageManipulator.manipulateAsync(
+      uri,
+      [
+        {
+          resize: {
+            width: 1280,
+          },
+        },
+      ],
+      {
+        compress: 0.75,
+        format: ImageManipulator.SaveFormat.JPEG,
+        base64: true,
+      }
+    );
+
+  return {
+    base64: manipulated.base64!,
+    mimeType: "image/jpeg",
+  };
+}
 
 export async function sendMessage(
   messages: Message[],
   webSearch: boolean
-): Promise < ApiResponse > {
+): Promise<ApiResponse> {
   try {
+    const contents = await Promise.all(
+      messages.map(async (msg) => {
+        const parts: any[] = [];
+
+        if (msg.text?.trim()) {
+          parts.push({
+            text: msg.text,
+          });
+        }
+
+        if (msg.attachments?.length) {
+          for (const attachment of msg.attachments) {
+            const isImage =
+              attachment.type === "image" ||
+              attachment.type === "camera";
+
+            if (!isImage) {
+              continue;
+            }
+
+            try {
+              const image = await uriToBase64(
+                attachment.uri
+              );
+
+              parts.push({
+                inlineData: {
+                  mimeType: image.mimeType,
+                  data: image.base64,
+                },
+              });
+            } catch (error) {
+              console.error(
+                "Failed to read image:",
+                error
+              );
+            }
+          }
+        }
+
+        return {
+          role:
+            msg.role === "assistant"
+              ? "model"
+              : "user",
+          parts,
+        };
+      })
+    );
+
     const response = await fetch(API_URL, {
       method: "POST",
       headers: {
@@ -19,25 +126,25 @@ export async function sendMessage(
       },
       body: JSON.stringify({
         webSearch,
-        contents: messages.map((msg) => ({
-          role: msg.role,
-          parts: [{
-            text: msg.text
-          }],
-        })),
+        contents,
       }),
     });
 
-
-
     const text = await response.text();
 
+    
+    
     if (!response.ok) {
-      return {
-        answer: `Server Error (${response.status})`,
-        sources: [],
-      };
-    }
+  console.log("SERVER STATUS:", response.status);
+  console.log("SERVER RESPONSE:", text);
+
+  return {
+    answer: `Server Error (${response.status})`,
+    sources: [],
+  };
+}
+    
+    
 
     try {
       return JSON.parse(text) as ApiResponse;
@@ -47,10 +154,9 @@ export async function sendMessage(
         sources: [],
       };
     }
-  }
-
-  catch (error) {
+  } catch (error) {
     console.error("Fetch Error:", error);
+
     return {
       answer: "❌ Unable to connect to NexusFly.",
       sources: [],

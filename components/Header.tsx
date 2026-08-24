@@ -1,8 +1,3 @@
-
-
-
-
-
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -52,7 +47,7 @@ export default function Header({
 
           {/* SVG Gradient Title with exact SVG canvas sizing */}
           <View style={styles.svgWrapper}>
-            <Svg height="26" width="100">
+            <Svg height="26" width="130">
               <Defs>
                 <LinearGradient id="titleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                   <Stop offset="0%" stopColor={gradientColors[0]} />
@@ -139,7 +134,7 @@ const createStyles = (colors: any) =>
 },
 svgWrapper: {
   height: 26,
-  width: 100,
+  width: 102,
   justifyContent: "center",
 },
 aiBadge: {

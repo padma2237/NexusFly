@@ -32,12 +32,17 @@ export default function Composer({
   onSend,
   onLayout,
   onToggleWebSearch,
+  currentConversationId
   
 }: ComposerProps) {
 
   const composer = useComposer();
   
   const attachments = useAttachments();
+  
+  useEffect(() => {
+  attachments.clearAttachments();
+}, [currentConversationId]);
 
   const attachmentSheetRef =
     useRef<BottomSheetModal>(null);
@@ -101,7 +106,12 @@ export default function Composer({
           isLoading={isLoading}
           webSearchEnabled={webSearchEnabled}
           onChangeText={onChangeText}
-          onSend={onSend}
+          
+          
+          onSend={async () => {
+  await onSend(attachments.attachments);
+  attachments.clearAttachments();
+}}
 
           onAttachmentPress={() => {
             Keyboard.dismiss();

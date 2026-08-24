@@ -1,10 +1,13 @@
-
 import { SearchResult } from "../services/search/types";
+import { Attachment } from "../components/Attachments/types/attachment";
 
 export interface Message {
   id: string;
   role: "user" | "assistant";
   text: string;
+
+  attachments?: Attachment[];
+
   sources?: SearchResult[];
   createdAt: number;
 }

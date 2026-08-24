@@ -1,5 +1,6 @@
 import React from "react";
 import { LayoutChangeEvent } from "react-native";
+import { Attachment } from "../Attachments/types/attachment";
 
 export interface ComposerInputProps {
   value: string;
@@ -84,10 +85,13 @@ export interface ComposerProps {
   isLoading: boolean;
 
   webSearchEnabled: boolean;
+  
+  currentConversationId: string | null;
 
   onChangeText: (text: string) => void;
 
-  onSend: () => void;
+  // onSend: () => void;
+  onSend: (attachments: Attachment[]) => void | Promise<void>;
 
 
   onToggleWebSearch: () => void;

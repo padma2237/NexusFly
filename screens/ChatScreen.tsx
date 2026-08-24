@@ -10,44 +10,27 @@ import {
   Keyboard,
   View,
 } from "react-native";
-import {
-  SafeAreaView,
-} from "react-native-safe-area-context";
-import {
-  StatusBar,
-} from "expo-status-bar";
-
+import { SafeAreaView } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
-
 import Header from "../components/Header";
 import Composer from "../components/Composer";
 
-import {
-  useTheme,
-} from "../theme/useTheme";
+import { useTheme } from "../theme/useTheme";
 
-import {
-  sendMessage,
-} from "../services/api";
+import { sendMessage,} from "../services/api";
 
-import {
-  Message,
-} from "../types/chat";
+import { Message,} from "../types/chat";
 
-import {
-  useConversation,
-} from "../context/ConversationContext";
+import { useConversation,} from "../context/ConversationContext";
 
-import {
-  useNavigation,
-  DrawerActions,
-} from "@react-navigation/native";
+import { useNavigation, DrawerActions,} from "@react-navigation/native";
 
-import ChatList, {
-  ChatListHandle,
-} from "../components/Chat/ChatList";
+import ChatList, { ChatListHandle,} from "../components/Chat/ChatList";
 
 import MessageRow from "../components/Chat/MessageRow";
+
+import { Attachment } from "../components/Attachments/types/attachment";
 
 
 export default function ChatScreen() {
@@ -128,10 +111,15 @@ export default function ChatScreen() {
     return () => clearTimeout(timer);
   }, [currentConversationId]);
 
-  const handleSend = async () => {
-    if (!inputText.trim() || isLoading) {
-      return;
-    }
+  
+    
+   const handleSend = async (attachments: Attachment[]) => {
+    if ((!inputText.trim() && attachments.length === 0) || isLoading) {
+  return;
+}
+    
+    
+    
 
     let activeConversation =
     currentConversation;
@@ -141,12 +129,17 @@ export default function ChatScreen() {
       createNewConversation();
     }
 
+    
     const userMessage: Message = {
-      id: Date.now().toString(),
-      role: "user",
-      text: inputText,
-      createdAt: Date.now(),
-    };
+  id: Date.now().toString(),
+  role: "user",
+  text: inputText,
+  attachments:
+    attachments.length > 0
+      ? attachments
+      : undefined,
+  createdAt: Date.now(),
+};
 
     const updatedMessages = [
       ...messages,
@@ -156,9 +149,15 @@ export default function ChatScreen() {
     const newMessageIndex =
     updatedMessages.length - 1;
 
+    
+    
     const newTitle =
-    activeConversation.title === "New Chat"
-    ? inputText.slice(0, 30): activeConversation.title;
+  activeConversation.title === "New Chat"
+    ? inputText.trim()
+      ? inputText.slice(0, 30)
+      : "Image"
+    : activeConversation.title;
+    
 
     setConversations((prev) =>
       prev.map((chat) =>
@@ -506,6 +505,7 @@ export default function ChatScreen() {
           />
 
         <Composer
+        currentConversationId={currentConversationId}
           value={inputText}
           onChangeText={setInputText}
           onSend={handleSend}

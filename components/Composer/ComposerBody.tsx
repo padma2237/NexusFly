@@ -29,13 +29,17 @@ export default function ComposerBody(props: any) {
   onRemoveAttachment,
 } = props;
 
-  const hasText = value.trim().length > 0;
-  const expanded = composer.state.isExpanded;
-  
-  const handleSend = () => {
-  if (!hasText) return;
+const hasText = value.trim().length > 0;
+const hasAttachments = attachments.length > 0;
+const canSend = hasText || hasAttachments;
 
-  onSend();
+
+const expanded = composer.state.isExpanded;
+
+const handleSend = () => {
+  if (!canSend) return;
+
+  onSend(attachments);
 
   composer.actions.reset();
 };
