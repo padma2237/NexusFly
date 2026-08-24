@@ -6,20 +6,28 @@ import Toolbar from "./Toolbar";
 
 import styles from "./styles";
 
+
+import AttachmentPreview from "../Attachments/components/AttachmentPreview";
+
+
 import LeftActions from "./components/LeftActions";
 import RightActions from "./components/RightActions";
 
 export default function ComposerBody(props: any) {
+  
+  
   const {
-    composer,
-    value,
-    isLoading,
-    webSearchEnabled,
-    onChangeText,
-    onSend,
-    onAttachmentPress,
-    onToggleWebSearch,
-  } = props;
+  composer,
+  value,
+  isLoading,
+  webSearchEnabled,
+  onChangeText,
+  onSend,
+  onAttachmentPress,
+  onToggleWebSearch,
+  attachments,
+  onRemoveAttachment,
+} = props;
 
   const hasText = value.trim().length > 0;
   const expanded = composer.state.isExpanded;
@@ -33,6 +41,12 @@ export default function ComposerBody(props: any) {
 };
  
  return (
+   <View>
+    <AttachmentPreview
+      attachments={attachments}
+      onRemove={onRemoveAttachment}
+    />
+    
   <View
     style={[
       styles.composerContent,
@@ -87,6 +101,8 @@ export default function ComposerBody(props: any) {
       />
     )}
   </View>
+  </View>
+  
 );
 
 }

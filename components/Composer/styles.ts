@@ -125,7 +125,7 @@ toolbar: {
     borderRadius: BUTTON_RADIUS,
     justifyContent: "center",
     alignItems: "center",
-    padding: 0,
+    paddingBottom: 0,
   },
 });
 

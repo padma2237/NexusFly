@@ -1,0 +1,126 @@
+{/*
+
+const charmPetalTheme = {
+  name: "charmPetal",
+  useGradient: true,
+  colors: {
+    background: "#F0FDF4",
+    backgroundGradient: [
+      "#CCFBFF", 
+      "#ECEBA7", 
+      "#ABF1C1"
+    ] as const,
+
+    surface: "#DCFCE7",
+    primary: "#22C55E",
+    //"#4ADE80",
+             //"#15803D",
+    secondary: "#166534",
+    text: "#14532D",
+    subText: "#166534",
+    textSecondary: "#3F6212",
+    border: "#BBF7D0",
+    success: "#166534",
+    warning: "#B45309",
+    error: "#991B1B",
+
+    cardGreen: "#DCFCE7",
+    cardBlue: "#E0F2FE",
+    cardOrange: "#FFEDD5",
+    cardPurple: "#F3E8FF",
+
+    codeBackground: "#F8FAFC",
+    codeHeader: "#F1F5F9",
+    codeBorder: "#E2E8F0",
+    codeText: "#334155",
+    codeLineNumber: "#94A3B8",
+    codeKeyword: "#0284C7",
+    codeFunction: "#15803D",
+    codeString: "#16A34A",
+    codeNumber: "#EA580C",
+    codeComment: "#64748B",
+    codeVariable: "#2563EB",
+    codeProperty: "#7C3AED",
+    codeType: "#0369A1",
+    codeOperator: "#EA580C",
+    codePunctuation: "#475569",
+    codeTag: "#15803D",
+    codeAttribute: "#2563EB",
+    codeConstant: "#7C3AED",
+    codeBoolean: "#EA580C",
+    codeBuiltin: "#0891B2",
+    codeCopy: "#15803D",
+    codeLanguage: "#475569",
+    codeButton: "#E2E8F0",
+    codeSegmentBackground: "#E2E8F0",
+    codeSegmentActive: "#BBF7D0",
+    codeSegmentActiveText: "#14532D",
+    codeSegmentText: "#475569",
+    codeSegmentPressed: "#86EFAC",
+  },
+};
+
+export default charmPetalTheme;
+*/}
+
+const oracleTheme = {
+  name: "oracle",
+  useGradient: true,
+  colors: {
+    background: "#F0FDF4",
+    backgroundGradient: [
+      "#CCFBFF", 
+      "#ECEBA7", 
+      "#ABF1C1"
+    ] as const,
+
+    surface: "#DCFCE7",
+    primary: "#22C55E",
+    //"#4ADE80",
+             //"#15803D",
+    secondary: "#166534",
+    text: "#14532D",
+    subText: "#166534",
+    textSecondary: "#3F6212",
+    border: "#BBF7D0",
+    success: "#166534",
+    warning: "#B45309",
+    error: "#991B1B",
+
+    cardGreen: "#DCFCE7",
+    cardBlue: "#E0F2FE",
+    cardOrange: "#FFEDD5",
+    cardPurple: "#F3E8FF",
+
+    codeBackground: "#F8FAFC",
+    codeHeader: "#F1F5F9",
+    codeBorder: "#E2E8F0",
+    codeText: "#334155",
+    codeLineNumber: "#94A3B8",
+    codeKeyword: "#0284C7",
+    codeFunction: "#15803D",
+    codeString: "#16A34A",
+    codeNumber: "#EA580C",
+    codeComment: "#64748B",
+    codeVariable: "#2563EB",
+    codeProperty: "#7C3AED",
+    codeType: "#0369A1",
+    codeOperator: "#EA580C",
+    codePunctuation: "#475569",
+    codeTag: "#15803D",
+    codeAttribute: "#2563EB",
+    codeConstant: "#7C3AED",
+    codeBoolean: "#EA580C",
+    codeBuiltin: "#0891B2",
+    codeCopy: "#15803D",
+    codeLanguage: "#475569",
+    codeButton: "#E2E8F0",
+    codeSegmentBackground: "#E2E8F0",
+    codeSegmentActive: "#BBF7D0",
+    codeSegmentActiveText: "#14532D",
+    codeSegmentText: "#475569",
+    codeSegmentPressed: "#86EFAC",
+  },
+};
+
+export default oracleTheme;

@@ -4,6 +4,7 @@ import experimentalTheme from "./experimental";
 import blossomTheme from "./blossom";
 import sleekTheme from "./sleek";
 import oracleTheme from "./oracle";
+import charmPetalTheme from "./charmPetal";
 
 
 export type BaseTheme = {
@@ -93,6 +94,7 @@ export const themes: Record<string, BaseTheme> = {
   blossom: blossomTheme,
   sleek: sleekTheme,
   oracle: oracleTheme,
+  charmPetal: charmPetalTheme,
 };
 
 export type ThemeName = keyof typeof themes | "system";

@@ -1,3 +1,4 @@
+
 const experimentalTheme = {
   name: "experimental",
   useGradient: true,
@@ -66,9 +67,9 @@ export default experimentalTheme;
 
 
 
+{/*
 
-
-{/* const experimentalTheme = {
+ const experimentalTheme = {
   name: "experimental",
 
   useGradient: true,
@@ -167,4 +168,6 @@ export default experimentalTheme;
   },
 };
 
-export default experimentalTheme; */}
+export default experimentalTheme;
+
+*/}

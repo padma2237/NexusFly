@@ -1,3 +1,7 @@
+
+// HEADER GRADIENT AVAILABLE HERE.
+
+
 {/* const oracleTheme = {
   name: "oracle",
   useGradient: true,

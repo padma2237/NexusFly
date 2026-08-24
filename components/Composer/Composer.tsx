@@ -11,7 +11,11 @@ import {
 
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 
-import AttachmentSheet from "../AttachmentSheet";
+// import AttachmentSheet from "../AttachmentSheet";
+
+import AttachmentSheet from "../Attachments/components/AttachmentSheet";
+
+import useAttachments from "../Attachments/hooks/useAttachments";
 
 import ComposerCard from "./ComposerCard";
 import ComposerBody from "./ComposerBody";
@@ -28,9 +32,12 @@ export default function Composer({
   onSend,
   onLayout,
   onToggleWebSearch,
+  
 }: ComposerProps) {
 
   const composer = useComposer();
+  
+  const attachments = useAttachments();
 
   const attachmentSheetRef =
     useRef<BottomSheetModal>(null);
@@ -105,6 +112,10 @@ export default function Composer({
           }}
 
           onToggleWebSearch={onToggleWebSearch}
+            attachments={attachments.attachments}
+  onRemoveAttachment={
+    attachments.removeAttachment
+  }
         />
 
       </ComposerCard>
@@ -114,9 +125,13 @@ export default function Composer({
         onCamera={() =>
           attachmentSheetRef.current?.dismiss()
         }
-        onGallery={() =>
-          attachmentSheetRef.current?.dismiss()
-        }
+        
+        onGallery={async () => {
+  attachmentSheetRef.current?.dismiss();
+
+  await attachments.selectPhoto();
+}}
+    
         onFile={() =>
           attachmentSheetRef.current?.dismiss()
         }

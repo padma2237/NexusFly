@@ -49,6 +49,12 @@ export default function SettingsScreen() {
     },
     
     
+      {
+      id: "charmPetal",
+      title: "𖡼 CharmPetal",
+    },
+    
+    
   ];
 
   return (
