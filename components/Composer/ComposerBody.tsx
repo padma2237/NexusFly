@@ -90,7 +90,7 @@ const handleSend = () => {
     {expanded ? (
       <Toolbar
         animatedStyle={composer.animation.toolbarStyle}
-        hasText={hasText}
+        hasText={canSend}
         isLoading={isLoading}
         webSearchEnabled={webSearchEnabled}
         onSend={handleSend}
@@ -99,7 +99,7 @@ const handleSend = () => {
       />
     ) : (
       <RightActions
-        hasText={hasText}
+        hasText={canSend}
         isLoading={isLoading}
         onSend={handleSend}
       />

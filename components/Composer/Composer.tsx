@@ -132,9 +132,14 @@ export default function Composer({
 
       <AttachmentSheet
         ref={attachmentSheetRef}
-        onCamera={() =>
-          attachmentSheetRef.current?.dismiss()
-        }
+        
+        onCamera={async () => {
+  attachmentSheetRef.current?.dismiss();
+
+  await attachments.capturePhoto();
+}}
+        
+        
         
         onGallery={async () => {
   attachmentSheetRef.current?.dismiss();
