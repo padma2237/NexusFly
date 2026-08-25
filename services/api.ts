@@ -6,40 +6,6 @@ import * as ImageManipulator from "expo-image-manipulator";
 const API_URL =
   "https://nexusfly-backend.onrender.com/ask";
 
-{/*
-async function uriToBase64(uri: string) {
-  const response = await fetch(uri);
-  const blob = await response.blob();
-
-  return new Promise<{
-    base64: string;
-    mimeType: string;
-  }>((resolve, reject) => {
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      const result = reader.result as string;
-
-      const commaIndex = result.indexOf(",");
-
-      resolve({
-        base64:
-          commaIndex >= 0
-            ? result.substring(commaIndex + 1)
-            : result,
-        mimeType:
-          blob.type || "image/jpeg",
-      });
-    };
-
-    reader.onerror = reject;
-
-    reader.readAsDataURL(blob);
-  });
-}
-
-*/}
-
 async function uriToBase64(uri: string) {
   const manipulated =
     await ImageManipulator.manipulateAsync(
