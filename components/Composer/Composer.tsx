@@ -147,9 +147,14 @@ export default function Composer({
   await attachments.selectPhoto();
 }}
     
-        onFile={() =>
-          attachmentSheetRef.current?.dismiss()
-        }
+    onFile={async () => {
+  attachmentSheetRef.current?.dismiss();
+
+  await attachments.selectFile();
+}}
+    
+    
+        
         onClipboard={() =>
           attachmentSheetRef.current?.dismiss()
         }

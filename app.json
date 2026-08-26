@@ -6,11 +6,20 @@
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
     "backgroundColor": "#020617",
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "android": {
       "package": "com.nexusfly.app",
       "softwareKeyboardLayoutMode": "resize"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "053449bc-382b-4c5a-8c5a-9f6e1af42ada"
       }
-    }
+    },
+    "plugins": [
+      "expo-font"
+    ]
   }
-
+}
