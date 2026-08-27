@@ -108,10 +108,18 @@ export default function Composer({
           onChangeText={onChangeText}
           
           
-          onSend={async () => {
-  await onSend(attachments.attachments);
+
+
+
+onSend={() => {
+  const currentAttachments = attachments.attachments;
+
   attachments.clearAttachments();
+
+  onSend(currentAttachments);
 }}
+
+
 
           onAttachmentPress={() => {
             Keyboard.dismiss();

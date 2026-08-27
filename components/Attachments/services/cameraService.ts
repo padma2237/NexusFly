@@ -13,7 +13,9 @@ export async function takePhoto(): Promise<Attachment | null> {
 
   const result =
     await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      
+      
+      mediaTypes: ["images"],
       allowsEditing: true,
       quality: 1,
     });

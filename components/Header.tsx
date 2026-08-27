@@ -61,7 +61,7 @@ export default function Header({
                 x="0"
                 y="19"
               >
-                Padmaria
+                Padma
               </SvgText>
             </Svg>
           </View>
