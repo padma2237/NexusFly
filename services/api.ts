@@ -1,28 +1,31 @@
-import { Message } from "../types/chat";
-import { ApiResponse } from "./search/types";
+import {
+  Message
+} from "../types/chat";
+import {
+  ApiResponse
+} from "./search/types";
 
 import * as ImageManipulator from "expo-image-manipulator";
 
 const API_URL =
-  "https://nexusfly-backend.onrender.com/ask";
+"https://nexusfly-backend.onrender.com/ask";
 
 async function uriToBase64(uri: string) {
   const manipulated =
-    await ImageManipulator.manipulateAsync(
-      uri,
-      [
-        {
-          resize: {
-            width: 1280,
-          },
-        },
-      ],
-      {
-        compress: 0.75,
-        format: ImageManipulator.SaveFormat.JPEG,
-        base64: true,
-      }
-    );
+  await ImageManipulator.manipulateAsync(
+    uri,
+    [{
+      resize: {
+        width: 1280,
+      },
+    },
+    ],
+    {
+      compress: 0.75,
+      format: ImageManipulator.SaveFormat.JPEG,
+      base64: true,
+    }
+  );
 
   return {
     base64: manipulated.base64!,
@@ -30,10 +33,44 @@ async function uriToBase64(uri: string) {
   };
 }
 
+async function fileUriToBase64(
+  uri: string,
+  mimeType: string
+) {
+  const response = await fetch(uri);
+  const blob = await response.blob();
+
+  return new Promise < {
+    base64: string;
+    mimeType: string;
+  } > ((resolve, reject) => {
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        const result = reader.result as string;
+
+        const commaIndex = result.indexOf(",");
+
+        resolve( {
+          base64:
+          commaIndex >= 0
+          ? result.substring(commaIndex + 1): result,
+          mimeType:
+          blob.type || mimeType || "application/octet-stream",
+        });
+      };
+
+      reader.onerror = reject;
+
+      reader.readAsDataURL(blob);
+    });
+}
+
+
 export async function sendMessage(
   messages: Message[],
   webSearch: boolean
-): Promise<ApiResponse> {
+): Promise < ApiResponse > {
   try {
     const contents = await Promise.all(
       messages.map(async (msg) => {
@@ -45,30 +82,51 @@ export async function sendMessage(
           });
         }
 
+
         if (msg.attachments?.length) {
           for (const attachment of msg.attachments) {
             const isImage =
-              attachment.type === "image" ||
-              attachment.type === "camera";
+            attachment.type === "image" ||
+            attachment.type === "camera";
 
-            if (!isImage) {
-              continue;
-            }
+            const isFile =
+            attachment.type === "file";
 
             try {
-              const image = await uriToBase64(
-                attachment.uri
-              );
+              if (isImage) {
+                const image = await uriToBase64(
+                  attachment.uri
+                );
 
-              parts.push({
-                inlineData: {
-                  mimeType: image.mimeType,
-                  data: image.base64,
-                },
-              });
+                parts.push({
+                  inlineData: {
+                    mimeType: image.mimeType,
+                    data: image.base64,
+                  },
+                });
+              }
+
+              if (isFile) {
+                const mimeType =
+                attachment.mimeType || "application/pdf";
+
+                const file =
+                await fileUriToBase64(
+                  attachment.uri,
+                  mimeType
+                );
+
+                parts.push({
+                  inlineData: {
+                    mimeType: file.mimeType,
+                    data: file.base64,
+                  },
+                });
+              }
             } catch (error) {
               console.error(
-                "Failed to read image:",
+                "Failed to read attachment:",
+                attachment.name,
                 error
               );
             }
@@ -77,9 +135,8 @@ export async function sendMessage(
 
         return {
           role:
-            msg.role === "assistant"
-              ? "model"
-              : "user",
+          msg.role === "assistant"
+          ? "model": "user",
           parts,
         };
       })
@@ -98,19 +155,17 @@ export async function sendMessage(
 
     const text = await response.text();
 
-    
-    
-    if (!response.ok) {
-  console.log("SERVER STATUS:", response.status);
-  console.log("SERVER RESPONSE:", text);
 
-  return {
-    answer: `Server Error (${response.status})`,
-    sources: [],
-  };
-}
-    
-    
+
+    if (!response.ok) {
+      console.log("SERVER STATUS:", response.status);
+      console.log("SERVER RESPONSE:", text);
+
+      return {
+        answer: `Server Error (${response.status})`,
+        sources: [],
+      };
+    }
 
     try {
       return JSON.parse(text) as ApiResponse;

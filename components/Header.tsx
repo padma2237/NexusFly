@@ -61,7 +61,7 @@ export default function Header({
                 x="0"
                 y="19"
               >
-                NexusFly
+                Padmaria
               </SvgText>
             </Svg>
           </View>
