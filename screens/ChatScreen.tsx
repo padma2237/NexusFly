@@ -74,10 +74,15 @@ export default function ChatScreen() {
     setInputText,
   ] = useState("");
 
+
+  
   const [
-    isLoading,
-    setIsLoading,
-  ] = useState(false);
+  loadingConversationId,
+  setLoadingConversationId,
+] = useState<string | null>(null);
+
+const isLoading =
+  loadingConversationId === currentConversationId;
 
   const [
     composerHeight,
@@ -171,10 +176,14 @@ export default function ChatScreen() {
       )
     );
 
+    
     setInputText("");
 
-    Keyboard.dismiss();
-    setIsLoading(true);
+Keyboard.dismiss();
+
+setLoadingConversationId(
+  activeConversation.id
+);
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -238,9 +247,19 @@ export default function ChatScreen() {
           }: chat
         )
       );
-    } finally {
-      setIsLoading(false);
-    }
+
+    
+    
+    
+   } finally {
+  setLoadingConversationId(
+    (currentId) =>
+      currentId === activeConversation.id
+        ? null
+        : currentId
+  );
+}
+
   };
 
 
@@ -283,7 +302,12 @@ export default function ChatScreen() {
       )
     );
 
-    setIsLoading(true);
+    
+    
+    setLoadingConversationId(
+  currentConversationId
+);
+    
 
     try {
       const result = await sendMessage(
@@ -312,9 +336,17 @@ export default function ChatScreen() {
           }: chat
         )
       );
-    } finally {
-      setIsLoading(false);
-    }
+    } 
+    
+    finally {
+  setLoadingConversationId(
+    (currentId) =>
+      currentId === currentConversationId
+        ? null
+        : currentId
+  );
+}
+    
   },
     [
       messages,
