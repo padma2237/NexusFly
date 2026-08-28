@@ -10,14 +10,16 @@ export default function RightActions({
   hasText,
   isLoading,
   onSend,
+  onStop,
 }: RightActionsProps) {
   return (
     <View style={styles.rightActions}>
-      {hasText ? (
+      {hasText || isLoading ? (
         <SendButton
           hasText={hasText}
           isLoading={isLoading}
           onSend={onSend}
+          onStop={onStop}
         />
       ) : (
         <MicButton />

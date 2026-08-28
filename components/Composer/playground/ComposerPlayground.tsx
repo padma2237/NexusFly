@@ -19,7 +19,11 @@ export default function ComposerPlayground() {
         onSend={() => {
           console.log("SEND:", text);
           setText("");
-        }}
+        }
+          
+          
+        }
+        onStop={() => {}}
         
         onToggleWebSearch={() =>
           console.log("Toggle Search")

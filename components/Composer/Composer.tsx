@@ -30,6 +30,7 @@ export default function Composer({
   webSearchEnabled,
   onChangeText,
   onSend,
+  onStop,
   onLayout,
   onToggleWebSearch,
   currentConversationId
@@ -119,7 +120,7 @@ onSend={() => {
   onSend(currentAttachments);
 }}
 
-
+onStop={onStop}
 
           onAttachmentPress={() => {
             Keyboard.dismiss();

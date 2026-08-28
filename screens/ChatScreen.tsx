@@ -62,6 +62,9 @@ export default function ChatScreen() {
 
   const chatListRef =
   useRef < ChatListHandle > (null);
+  
+  const abortControllerRef =
+  useRef<AbortController | null>(null);
 
 
   const [
@@ -82,6 +85,7 @@ export default function ChatScreen() {
 ] = useState<string | null>(null);
 
 const isLoading =
+loadingConversationId !== null &&
   loadingConversationId === currentConversationId;
 
   const [
@@ -117,14 +121,20 @@ const isLoading =
   }, [currentConversationId]);
 
   
+  const handleStop = useCallback(() => {
+  abortControllerRef.current?.abort();
+  abortControllerRef.current = null;
+}, []);
+  
+  
+  
+  
+  
     
    const handleSend = async (attachments: Attachment[]) => {
     if ((!inputText.trim() && attachments.length === 0) || isLoading) {
   return;
 }
-    
-    
-    
 
     let activeConversation =
     currentConversation;
@@ -183,7 +193,13 @@ Keyboard.dismiss();
 
 setLoadingConversationId(
   activeConversation.id
-);
+  );
+  const controller =
+  new AbortController();
+
+abortControllerRef.current =
+  controller;
+
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
@@ -198,7 +214,8 @@ setLoadingConversationId(
     try {
       const result = await sendMessage(
         updatedMessages,
-        webSearchEnabled
+        webSearchEnabled,
+        controller.signal
       );
 
       const assistantMessage: Message = {
@@ -224,10 +241,25 @@ setLoadingConversationId(
           }: chat
         )
       );
-    } catch (error) {
-      console.error(error);
+    
+        
+        
+        
+      } catch (error) {
 
-      const errorMessage: Message = {
+  if (
+    error instanceof Error &&
+    error.name === "AbortError"
+  ) {
+    return;
+  }
+
+  console.error(error);
+
+  const errorMessage: Message = {
+        
+        
+        
         id: Date.now().toString(),
         role: "assistant",
         text: "Error connecting to AI.",
@@ -249,9 +281,15 @@ setLoadingConversationId(
       );
 
     
-    
-    
-   } finally {
+      } finally {
+
+  if (
+    abortControllerRef.current ===
+    controller
+  ) {
+    abortControllerRef.current = null;
+  }
+
   setLoadingConversationId(
     (currentId) =>
       currentId === activeConversation.id
@@ -259,6 +297,8 @@ setLoadingConversationId(
         : currentId
   );
 }
+    
+  
 
   };
 
@@ -306,13 +346,21 @@ setLoadingConversationId(
     
     setLoadingConversationId(
   currentConversationId
-);
+  );
+  
+  const controller =
+  new AbortController();
+
+abortControllerRef.current =
+  controller;
+
     
 
     try {
       const result = await sendMessage(
         updatedMessages,
-        webSearchEnabled
+        webSearchEnabled,
+        controller.signal
       );
 
       const assistantMessage: Message = {
@@ -338,7 +386,16 @@ setLoadingConversationId(
       );
     } 
     
-    finally {
+
+finally {
+
+  if (
+    abortControllerRef.current ===
+    controller
+  ) {
+    abortControllerRef.current = null;
+  }
+
   setLoadingConversationId(
     (currentId) =>
       currentId === currentConversationId
@@ -346,6 +403,7 @@ setLoadingConversationId(
         : currentId
   );
 }
+
     
   },
     [
@@ -541,6 +599,7 @@ setLoadingConversationId(
           value={inputText}
           onChangeText={setInputText}
           onSend={handleSend}
+          onStop={handleStop}
           isLoading={isLoading}
           webSearchEnabled={
           webSearchEnabled

@@ -1,7 +1,11 @@
 import React from "react";
 import { TouchableOpacity } from "react-native";
 
-import { Send, Mic } from "lucide-react-native";
+import {
+  Send,
+  Mic,
+  Square,
+} from "lucide-react-native";
 
 import Animated from "react-native-reanimated";
 
@@ -16,29 +20,46 @@ export default function SendButton({
   hasText,
   isLoading,
   onSend,
+  onStop,
 }: SendButtonProps) {
   const theme = useComposerTheme();
+
+  const handlePress = () => {
+    if (isLoading) {
+      onStop();
+      return;
+    }
+
+    if (hasText) {
+      onSend();
+    }
+  };
 
   return (
     <TouchableOpacity
       activeOpacity={0.8}
-      disabled={isLoading}
-      onPress={hasText ? onSend : undefined}
+      onPress={handlePress}
     >
       <Animated.View
         style={[
           styles.sendButton,
           {
-            backgroundColor: hasText
-              ? theme.primary
-              : "transparent",
+            backgroundColor:
+              hasText || isLoading
+                ? theme.primary
+                : "transparent",
           },
         ]}
       >
-        {hasText ? (
+        {isLoading ? (
+          <Square
+            size={SEND_ICON_SIZE}
+            color={theme.sendIcon}
+            fill={theme.sendIcon}
+          />
+        ) : hasText ? (
           <Send
             size={SEND_ICON_SIZE}
-            
             color={theme.sendIcon}
           />
         ) : (

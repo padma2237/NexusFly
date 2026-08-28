@@ -31,6 +31,7 @@ export interface ToolbarProps {
 
 
   onSend: () => void;
+  onStop: () => void;
 
   onAttachmentPress: () => void;
 
@@ -51,6 +52,7 @@ export interface RightActionsProps {
   isLoading: boolean;
 
   onSend: () => void;
+onStop: () => void;
 }
 
 export interface ActionButtonProps {
@@ -77,6 +79,7 @@ export interface SendButtonProps {
   isLoading: boolean;
 
   onSend: () => void;
+  onStop: () => void;
 }
 
 export interface ComposerProps {
@@ -90,9 +93,8 @@ export interface ComposerProps {
 
   onChangeText: (text: string) => void;
 
-  // onSend: () => void;
   onSend: (attachments: Attachment[]) => void | Promise<void>;
-
+onStop: () => void;
 
   onToggleWebSearch: () => void;
   

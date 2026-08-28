@@ -23,6 +23,7 @@ export default function ComposerBody(props: any) {
   webSearchEnabled,
   onChangeText,
   onSend,
+  onStop,
   onAttachmentPress,
   onToggleWebSearch,
   attachments,
@@ -94,6 +95,7 @@ const handleSend = () => {
         isLoading={isLoading}
         webSearchEnabled={webSearchEnabled}
         onSend={handleSend}
+        onStop={onStop}
         onAttachmentPress={onAttachmentPress}
         onToggleWebSearch={onToggleWebSearch}
       />
@@ -102,6 +104,7 @@ const handleSend = () => {
         hasText={canSend}
         isLoading={isLoading}
         onSend={handleSend}
+onStop={onStop}
       />
     )}
   </View>
