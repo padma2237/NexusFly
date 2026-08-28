@@ -23,6 +23,12 @@ import Animated, {
   FadeInRight,
 } from "react-native-reanimated";
 
+
+
+
+import MessageActionRow from "./Chat/MessageActions/MessageActionRow";
+
+
 import * as Clipboard from "expo-clipboard";
 
 import { useTheme } from "../theme/useTheme";
@@ -82,14 +88,95 @@ function ChatBubble({
     [colors]
   );
 
-  const markdownRules = React.useMemo(
-    () => ({
-      code_block: (
-        node: any,
-        children: React.ReactNode[],
-        parent: any[],
-        styles: any
-      ) => {
+  
+      
+      
+      
+      
+        
+        
+        const markdownRules = React.useMemo(
+  () => ({
+    text: (
+      node: any,
+      children: React.ReactNode[],
+      parent: any[],
+      styles: any,
+      inheritedStyles: any = {}
+    ) => {
+      return (
+        <Text
+          key={node.key}
+          selectable={true}
+          style={[
+            inheritedStyles,
+            styles.text,
+          ]}
+        >
+          {node.content}
+        </Text>
+      );
+    },
+    
+    textgroup: (
+  node: any,
+  children: React.ReactNode[],
+  parent: any[],
+  styles: any
+) => {
+  return (
+    <Text
+      key={node.key}
+      selectable={true}
+      style={styles.textgroup}
+    >
+      {children}
+    </Text>
+  );
+},
+
+strong: (
+  node: any,
+  children: React.ReactNode[],
+  parent: any[],
+  styles: any
+) => {
+  return (
+    <Text
+      key={node.key}
+      selectable={true}
+      style={styles.strong}
+    >
+      {children}
+    </Text>
+  );
+},
+
+em: (
+  node: any,
+  children: React.ReactNode[],
+  parent: any[],
+  styles: any
+) => {
+  return (
+    <Text
+      key={node.key}
+      selectable={true}
+      style={styles.em}
+    >
+      {children}
+    </Text>
+  );
+},
+
+    code_block: (
+      node: any,
+      children: React.ReactNode[],
+      parent: any[],
+      styles: any
+    ) => {
+        
+        
 
         const code =
           String(node.content ?? "");
@@ -312,19 +399,9 @@ function ChatBubble({
       >
 
         <Pressable
-          onLongPress={
-            !isUser
-              ? () => {
-
-                  Keyboard.dismiss();
-
-                  setTimeout(() => {
-                    sheetRef.current?.present();
-                  }, 120);
-
-                }
-              : undefined
-          }
+          
+          
+          onLongPress={undefined}
           delayLongPress={350}
           style={[
             styles.bubble,
@@ -429,9 +506,24 @@ function ChatBubble({
                 style={markdownStyles}
                 rules={markdownRules}
                 mergeStyle={true}
+                
               >
                 {message.text}
               </Markdown>
+              
+              
+              <MessageActionRow
+  onCopy={copyMessage}
+  onShare={shareMessage}
+  onRegenerate={onRegenerate}
+  onMore={() => {
+    Keyboard.dismiss();
+
+    setTimeout(() => {
+      sheetRef.current?.present();
+    }, 120);
+  }}
+/>
 
 
               {message.sources &&
