@@ -23,7 +23,7 @@ import Animated, {
   FadeInRight,
 } from "react-native-reanimated";
 
-
+import AIResponse from "./AIResponse/AIResponse";
 
 
 import MessageActionRow from "./Chat/MessageActions/MessageActionRow";
@@ -31,11 +31,17 @@ import MessageActionRow from "./Chat/MessageActions/MessageActionRow";
 
 import * as Clipboard from "expo-clipboard";
 
-import { useTheme } from "../theme/useTheme";
+import {
+  useTheme
+} from "../theme/useTheme";
 
-import { Message } from "../types/chat";
+import {
+  Message
+} from "../types/chat";
 
-import { Attachment } from "../components/Attachments/types/attachment";
+import {
+  Attachment
+} from "../components/Attachments/types/attachment";
 
 import Markdown from "react-native-markdown-display";
 
@@ -53,8 +59,11 @@ interface ChatBubbleProps {
   onRegenerate?: () => void;
 }
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } =
-  Dimensions.get("window");
+const {
+  width: SCREEN_WIDTH,
+  height: SCREEN_HEIGHT
+} =
+Dimensions.get("window");
 
 function ChatBubble({
   message,
@@ -63,20 +72,24 @@ function ChatBubble({
 
   const isUser = message.role === "user";
 
-  const { colors } = useTheme();
+  const {
+    colors
+  } = useTheme();
 
-  const [expanded, setExpanded] =
-    useState(false);
+  const [expanded,
+    setExpanded] =
+  useState(false);
 
-  const [selectedImage, setSelectedImage] =
-    useState<string | null>(null);
+  const [selectedImage,
+    setSelectedImage] =
+  useState < string | null > (null);
 
   const LONG_MESSAGE_LENGTH = 500;
 
   const shouldCollapse =
-    isUser &&
-    message.text.length >
-      LONG_MESSAGE_LENGTH;
+  isUser &&
+  message.text.length >
+  LONG_MESSAGE_LENGTH;
 
   const styles = React.useMemo(
     () => createStyles(colors),
@@ -88,105 +101,98 @@ function ChatBubble({
     [colors]
   );
 
-  
-      
-      
-      
-      
-        
-        
-        const markdownRules = React.useMemo(
-  () => ({
-    text: (
-      node: any,
-      children: React.ReactNode[],
-      parent: any[],
-      styles: any,
-      inheritedStyles: any = {}
-    ) => {
-      return (
-        <Text
-          key={node.key}
-          selectable={true}
-          style={[
-            inheritedStyles,
-            styles.text,
-          ]}
-        >
-          {node.content}
-        </Text>
-      );
-    },
-    
-    textgroup: (
-  node: any,
-  children: React.ReactNode[],
-  parent: any[],
-  styles: any
-) => {
-  return (
-    <Text
-      key={node.key}
-      selectable={true}
-      style={styles.textgroup}
-    >
-      {children}
-    </Text>
-  );
-},
+  const markdownRules = React.useMemo(
+    () => ({
+      text: (
+        node: any,
+        children: React.ReactNode[],
+        parent: any[],
+        styles: any,
+        inheritedStyles: any = {}
+      ) => {
+        return (
+          <Text
+            key={node.key}
+            selectable={true}
+            style={[
+              inheritedStyles,
+              styles.text,
+            ]}
+            >
+            {node.content}
+          </Text>
+        );
+      },
 
-strong: (
-  node: any,
-  children: React.ReactNode[],
-  parent: any[],
-  styles: any
-) => {
-  return (
-    <Text
-      key={node.key}
-      selectable={true}
-      style={styles.strong}
-    >
-      {children}
-    </Text>
-  );
-},
+      textgroup: (
+        node: any,
+        children: React.ReactNode[],
+        parent: any[],
+        styles: any
+      ) => {
+        return (
+          <Text
+            key={node.key}
+            selectable={true}
+            style={styles.textgroup}
+            >
+            {children}
+          </Text>
+        );
+      },
 
-em: (
-  node: any,
-  children: React.ReactNode[],
-  parent: any[],
-  styles: any
-) => {
-  return (
-    <Text
-      key={node.key}
-      selectable={true}
-      style={styles.em}
-    >
-      {children}
-    </Text>
-  );
-},
+      strong: (
+        node: any,
+        children: React.ReactNode[],
+        parent: any[],
+        styles: any
+      ) => {
+        return (
+          <Text
+            key={node.key}
+            selectable={true}
+            style={styles.strong}
+            >
+            {children}
+          </Text>
+        );
+      },
 
-    code_block: (
-      node: any,
-      children: React.ReactNode[],
-      parent: any[],
-      styles: any
-    ) => {
-        
-        
+      em: (
+        node: any,
+        children: React.ReactNode[],
+        parent: any[],
+        styles: any
+      ) => {
+        return (
+          <Text
+            key={node.key}
+            selectable={true}
+            style={styles.em}
+            >
+            {children}
+          </Text>
+        );
+      },
+
+      code_block: (
+        node: any,
+        children: React.ReactNode[],
+        parent: any[],
+        styles: any
+      ) => {
+
+
 
         const code =
-          String(node.content ?? "");
+        String(node.content ?? "");
 
         return (
           <CodeBlock
             key={node.key}
             code={code}
             language="text"
-          />
+            />
         );
       },
 
@@ -198,22 +204,21 @@ em: (
       ) => {
 
         const code =
-          String(node.content ?? "");
+        String(node.content ?? "");
 
         const language =
-          typeof node.info === "string" &&
-          node.info.trim()
-            ? node.info
-                .trim()
-                .split(/\s+/)[0]
-            : "text";
+        typeof node.info === "string" &&
+        node.info.trim()
+        ? node.info
+        .trim()
+        .split(/\s+/)[0]: "text";
 
         return (
           <CodeBlock
             key={node.key}
             code={code}
             language={language}
-          />
+            />
         );
       },
     }),
@@ -222,35 +227,36 @@ em: (
 
 
   const sheetRef =
-    useRef<BottomSheetModal>(null);
+  useRef < BottomSheetModal > (null);
 
-  const [isSheetOpen, setIsSheetOpen] =
-    React.useState(false);
+  const [isSheetOpen,
+    setIsSheetOpen] =
+  React.useState(false);
 
 
   useEffect(() => {
 
     const subscription =
-      BackHandler.addEventListener(
-        "hardwareBackPress",
-        () => {
+    BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => {
 
-          if (selectedImage) {
-            setSelectedImage(null);
-            return true;
-          }
-
-          if (isSheetOpen) {
-            sheetRef.current?.dismiss();
-            return true;
-          }
-
-          return false;
+        if (selectedImage) {
+          setSelectedImage(null);
+          return true;
         }
-      );
+
+        if (isSheetOpen) {
+          sheetRef.current?.dismiss();
+          return true;
+        }
+
+        return false;
+      }
+    );
 
     return () =>
-      subscription.remove();
+    subscription.remove();
 
   }, [isSheetOpen, selectedImage]);
 
@@ -276,8 +282,8 @@ em: (
   const getDomain = (url: string) => {
     try {
       return new URL(url)
-        .hostname
-        .replace("www.", "");
+      .hostname
+      .replace("www.", "");
     } catch {
       return url;
     }
@@ -291,19 +297,19 @@ em: (
    */
 
   const imageAttachments =
-    message.attachments?.filter(
-      (attachment) =>
-        attachment.type === "image" ||
-        attachment.type === "camera"
-    ) ?? [];
+  message.attachments?.filter(
+    (attachment) =>
+    attachment.type === "image" ||
+    attachment.type === "camera"
+  ) ?? [];
 
 
   const fileAttachments =
-    message.attachments?.filter(
-      (attachment) =>
-        attachment.type !== "image" &&
-        attachment.type !== "camera"
-    ) ?? [];
+  message.attachments?.filter(
+    (attachment) =>
+    attachment.type !== "image" &&
+    attachment.type !== "camera"
+  ) ?? [];
 
 
   const renderImage = (
@@ -312,35 +318,33 @@ em: (
   ) => {
 
     const isSingle =
-      imageAttachments.length === 1;
+    imageAttachments.length === 1;
 
     return (
       <Pressable
         key={attachment.id}
         onPress={() =>
-          setSelectedImage(
-            attachment.uri
-          )
+        setSelectedImage(
+          attachment.uri
+        )
         }
         style={[
           styles.imagePressable,
           isSingle
-            ? styles.singleImagePressable
-            : styles.gridImagePressable,
+          ? styles.singleImagePressable: styles.gridImagePressable,
         ]}
-      >
+        >
 
         <Image
-          source={{
+          source={ {
             uri: attachment.uri,
           }}
           style={
-            isSingle
-              ? styles.singleImage
-              : styles.gridImage
+          isSingle
+          ? styles.singleImage: styles.gridImage
           }
           resizeMode="cover"
-        />
+          />
 
       </Pressable>
     );
@@ -358,12 +362,12 @@ em: (
           styles.attachmentFile,
           {
             backgroundColor:
-              colors.background,
+            colors.background,
             borderColor:
-              colors.border,
+            colors.border,
           },
         ]}
-      >
+        >
 
         <Text
           style={[
@@ -373,9 +377,9 @@ em: (
             },
           ]}
           numberOfLines={2}
-        >
+          >
           {attachment.name ??
-            attachment.type}
+          attachment.type}
         </Text>
 
       </View>
@@ -388,28 +392,26 @@ em: (
 
       <Animated.View
         entering={
-          isUser
-            ? FadeInRight
-                .springify()
-                .damping(50)
-            : FadeInLeft
-                .springify()
-                .damping(50)
+        isUser
+        ? FadeInRight
+        .springify()
+        .damping(50): FadeInLeft
+        .springify()
+        .damping(50)
         }
-      >
+        >
 
         <Pressable
-          
-          
+
+
           onLongPress={undefined}
           delayLongPress={350}
           style={[
             styles.bubble,
             isUser
-              ? styles.userBubble
-              : styles.aiBubble,
+            ? styles.userBubble: styles.aiBubble,
           ]}
-        >
+          >
 
           {isUser ? (
 
@@ -424,9 +426,9 @@ em: (
                   style={[
                     styles.imageGrid,
                     imageAttachments.length === 1 &&
-                      styles.singleImageGrid,
+                    styles.singleImageGrid,
                   ]}
-                >
+                  >
 
                   {imageAttachments.map(
                     renderImage
@@ -444,7 +446,7 @@ em: (
 
                 <View
                   style={styles.fileContainer}
-                >
+                  >
 
                   {fileAttachments.map(
                     renderFile
@@ -463,13 +465,12 @@ em: (
                 <Text
                   style={styles.text}
                   numberOfLines={
-                    shouldCollapse &&
-                    !expanded
-                      ? 8
-                      : undefined
+                  shouldCollapse &&
+                  !expanded
+                  ? 8: undefined
                   }
                   ellipsizeMode="tail"
-                >
+                  >
                   {message.text}
                 </Text>
               )}
@@ -479,19 +480,18 @@ em: (
 
                 <Pressable
                   onPress={() =>
-                    setExpanded(
-                      (prev) => !prev
-                    )
+                  setExpanded(
+                    (prev) => !prev
+                  )
                   }
                   hitSlop={8}
-                >
+                  >
 
                   <Text
                     style={styles.showMore}
-                  >
+                    >
                     {expanded
-                      ? "Show less ↑"
-                      : "Show more ↓"}
+                    ? "Show less ↑": "Show more ↓"}
                   </Text>
 
                 </Pressable>
@@ -499,86 +499,79 @@ em: (
 
             </>
 
-          ) : (
+          ): (
 
             <>
-              <Markdown
-                style={markdownStyles}
-                rules={markdownRules}
-                mergeStyle={true}
-                
-              >
-                {message.text}
-              </Markdown>
-              
-              
-              <MessageActionRow
-  onCopy={copyMessage}
-  onShare={shareMessage}
-  onRegenerate={onRegenerate}
-  onMore={() => {
-    Keyboard.dismiss();
 
-    setTimeout(() => {
-      sheetRef.current?.present();
-    }, 120);
-  }}
-/>
+<AIResponse text={message.text} />
+
+              <MessageActionRow
+                onCopy={copyMessage}
+                onShare={shareMessage}
+                onRegenerate={onRegenerate}
+                onMore={() => {
+                  Keyboard.dismiss();
+
+                  setTimeout(() => {
+                    sheetRef.current?.present();
+                  }, 120);
+                }}
+                />
 
 
               {message.sources &&
-                message.sources.length > 0 && (
+              message.sources.length > 0 && (
 
-                  <>
+                <>
 
-                    <Text
-                      style={
-                        styles.sourceTitle
-                      }
+                  <Text
+                    style={
+                    styles.sourceTitle
+                    }
                     >
-                      📚 Sources
-                    </Text>
+                    📚 Sources
+                  </Text>
 
 
-                    {message.sources.map(
-                      (source, index) => (
+                  {message.sources.map(
+                    (source, index) => (
 
-                        <Pressable
-                          key={index}
-                          style={
-                            styles.sourceCard
-                          }
-                          onPress={() =>
-                            Linking.openURL(
-                              source.url
-                            )
-                          }
+                      <Pressable
+                        key={index}
+                        style={
+                        styles.sourceCard
+                        }
+                        onPress={() =>
+                        Linking.openURL(
+                          source.url
+                        )
+                        }
                         >
 
-                          <Text
-                            style={
-                              styles.sourceName
-                            }
+                        <Text
+                          style={
+                          styles.sourceName
+                          }
                           >
-                            🌐 {source.title}
-                          </Text>
+                          🌐 {source.title}
+                        </Text>
 
-                          <Text
-                            style={
-                              styles.sourceDomain
-                            }
+                        <Text
+                          style={
+                          styles.sourceDomain
+                          }
                           >
-                            {getDomain(
-                              source.url
-                            )}
-                          </Text>
+                          {getDomain(
+                            source.url
+                          )}
+                        </Text>
 
-                        </Pressable>
-                      )
-                    )}
+                      </Pressable>
+                    )
+                  )}
 
-                  </>
-                )}
+                </>
+              )}
             </>
           )}
 
@@ -595,36 +588,36 @@ em: (
 
       <Modal
         visible={
-          selectedImage !== null
+        selectedImage !== null
         }
         transparent={false}
         animationType="fade"
         statusBarTranslucent
         onRequestClose={() =>
-          setSelectedImage(null)
+        setSelectedImage(null)
         }
-      >
+        >
 
         <View
           style={styles.viewerContainer}
-        >
+          >
 
           <Pressable
             style={styles.viewerBackground}
             onPress={() =>
-              setSelectedImage(null)
+            setSelectedImage(null)
             }
-          >
+            >
 
             {selectedImage && (
 
               <Image
-                source={{
+                source={ {
                   uri: selectedImage,
                 }}
                 style={styles.fullScreenImage}
                 resizeMode="contain"
-              />
+                />
 
             )}
 
@@ -634,14 +627,14 @@ em: (
           <Pressable
             style={styles.closeButton}
             onPress={() =>
-              setSelectedImage(null)
+            setSelectedImage(null)
             }
             hitSlop={12}
-          >
+            >
 
             <Text
               style={styles.closeButtonText}
-            >
+              >
               ✕
             </Text>
 
@@ -658,9 +651,9 @@ em: (
         onShare={shareMessage}
         onRegenerate={onRegenerate}
         onChange={(index) =>
-          setIsSheetOpen(index >= 0)
+        setIsSheetOpen(index >= 0)
         }
-      />
+        />
 
     </>
   );
@@ -670,277 +663,277 @@ em: (
 const createStyles = (
   colors: any
 ) =>
-  StyleSheet.create({
+StyleSheet.create({
 
-    bubble: {
-      maxWidth: "100%",
-      padding: 14,
-      borderRadius: 20,
-    },
+  bubble: {
+    maxWidth: "100%",
+    padding: 14,
+    borderRadius: 20,
+  },
 
-    userBubble: {
-      backgroundColor:
-        colors.userBubble ||
-        colors.primary,
-      borderBottomRightRadius: 6,
-    },
+  userBubble: {
+    backgroundColor:
+    colors.userBubble ||
+    colors.primary,
+    borderBottomRightRadius: 6,
+  },
 
-    aiBubble: {
-      backgroundColor:
-        colors.surface,
-      borderBottomLeftRadius: 6,
-      borderWidth: 1,
-      borderColor:
-        colors.border,
-    },
+  aiBubble: {
+    backgroundColor:
+    colors.surface,
+    borderBottomLeftRadius: 6,
+    borderWidth: 1,
+    borderColor:
+    colors.border,
+  },
 
-    text: {
-      color: colors.text,
-      fontSize: 16,
-      lineHeight: 24,
-    },
+  text: {
+    color: colors.text,
+    fontSize: 16,
+    lineHeight: 24,
+  },
 
 
-    /*
+  /*
      * --------------------------------
      * IMAGE GRID
      * --------------------------------
      */
 
-    imageGrid: {
-      flexDirection: "row",
-      flexWrap: "wrap",
-      gap: 6,
-      marginBottom: 8,
-    },
+  imageGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 6,
+    marginBottom: 8,
+  },
 
-    singleImageGrid: {
-      flexDirection: "column",
-    },
+  singleImageGrid: {
+    flexDirection: "column",
+  },
 
-    imagePressable: {
-      overflow: "hidden",
-      borderRadius: 14,
-    },
+  imagePressable: {
+    overflow: "hidden",
+    borderRadius: 14,
+  },
 
-    singleImagePressable: {
-      width: 220,
-      height: 220,
-    },
+  singleImagePressable: {
+    width: 220,
+    height: 220,
+  },
 
-    gridImagePressable: {
-      width: "48%",
-      aspectRatio: 1,
-    },
+  gridImagePressable: {
+    width: "48%",
+    aspectRatio: 1,
+  },
 
-    singleImage: {
-      width: "100%",
-      height: "100%",
-      borderRadius: 14,
-    },
+  singleImage: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 14,
+  },
 
-    gridImage: {
-      width: "100%",
-      height: "100%",
-      borderRadius: 14,
-    },
+  gridImage: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 14,
+  },
 
 
-    /*
+  /*
      * --------------------------------
      * FILE ATTACHMENTS
      * --------------------------------
      */
 
-    fileContainer: {
-      marginBottom: 8,
-    },
+  fileContainer: {
+    marginBottom: 8,
+  },
 
-    attachmentFile: {
-      minWidth: 160,
-      maxWidth: 220,
-      minHeight: 60,
-      borderRadius: 12,
-      borderWidth: 1,
-      padding: 10,
-      justifyContent:
-        "center",
-      marginBottom: 8,
-    },
+  attachmentFile: {
+    minWidth: 160,
+    maxWidth: 220,
+    minHeight: 60,
+    borderRadius: 12,
+    borderWidth: 1,
+    padding: 10,
+    justifyContent:
+    "center",
+    marginBottom: 8,
+  },
 
-    attachmentFileName: {
-      fontSize: 13,
-      fontWeight: "600",
-    },
+  attachmentFileName: {
+    fontSize: 13,
+    fontWeight: "600",
+  },
 
 
-    /*
+  /*
      * --------------------------------
      * FULL-SCREEN VIEWER
      * --------------------------------
      */
 
-    viewerContainer: {
-      flex: 1,
-      backgroundColor: "#000",
-    },
+  viewerContainer: {
+    flex: 1,
+    backgroundColor: "#000",
+  },
 
-    viewerBackground: {
-      flex: 1,
-      justifyContent:
-        "center",
-      alignItems: "center",
-    },
+  viewerBackground: {
+    flex: 1,
+    justifyContent:
+    "center",
+    alignItems: "center",
+  },
 
-    fullScreenImage: {
-      width: SCREEN_WIDTH,
-      height: SCREEN_HEIGHT,
-    },
+  fullScreenImage: {
+    width: SCREEN_WIDTH,
+    height: SCREEN_HEIGHT,
+  },
 
-    closeButton: {
-      position: "absolute",
-      top: 50,
-      right: 20,
-      width: 44,
-      height: 44,
-      borderRadius: 22,
-      backgroundColor:
-        "rgba(0,0,0,0.65)",
-      justifyContent:
-        "center",
-      alignItems: "center",
-    },
+  closeButton: {
+    position: "absolute",
+    top: 50,
+    right: 20,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor:
+    "rgba(0,0,0,0.65)",
+    justifyContent:
+    "center",
+    alignItems: "center",
+  },
 
-    closeButtonText: {
-      color: "#fff",
-      fontSize: 25,
-      fontWeight: "600",
-    },
+  closeButtonText: {
+    color: "#fff",
+    fontSize: 25,
+    fontWeight: "600",
+  },
 
 
-    /*
+  /*
      * --------------------------------
      * SOURCES
      * --------------------------------
      */
 
-    sourceTitle: {
-      color: colors.text,
-      fontWeight: "bold",
-      marginTop: 14,
-      marginBottom: 8,
-    },
+  sourceTitle: {
+    color: colors.text,
+    fontWeight: "bold",
+    marginTop: 14,
+    marginBottom: 8,
+  },
 
-    sourceCard: {
-      backgroundColor:
-        colors.background,
-      borderRadius: 12,
-      padding: 12,
-      marginBottom: 10,
-      borderWidth: 1,
-      borderColor:
-        colors.border,
-    },
+  sourceCard: {
+    backgroundColor:
+    colors.background,
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor:
+    colors.border,
+  },
 
-    sourceName: {
-      color: colors.text,
-      fontWeight: "bold",
-      fontSize: 15,
-    },
+  sourceName: {
+    color: colors.text,
+    fontWeight: "bold",
+    fontSize: 15,
+  },
 
-    sourceDomain: {
-      color: colors.subText,
-      marginTop: 4,
-      fontSize: 13,
-    },
+  sourceDomain: {
+    color: colors.subText,
+    marginTop: 4,
+    fontSize: 13,
+  },
 
-    showMore: {
-      color: colors.text,
-      fontSize: 14,
-      fontWeight: "900",
-      marginTop: 8,
-    },
+  showMore: {
+    color: colors.text,
+    fontSize: 14,
+    fontWeight: "900",
+    marginTop: 8,
+  },
 
-  });
+});
 
 
 const createMarkdownStyles = (
   colors: any
 ) =>
-  StyleSheet.create({
+StyleSheet.create({
 
-    body: {
-      color: colors.text,
-      fontSize: 16,
-      lineHeight: 24,
-    },
+  body: {
+    color: colors.text,
+    fontSize: 16,
+    lineHeight: 24,
+  },
 
-    heading1: {
-      color: colors.text,
-      fontWeight: "700",
-    },
+  heading1: {
+    color: colors.text,
+    fontWeight: "700",
+  },
 
-    heading2: {
-      color: colors.text,
-      fontWeight: "700",
-    },
+  heading2: {
+    color: colors.text,
+    fontWeight: "700",
+  },
 
-    heading3: {
-      color: colors.text,
-      fontWeight: "700",
-    },
+  heading3: {
+    color: colors.text,
+    fontWeight: "700",
+  },
 
-    strong: {
-      color: colors.text,
-      fontWeight: "700",
-    },
+  strong: {
+    color: colors.text,
+    fontWeight: "700",
+  },
 
-    em: {
-      color: colors.text,
-    },
+  em: {
+    color: colors.text,
+  },
 
-    bullet_list: {
-      color: colors.text,
-    },
+  bullet_list: {
+    color: colors.text,
+  },
 
-    ordered_list: {
-      color: colors.text,
-    },
+  ordered_list: {
+    color: colors.text,
+  },
 
-    list_item: {
-      color: colors.text,
-    },
+  list_item: {
+    color: colors.text,
+  },
 
-    paragraph: {
-      color: colors.text,
-      marginTop: 0,
-      marginBottom: 10,
-    },
+  paragraph: {
+    color: colors.text,
+    marginTop: 0,
+    marginBottom: 10,
+  },
 
-    code_inline: {
-      backgroundColor:
-        colors.background,
-      color: colors.text,
-      paddingHorizontal: 5,
-      paddingVertical: 2,
-      borderRadius: 5,
-    },
+  code_inline: {
+    backgroundColor:
+    colors.background,
+    color: colors.text,
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    borderRadius: 5,
+  },
 
-    blockquote: {
-      backgroundColor:
-        colors.background,
-      borderLeftWidth: 4,
-      borderLeftColor:
-        colors.primary,
-      paddingHorizontal: 12,
-      paddingVertical: 8,
-    },
+  blockquote: {
+    backgroundColor:
+    colors.background,
+    borderLeftWidth: 4,
+    borderLeftColor:
+    colors.primary,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
 
-    link: {
-      color: colors.primary,
-    },
+  link: {
+    color: colors.primary,
+  },
 
-  });
+});
 
 
 export default React.memo(
