@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Text, View } from "react-native";
+import { Linking, Text, View } from "react-native";
 import MarkdownIt from "markdown-it";
 
 import { useTheme } from "../../theme/useTheme";
@@ -39,7 +39,17 @@ export default function AIResponseRenderer({
    *   *italic*
    *   ~~strikethrough~~
    *   `inline code`
+   *   links
    *   line breaks
+   *
+   * IMPORTANT:
+   *
+   * Everything remains inside the same
+   * selectable Text tree.
+   *
+   * Links use nested Text rather than
+   * Pressable/View so text selection remains
+   * compatible with the surrounding response.
    */
   const renderInline = (
     children: any[],
@@ -51,6 +61,8 @@ export default function AIResponseRenderer({
     let bold = false;
     let italic = false;
     let strike = false;
+
+    let linkHref: string | null = null;
 
     children.forEach((token, index) => {
       const key = `${keyPrefix}-${index}`;
@@ -102,19 +114,73 @@ export default function AIResponseRenderer({
 
       /*
        * ------------------------------------
+       * LINK OPEN
+       * ------------------------------------
+       */
+      if (token.type === "link_open") {
+        linkHref =
+          typeof token.attrGet === "function"
+            ? token.attrGet("href")
+            : null;
+
+        return;
+      }
+
+      /*
+       * ------------------------------------
+       * LINK CLOSE
+       * ------------------------------------
+       */
+      if (token.type === "link_close") {
+        linkHref = null;
+        return;
+      }
+
+      /*
+       * ------------------------------------
        * TEXT
        * ------------------------------------
        */
       if (token.type === "text") {
+        const textStyle = [
+          blockStyle,
+          bold && styles.strong,
+          italic && styles.em,
+          strike && styles.strike,
+          linkHref && styles.link,
+        ];
+
+        /*
+         * Normal text
+         */
+        if (!linkHref) {
+          result.push(
+            <Text
+              key={key}
+              style={textStyle}
+            >
+              {token.content}
+            </Text>
+          );
+
+          return;
+        }
+
+        /*
+         * Link text
+         *
+         * Nested Text keeps this inside the
+         * selectable Text hierarchy.
+         */
+        const href = linkHref;
+
         result.push(
           <Text
             key={key}
-            style={[
-              blockStyle,
-              bold && styles.strong,
-              italic && styles.em,
-              strike && styles.strike,
-            ]}
+            style={textStyle}
+            onPress={() => {
+              Linking.openURL(href).catch(() => {});
+            }}
           >
             {token.content}
           </Text>
@@ -166,30 +232,13 @@ export default function AIResponseRenderer({
 
       /*
        * ------------------------------------
-       * LINKS
-       * ------------------------------------
-       *
-       * We currently render the link text
-       * normally.
-       */
-      if (
-        token.type === "link_open" ||
-        token.type === "link_close"
-      ) {
-        return;
-      }
-
-      /*
-       * ------------------------------------
        * IMAGE
        * ------------------------------------
        *
-       * Ignore image token here rather than
-       * displaying broken content.
+       * Images will be handled separately
+       * later.
        */
-      if (
-        token.type === "image"
-      ) {
+      if (token.type === "image") {
         return;
       }
     });
