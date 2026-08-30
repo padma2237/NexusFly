@@ -1,10 +1,12 @@
 import React, { useMemo } from "react";
-import { Linking, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import MarkdownIt from "markdown-it";
 
 import { useTheme } from "../../theme/useTheme";
 import CodeBlock from "../CodeBlock";
 import { createStyles } from "./styles";
+
+import { renderInline } from "./markdown/renderInline";
 
 interface AIResponseRendererProps {
   text: string;
@@ -51,200 +53,7 @@ export default function AIResponseRenderer({
    * Pressable/View so text selection remains
    * compatible with the surrounding response.
    */
-  const renderInline = (
-    children: any[],
-    keyPrefix: string,
-    blockStyle?: any
-  ): React.ReactNode[] => {
-    const result: React.ReactNode[] = [];
-
-    let bold = false;
-    let italic = false;
-    let strike = false;
-
-    let linkHref: string | null = null;
-
-    children.forEach((token, index) => {
-      const key = `${keyPrefix}-${index}`;
-
-      /*
-       * ------------------------------------
-       * BOLD
-       * ------------------------------------
-       */
-      if (token.type === "strong_open") {
-        bold = true;
-        return;
-      }
-
-      if (token.type === "strong_close") {
-        bold = false;
-        return;
-      }
-
-      /*
-       * ------------------------------------
-       * ITALIC
-       * ------------------------------------
-       */
-      if (token.type === "em_open") {
-        italic = true;
-        return;
-      }
-
-      if (token.type === "em_close") {
-        italic = false;
-        return;
-      }
-
-      /*
-       * ------------------------------------
-       * STRIKETHROUGH
-       * ------------------------------------
-       */
-      if (token.type === "s_open") {
-        strike = true;
-        return;
-      }
-
-      if (token.type === "s_close") {
-        strike = false;
-        return;
-      }
-
-      /*
-       * ------------------------------------
-       * LINK OPEN
-       * ------------------------------------
-       */
-      if (token.type === "link_open") {
-        linkHref =
-          typeof token.attrGet === "function"
-            ? token.attrGet("href")
-            : null;
-
-        return;
-      }
-
-      /*
-       * ------------------------------------
-       * LINK CLOSE
-       * ------------------------------------
-       */
-      if (token.type === "link_close") {
-        linkHref = null;
-        return;
-      }
-
-      /*
-       * ------------------------------------
-       * TEXT
-       * ------------------------------------
-       */
-      if (token.type === "text") {
-        const textStyle = [
-          blockStyle,
-          bold && styles.strong,
-          italic && styles.em,
-          strike && styles.strike,
-          linkHref && styles.link,
-        ];
-
-        /*
-         * Normal text
-         */
-        if (!linkHref) {
-          result.push(
-            <Text
-              key={key}
-              style={textStyle}
-            >
-              {token.content}
-            </Text>
-          );
-
-          return;
-        }
-
-        /*
-         * Link text
-         *
-         * Nested Text keeps this inside the
-         * selectable Text hierarchy.
-         */
-        const href = linkHref;
-
-        result.push(
-          <Text
-            key={key}
-            style={textStyle}
-            onPress={() => {
-              Linking.openURL(href).catch(() => {});
-            }}
-          >
-            {token.content}
-          </Text>
-        );
-
-        return;
-      }
-
-      /*
-       * ------------------------------------
-       * INLINE CODE
-       * ------------------------------------
-       */
-      if (token.type === "code_inline") {
-        result.push(
-          <Text
-            key={key}
-            style={[
-              blockStyle,
-              styles.inlineCode,
-              bold && styles.strong,
-              italic && styles.em,
-            ]}
-          >
-            {token.content}
-          </Text>
-        );
-
-        return;
-      }
-
-      /*
-       * ------------------------------------
-       * SOFT / HARD BREAK
-       * ------------------------------------
-       */
-      if (
-        token.type === "softbreak" ||
-        token.type === "hardbreak"
-      ) {
-        result.push(
-          <Text key={key}>
-            {"\n"}
-          </Text>
-        );
-
-        return;
-      }
-
-      /*
-       * ------------------------------------
-       * IMAGE
-       * ------------------------------------
-       *
-       * Images will be handled separately
-       * later.
-       */
-      if (token.type === "image") {
-        return;
-      }
-    });
-
-    return result;
-  };
+  
 
   /*
    * ========================================
@@ -325,9 +134,15 @@ export default function AIResponseRenderer({
     proseParts.push(
       ...renderInline(
         inlineTokens,
-        `paragraph-${proseParts.length}`
+        `paragraph-${proseParts.length}`,
+        styles
       )
     );
+
+
+
+
+
 
     /*
      * ONE VISUAL BLANK LINE AFTER EVERY NORMAL
@@ -413,6 +228,7 @@ export default function AIResponseRenderer({
           ...renderInline(
             inlineTokens,
             `heading-${index}`,
+            styles,
             getHeadingStyle(headingLevel)
           )
         );
@@ -554,6 +370,7 @@ export default function AIResponseRenderer({
             {renderInline(
               inlineTokens,
               `list-${index}`,
+              styles,
               styles.listItem
             )}
 
@@ -625,7 +442,8 @@ export default function AIResponseRenderer({
 
             {renderInline(
               inlineTokens,
-              `blockquote-${index}`
+              `blockquote-${index}`,
+             styles,
             )}
 
             {"\n\n"}

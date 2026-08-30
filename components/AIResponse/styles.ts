@@ -74,7 +74,7 @@ heading6: {
 
     inlineCode: {
       fontFamily: "monospace",
-      color: colors.text,
+      color: colors.primary,
     },
 
 
