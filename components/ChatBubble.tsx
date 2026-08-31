@@ -401,11 +401,7 @@ function ChatBubble({
         }
         >
 
-        <Pressable
-
-
-          onLongPress={undefined}
-          delayLongPress={350}
+        <View
           style={[
             styles.bubble,
             isUser
@@ -575,7 +571,7 @@ function ChatBubble({
             </>
           )}
 
-        </Pressable>
+        </View>
 
       </Animated.View>
 
@@ -669,6 +665,7 @@ StyleSheet.create({
     maxWidth: "100%",
     padding: 14,
     borderRadius: 20,
+    
   },
 
   userBubble: {

@@ -109,9 +109,20 @@ export default function MessageActionRow({
 
 const styles = StyleSheet.create({
   container: {
+    width: "100%",
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 2,
-    marginLeft: 4,
+    marginTop: 10,
+    paddingLeft: 4,
+    paddingRight: 4,
   },
 });
+
+//const styles = StyleSheet.create({
+ // container: {
+  //  flexDirection: "row",
+  //  alignItems: "center",
+ //   marginTop: 2,
+//    marginLeft: 4,
+//  },
+// });

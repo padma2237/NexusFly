@@ -2,9 +2,13 @@ import { StyleSheet } from "react-native";
 
 export const createStyles = (colors: any) =>
   StyleSheet.create({
+    
+    
     container: {
-      width: "100%",
-    },
+  width: "100%",
+  alignSelf: "stretch",
+},
+
 
     response: {
       color: colors.text,
@@ -80,6 +84,7 @@ heading6: {
 
     codeContainer: {
       width: "100%",
+      alignSelf: "stretch",
       marginVertical: 4,
     },
     
@@ -98,14 +103,17 @@ listMarker: {
   fontWeight: "600",
 },
 
+
+    
     table: {
-      width: "100%",
-      marginVertical: 8,
-      borderWidth: 1,
-      borderColor: colors.border,
-      borderRadius: 8,
-      overflow: "hidden",
-    },
+  width: "100%",
+  marginTop: 8,
+  marginBottom: 16,
+  borderWidth: 1,
+  borderColor: colors.border,
+  borderRadius: 8,
+  overflow: "hidden",
+},
 
     tableRow: {
       flexDirection: "row",
@@ -121,6 +129,15 @@ listMarker: {
       fontSize: 15,
       lineHeight: 21,
     },
+
+tableHeaderRow: {
+  backgroundColor: colors.surface,
+},
+
+tableLastRow: {
+  borderBottomWidth: 0,
+},
+
 
     tableHeader: {
       fontWeight: "700",
