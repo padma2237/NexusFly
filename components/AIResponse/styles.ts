@@ -145,11 +145,25 @@ tableLastRow: {
   borderBottomWidth: 0,
 },
 
+tableSelectionColor: colors.primary,
 
     tableHeader: {
       fontWeight: "700",
       color: colors.text,
     },
+    
+    tableCopyButton: {
+  alignSelf: "flex-end",
+  paddingHorizontal: 10,
+  paddingVertical: 5,
+  marginBottom: 6,
+},
+
+tableCopyText: {
+  color: colors.primary,
+  fontSize: 13,
+  fontWeight: "600",
+},
 
     link: {
       color: colors.primary,

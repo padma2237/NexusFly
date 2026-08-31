@@ -4,9 +4,12 @@ import {
   View,
   ScrollView,
   LayoutChangeEvent,
+  Pressable,
 } from "react-native";
 
 import { renderInline } from "./renderInline";
+
+import * as Clipboard from "expo-clipboard";
 
 interface RenderTableOptions {
   tokens: any[];
@@ -117,6 +120,21 @@ export const renderTable = ({
       Math.max(maximum, row.cells.length),
     0
   );
+  
+  
+  const getCellText = (cell: TableRow["cells"][number]) => {
+  return cell.tokens
+    .map((token: any) => token.content ?? "")
+    .join("");
+};
+
+const tableText = rows
+  .map((row) =>
+    row.cells
+      .map((cell) => getCellText(cell))
+      .join("\t")
+  )
+  .join("\n");
 
   /*
    * ============================================
@@ -190,7 +208,11 @@ export const renderTable = ({
               (cell, cellIndex) => (
                 <Text
                   key={`table-cell-${rowIndex}-${cellIndex}`}
-                  selectable={true}
+                
+                  
+                  selectable
+selectionColor={styles.tableSelectionColor}
+                  
                   style={[
                     styles.tableCell,
                     {
@@ -206,6 +228,11 @@ export const renderTable = ({
                     styles
                   )}
                 </Text>
+                
+                
+
+                
+                
               )
             )}
 
@@ -224,6 +251,11 @@ export const renderTable = ({
                     },
                   ]}
                 />
+                
+
+                
+                
+                
               )
             )}
           </View>
@@ -259,6 +291,7 @@ export const renderTable = ({
   const MeasuredTable = () => {
     const [availableWidth, setAvailableWidth] =
       useState(0);
+const [copied, setCopied] = useState(false);
 
     const handleLayout = (
       event: LayoutChangeEvent
@@ -276,6 +309,25 @@ export const renderTable = ({
         style={styles.tableWrapper}
         onLayout={handleLayout}
       >
+        
+            
+        <Pressable
+  onPress={async () => {
+    await Clipboard.setStringAsync(tableText);
+
+    setCopied(true);
+
+    setTimeout(() => {
+      setCopied(false);
+    }, 1500);
+  }}
+  style={styles.tableCopyButton}
+>
+  <Text style={styles.tableCopyText}>
+    {copied ? "✓ Copied" : "Copy Table"}
+  </Text>
+</Pressable>
+        
         <TableContent
           availableWidth={availableWidth}
         />
