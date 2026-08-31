@@ -1,5 +1,10 @@
-import React from "react";
-import { Text, View } from "react-native";
+import React, { useState } from "react";
+import {
+  Text,
+  View,
+  ScrollView,
+  LayoutChangeEvent,
+} from "react-native";
 
 import { renderInline } from "./renderInline";
 
@@ -35,63 +40,35 @@ export const renderTable = ({
     isHeader: boolean;
   } | null = null;
 
-  let rowIndex = -1;
-  let cellIndex = -1;
-
   for (
     let i = startIndex;
     i < tokens.length;
     i++
   ) {
     const token = tokens[i];
-    
 
-    /*
-     * ============================================
-     * TABLE CLOSE
-     * ============================================
-     */
     if (token.type === "table_close") {
       break;
     }
 
-    /*
-     * ============================================
-     * ROW OPEN
-     * ============================================
-     */
     if (token.type === "tr_open") {
       currentRow = {
         cells: [],
       };
 
       rows.push(currentRow);
-
-      rowIndex += 1;
-      cellIndex = -1;
+      currentCell = null;
 
       continue;
     }
 
-    /*
-     * ============================================
-     * ROW CLOSE
-     * ============================================
-     */
     if (token.type === "tr_close") {
       currentCell = null;
       continue;
     }
 
-    /*
-     * ============================================
-     * HEADER CELL OPEN
-     * ============================================
-     */
     if (token.type === "th_open") {
-      if (!currentRow) {
-        continue;
-      }
+      if (!currentRow) continue;
 
       currentCell = {
         tokens: [],
@@ -100,20 +77,11 @@ export const renderTable = ({
 
       currentRow.cells.push(currentCell);
 
-      cellIndex += 1;
-
       continue;
     }
 
-    /*
-     * ============================================
-     * NORMAL CELL OPEN
-     * ============================================
-     */
     if (token.type === "td_open") {
-      if (!currentRow) {
-        continue;
-      }
+      if (!currentRow) continue;
 
       currentCell = {
         tokens: [],
@@ -122,16 +90,9 @@ export const renderTable = ({
 
       currentRow.cells.push(currentCell);
 
-      cellIndex += 1;
-
       continue;
     }
 
-    /*
-     * ============================================
-     * CELL CLOSE
-     * ============================================
-     */
     if (
       token.type === "th_close" ||
       token.type === "td_close"
@@ -140,11 +101,6 @@ export const renderTable = ({
       continue;
     }
 
-    /*
-     * ============================================
-     * INLINE CONTENT
-     * ============================================
-     */
     if (
       token.type === "inline" &&
       currentCell
@@ -156,11 +112,6 @@ export const renderTable = ({
     }
   }
 
-  /*
-   * ============================================
-   * FIND MAXIMUM COLUMN COUNT
-   * ============================================
-   */
   const columnCount = rows.reduce(
     (maximum, row) =>
       Math.max(maximum, row.cells.length),
@@ -169,67 +120,175 @@ export const renderTable = ({
 
   /*
    * ============================================
-   * RENDER TABLE
+   * TABLE WIDTH
+   * ============================================
+   *
+   * 1–4 columns:
+   * Fit inside the available bubble width.
+   *
+   * 5+ columns:
+   * Use horizontal scrolling.
+   */
+
+  const shouldScroll =
+    columnCount >= 5;
+
+  /*
+   * ============================================
+   * TABLE COMPONENT
    * ============================================
    */
-  const table = (
-    <View style={styles.table}>
-      {rows.map((row, rowIndex) => (
-      
 
-        
+  const TableContent = ({
+    availableWidth,
+  }: {
+    availableWidth: number;
+  }) => {
+    /*
+     * Wait until the parent gives us
+     * its actual width.
+     */
+    if (availableWidth <= 0) {
+      return null;
+    }
+
+    /*
+     * 1–4 columns:
+     * Equal automatic width.
+     *
+     * 5+ columns:
+     * Fixed comfortable width.
+     */
+
+    const columnWidth = shouldScroll
+      ? 105
+      : availableWidth / columnCount;
+
+    const tableWidth = shouldScroll
+      ? columnCount * columnWidth
+      : availableWidth;
+
+    const content = (
+      <View
+        style={[
+          styles.table,
+          {
+            width: tableWidth,
+          },
+        ]}
+      >
+        {rows.map((row, rowIndex) => (
           <View
-  key={`table-row-${rowIndex}`}
-  style={[
-    styles.tableRow,
-    rowIndex === rows.length - 1 &&
-      styles.tableLastRow,
-  ]}
->
-          
-          
-          {row.cells.map((cell, cellIndex) => (
-            <Text
-              key={`table-cell-${rowIndex}-${cellIndex}`}
-              selectable={true}
-              style={[
-                styles.tableCell,
-                cell.isHeader &&
-                  styles.tableHeader,
-              ]}
-            >
-              {renderInline(
-                cell.tokens,
-                `table-${rowIndex}-${cellIndex}`,
-                styles
-              )}
-            </Text>
-          ))}
+            key={`table-row-${rowIndex}`}
+            style={[
+              styles.tableRow,
+              rowIndex === rows.length - 1 &&
+                styles.tableLastRow,
+            ]}
+          >
+            {row.cells.map(
+              (cell, cellIndex) => (
+                <Text
+                  key={`table-cell-${rowIndex}-${cellIndex}`}
+                  selectable={true}
+                  style={[
+                    styles.tableCell,
+                    {
+                      width: columnWidth,
+                    },
+                    cell.isHeader &&
+                      styles.tableHeader,
+                  ]}
+                >
+                  {renderInline(
+                    cell.tokens,
+                    `table-${rowIndex}-${cellIndex}`,
+                    styles
+                  )}
+                </Text>
+              )
+            )}
 
-          {/*
-           * Keep columns aligned if a malformed/
-           * incomplete Markdown row has fewer cells.
-           */}
-          {Array.from({
-            length:
-              columnCount -
-              row.cells.length,
-          }).map((_, emptyIndex) => (
-            <Text
-              key={`table-empty-${rowIndex}-${emptyIndex}`}
-              style={styles.tableCell}
-            />
-          ))}
-        </View>
-      ))}
-    </View>
-  );
+            {Array.from({
+              length:
+                columnCount -
+                row.cells.length,
+            }).map(
+              (_, emptyIndex) => (
+                <Text
+                  key={`table-empty-${rowIndex}-${emptyIndex}`}
+                  style={[
+                    styles.tableCell,
+                    {
+                      width: columnWidth,
+                    },
+                  ]}
+                />
+              )
+            )}
+          </View>
+        ))}
+      </View>
+    );
+
+    /*
+     * Only 5+ columns get horizontal scrolling.
+     */
+    if (shouldScroll) {
+      return (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={true}
+          nestedScrollEnabled={true}
+          style={styles.tableScroll}
+        >
+          {content}
+        </ScrollView>
+      );
+    }
+
+    return content;
+  };
+
+  /*
+   * ============================================
+   * MEASURE AVAILABLE WIDTH
+   * ============================================
+   */
+
+  const MeasuredTable = () => {
+    const [availableWidth, setAvailableWidth] =
+      useState(0);
+
+    const handleLayout = (
+      event: LayoutChangeEvent
+    ) => {
+      const width =
+        event.nativeEvent.layout.width;
+
+      if (width !== availableWidth) {
+        setAvailableWidth(width);
+      }
+    };
+
+    return (
+      <View
+        style={styles.tableWrapper}
+        onLayout={handleLayout}
+      >
+        <TableContent
+          availableWidth={availableWidth}
+        />
+      </View>
+    );
+  };
 
   /*
    * ============================================
    * FIND TABLE CLOSE
    * ============================================
    */
+
   let nextIndex = startIndex;
 
   for (
@@ -237,14 +296,16 @@ export const renderTable = ({
     i < tokens.length;
     i++
   ) {
-    if (tokens[i].type === "table_close") {
+    if (
+      tokens[i].type === "table_close"
+    ) {
       nextIndex = i;
       break;
     }
   }
 
   return {
-    node: table,
+    node: <MeasuredTable />,
     nextIndex,
   };
 };

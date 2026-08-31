@@ -105,8 +105,11 @@ listMarker: {
 
 
     
-    table: {
+    
+
+table: {
   width: "100%",
+  
   marginTop: 8,
   marginBottom: 16,
   borderWidth: 1,
@@ -120,10 +123,14 @@ listMarker: {
       borderBottomWidth: 1,
       borderBottomColor: colors.border,
     },
+    
+    tableScroll: {
+  width: "100%",
+},
 
     tableCell: {
-      flex: 1,
-      paddingHorizontal: 10,
+      
+      paddingHorizontal: 5,
       paddingVertical: 8,
       color: colors.text,
       fontSize: 15,
