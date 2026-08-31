@@ -21,15 +21,35 @@ interface Props {
   onCopy: () => void;
   onShare: () => void;
   onRegenerate?: () => void;
+
+  // NEW
+  onEdit?: () => void;
+  onSelect?: () => void;
+  onEnhance?: () => void;
+
   onChange?: (index: number) => void;
 }
 
-const MessageActionSheet = forwardRef<BottomSheetModal, Props>(
-  ({ onCopy, onShare, onRegenerate, onChange }, ref) => {
+const MessageActionSheet = forwardRef<
+  BottomSheetModal,
+  Props
+>(
+  (
+    {
+      onCopy,
+      onShare,
+      onRegenerate,
+      onEdit,
+      onSelect,
+      onEnhance,
+      onChange,
+    },
+    ref
+  ) => {
     const { colors } = useTheme();
 
     const snapPoints = useMemo(
-      () => ["35%"],
+      () => ["55%"],
       []
     );
 
@@ -48,8 +68,9 @@ const MessageActionSheet = forwardRef<BottomSheetModal, Props>(
     );
 
     const dismiss = () => {
-      (ref as React.RefObject<BottomSheetModal>)
-        .current?.dismiss();
+      (
+        ref as React.RefObject<BottomSheetModal>
+      ).current?.dismiss();
     };
 
     return (
@@ -65,6 +86,20 @@ const MessageActionSheet = forwardRef<BottomSheetModal, Props>(
         }}
       >
         <BottomSheetView style={styles.container}>
+
+          {onEdit && (
+            <Pressable
+              style={styles.item}
+              onPress={() => {
+                dismiss();
+                onEdit();
+              }}
+            >
+              <Text style={styles.text}>
+                ✏️ Edit
+              </Text>
+            </Pressable>
+          )}
 
           <Pressable
             style={styles.item}
@@ -89,6 +124,34 @@ const MessageActionSheet = forwardRef<BottomSheetModal, Props>(
               📤 Share
             </Text>
           </Pressable>
+
+          {onSelect && (
+            <Pressable
+              style={styles.item}
+              onPress={() => {
+                dismiss();
+                onSelect();
+              }}
+            >
+              <Text style={styles.text}>
+                ☑️ Select
+              </Text>
+            </Pressable>
+          )}
+
+          {onEnhance && (
+            <Pressable
+              style={styles.item}
+              onPress={() => {
+                dismiss();
+                onEnhance();
+              }}
+            >
+              <Text style={styles.text}>
+                ✨ Enhance Prompt
+              </Text>
+            </Pressable>
+          )}
 
           {onRegenerate && (
             <Pressable
@@ -119,7 +182,7 @@ const createStyles = (colors: any) =>
     },
 
     item: {
-      paddingVertical: 18,
+      paddingVertical: 16,
     },
 
     text: {
