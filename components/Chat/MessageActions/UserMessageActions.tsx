@@ -2,19 +2,9 @@ import React, { useState } from "react";
 import {
   View,
   Pressable,
-  Text,
   StyleSheet,
   Share,
 } from "react-native";
-
-
-
-// UNUSED // UNUSED.......
-
-
-
-
-
 
 import * as Clipboard from "expo-clipboard";
 
@@ -22,20 +12,21 @@ import {
   Copy,
   Share2,
   Pencil,
-  Sparkles,
 } from "lucide-react-native";
+
+import { useTheme } from "../../../theme/useTheme";
 
 interface Props {
   text: string;
   onEdit?: () => void;
-  onEnhance?: () => void;
 }
 
 export default function UserMessageActions({
   text,
   onEdit,
-  onEnhance,
 }: Props) {
+  const { colors } = useTheme();
+
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -64,53 +55,46 @@ export default function UserMessageActions({
       <Pressable
         style={styles.button}
         onPress={handleCopy}
+        hitSlop={8}
       >
         {copied ? (
-          <Text style={styles.check}>✓</Text>
+          <Copy
+            size={19}
+            strokeWidth={2}
+            color={colors.text}
+          />
         ) : (
-          <Copy size={16} strokeWidth={2} />
+          <Copy
+            size={19}
+            strokeWidth={2}
+            color={colors.text}
+          />
         )}
-
-        <Text style={styles.text}>
-          {copied ? "Copied":"Copy"}
-        </Text>
       </Pressable>
 
       <Pressable
         style={styles.button}
         onPress={handleShare}
+        hitSlop={8}
       >
-        <Share2 size={16} strokeWidth={2} />
-
-      <Text style={styles.text}>
-          Share
-        </Text>
-        
+        <Share2
+          size={19}
+          strokeWidth={2}
+          color={colors.text}
+        />
       </Pressable>
 
       {onEdit && (
         <Pressable
           style={styles.button}
           onPress={onEdit}
+          hitSlop={8}
         >
-          <Pencil size={16} strokeWidth={2} />
-
-          <Text style={styles.text}>
-            Edit
-          </Text>
-        </Pressable>
-      )}
-
-      {onEnhance && (
-        <Pressable
-          style={styles.button}
-          onPress={onEnhance}
-        >
-          <Sparkles size={16} strokeWidth={2} />
-
-          <Text style={styles.text}>
-            Enhance
-          </Text>
+          <Pencil
+            size={19}
+            strokeWidth={2}
+            color={colors.text}
+          />
         </Pressable>
       )}
 
@@ -122,24 +106,16 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 6,
-    gap: 5,
+    justifyContent: "flex-end",
+    alignSelf: "flex-end",
+    marginTop: 4,
+    gap: 12,
   },
 
   button: {
-    flexDirection: "row",
+    width: 24,
+    height: 24,
     alignItems: "center",
-    paddingVertical: 4,
-    paddingHorizontal:0,
-  },
-
-  text: {
-    fontSize: 13,
-    marginLeft: 4,
-  },
-
-  check: {
-    fontSize: 16,
-    fontWeight: "600",
+    justifyContent: "center",
   },
 });

@@ -1,4 +1,3 @@
-{/*
 import React from "react";
 import { View, StyleSheet } from "react-native";
 
@@ -8,7 +7,7 @@ import { Message } from "../../types/chat";
 interface MessageItemProps {
   message: Message;
   onRegenerate?: () => void;
-  onEdit?: () => void;
+  onEdit?: (message: Message) => void;
 }
 
 export default React.memo(function MessageItem({
@@ -28,7 +27,11 @@ export default React.memo(function MessageItem({
       <ChatBubble
         message={message}
         onRegenerate={onRegenerate}
-        onEdit={onEdit}
+        onEdit={
+          message.role === "user"
+            ? () => onEdit?.(message)
+            : undefined
+        }
       />
     </View>
   );
@@ -50,32 +53,36 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
 });
-*/}
 
+
+
+
+
+
+
+{/*
 import React from "react";
 import { View, StyleSheet } from "react-native";
 
 import ChatBubble from "../ChatBubble";
-import UserMessageActions from "./UserMessageActions";
-
 import { Message } from "../../types/chat";
 
 interface MessageItemProps {
   message: Message;
   onRegenerate?: () => void;
+  onEdit?: (text: string) => void;
 }
 
 export default React.memo(function MessageItem({
   message,
   onRegenerate,
+  onEdit,
 }: MessageItemProps) {
-  const isUser = message.role === "user";
-
   return (
     <View
       style={[
         styles.row,
-        isUser
+        message.role === "user"
           ? styles.userRow
           : styles.aiRow,
       ]}
@@ -83,13 +90,12 @@ export default React.memo(function MessageItem({
       <ChatBubble
         message={message}
         onRegenerate={onRegenerate}
+        onEdit={
+          message.role === "user"
+            ? () => onEdit?.(message.text)
+            : undefined
+        }
       />
-
-      {isUser && message.text.trim().length > 0 && (
-        <UserMessageActions
-          text={message.text}
-        />
-      )}
     </View>
   );
 });
@@ -110,3 +116,5 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
 });
+
+*/}

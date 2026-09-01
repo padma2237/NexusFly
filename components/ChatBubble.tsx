@@ -28,6 +28,7 @@ import AIResponse from "./AIResponse/AIResponse";
 
 import MessageActionRow from "./Chat/MessageActions/MessageActionRow";
 
+import UserMessageActions from "./Chat/MessageActions/UserMessageActions";
 
 import * as Clipboard from "expo-clipboard";
 
@@ -57,6 +58,7 @@ import CodeBlock from "./CodeBlock";
 interface ChatBubbleProps {
   message: Message;
   onRegenerate?: () => void;
+  onEdit?: () => void;
 }
 
 const {
@@ -68,6 +70,7 @@ Dimensions.get("window");
 function ChatBubble({
   message,
   onRegenerate,
+  onEdit,
 }: ChatBubbleProps) {
 
   const isUser = message.role === "user";
@@ -492,6 +495,17 @@ function ChatBubble({
 
                 </Pressable>
               )}
+{onEdit && (
+  <Pressable
+    onPress={onEdit}
+    hitSlop={8}
+  >
+    <Text style={styles.editText}>
+      Edit
+    </Text>
+  </Pressable>
+)}
+
 
             </>
 
@@ -570,10 +584,20 @@ function ChatBubble({
               )}
             </>
           )}
+          
+                  </View>
 
-        </View>
+        {isUser && (
+          <UserMessageActions
+            text={message.text}
+            onEdit={onEdit}
+          />
+        )}
 
       </Animated.View>
+          
+
+
 
 
       {/*
@@ -639,17 +663,25 @@ function ChatBubble({
         </View>
 
       </Modal>
+      
+
+<MessageActionSheet
+  ref={sheetRef}
+  onCopy={copyMessage}
+  onShare={shareMessage}
+  onRegenerate={onRegenerate}
+  onEdit={
+    isUser
+      ? onEdit
+      : undefined
+  }
+  onChange={(index) =>
+    setIsSheetOpen(index >= 0)
+  }
+/>
 
 
-      <MessageActionSheet
-        ref={sheetRef}
-        onCopy={copyMessage}
-        onShare={shareMessage}
-        onRegenerate={onRegenerate}
-        onChange={(index) =>
-        setIsSheetOpen(index >= 0)
-        }
-        />
+
 
     </>
   );
@@ -661,12 +693,13 @@ const createStyles = (
 ) =>
 StyleSheet.create({
 
-  bubble: {
-    maxWidth: "100%",
-    padding: 14,
-    borderRadius: 20,
-    
-  },
+  
+bubble: {
+  maxWidth: "100%",
+  paddingHorizontal: 14,
+  paddingVertical: 10,
+  borderRadius: 20,
+},
 
   userBubble: {
     backgroundColor:
@@ -850,6 +883,13 @@ StyleSheet.create({
     fontWeight: "900",
     marginTop: 8,
   },
+  
+  editText: {
+  color: colors.primary,
+  fontSize: 13,
+  fontWeight: "600",
+  marginTop: 8,
+},
 
 });
 
@@ -930,7 +970,7 @@ StyleSheet.create({
     color: colors.primary,
   },
 
-});
+}); 
 
 
 export default React.memo(

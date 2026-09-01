@@ -76,6 +76,9 @@ export default function ChatScreen() {
     inputText,
     setInputText,
   ] = useState("");
+  
+  const [editingMessageId, setEditingMessageId] =
+  useState<string | null>(null);
 
 
   
@@ -127,7 +130,17 @@ loadingConversationId !== null &&
 }, []);
   
   
+  const handleEditMessage = useCallback(
+  (message: Message) => {
+    setInputText(message.text);
+    setEditingMessageId(message.id);
+
   
+      
+    
+  },
+  []
+);
   
   
     
@@ -144,9 +157,16 @@ loadingConversationId !== null &&
       createNewConversation();
     }
 
-    
-    const userMessage: Message = {
-  id: Date.now().toString(),
+
+
+
+
+
+
+
+
+const userMessage: Message = {
+  id: editingMessageId ?? Date.now().toString(),
   role: "user",
   text: inputText,
   attachments:
@@ -156,10 +176,34 @@ loadingConversationId !== null &&
   createdAt: Date.now(),
 };
 
-    const updatedMessages = [
+const updatedMessages = editingMessageId
+  ? (() => {
+      const editIndex = messages.findIndex(
+        (message) =>
+          message.id === editingMessageId
+      );
+
+      if (editIndex === -1) {
+        return [
+          ...messages,
+          userMessage,
+        ];
+      }
+
+      return [
+        ...messages.slice(0, editIndex),
+        userMessage,
+      ];
+    })()
+  : [
       ...messages,
       userMessage,
     ];
+
+setEditingMessageId(null);
+
+
+
 
     const newMessageIndex =
     updatedMessages.length - 1;
@@ -587,9 +631,9 @@ finally {
               index === messages.length - 1 &&
               item.role === "assistant"
               }
-              handleRegenerate={
-              handleRegenerate
-              }
+              handleRegenerate={ handleRegenerate }
+              
+              handleEdit={handleEditMessage}
               />
           )}
           />

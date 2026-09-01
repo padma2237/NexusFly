@@ -8,6 +8,7 @@ interface MessageRowProps {
   item: Message;
   isLastAssistant: boolean;
   handleRegenerate: () => void;
+  handleEdit: (message: Message) => void;
 }
 
 const MessageRow = React.memo(
@@ -15,6 +16,7 @@ const MessageRow = React.memo(
     item,
     isLastAssistant,
     handleRegenerate,
+    handleEdit,
   }: MessageRowProps) => {
     return (
       <View>
@@ -25,16 +27,13 @@ const MessageRow = React.memo(
               ? handleRegenerate
               : undefined
           }
+          onEdit={
+            item.role === "user"
+              ? () => handleEdit(item)
+              : undefined
+          }
         />
       </View>
-    );
-  },
-  (prevProps, nextProps) => {
-    return (
-      prevProps.item.id === nextProps.item.id &&
-      prevProps.item.text === nextProps.item.text &&
-      prevProps.isLastAssistant ===
-        nextProps.isLastAssistant
     );
   }
 );
