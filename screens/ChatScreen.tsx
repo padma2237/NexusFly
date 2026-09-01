@@ -63,6 +63,8 @@ export default function ChatScreen() {
   const chatListRef =
   useRef < ChatListHandle > (null);
   
+  const composerRef = useRef<any>(null);
+  
   const abortControllerRef =
   useRef<AbortController | null>(null);
 
@@ -135,12 +137,13 @@ loadingConversationId !== null &&
     setInputText(message.text);
     setEditingMessageId(message.id);
 
-  
-      
-    
+    requestAnimationFrame(() => {
+      composerRef.current?.focusInput();
+    });
   },
   []
 );
+  
   
   
     
@@ -639,6 +642,8 @@ finally {
           />
 
         <Composer
+        ref={composerRef}
+ 
         currentConversationId={currentConversationId}
           value={inputText}
           onChangeText={setInputText}

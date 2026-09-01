@@ -20,6 +20,7 @@ export default function ComposerBody(props: any) {
   composer,
   value,
   isLoading,
+  inputRef,
   webSearchEnabled,
   onChangeText,
   onSend,
@@ -34,6 +35,7 @@ const hasText = value.trim().length > 0;
 const hasAttachments = attachments.length > 0;
 const canSend = hasText || hasAttachments;
 
+// const inputRef = React.useRef<TextInput>(null);
 
 const expanded = composer.state.isExpanded;
 
@@ -77,6 +79,7 @@ const handleSend = () => {
       ]}
     >
       <ComposerInput
+      ref={inputRef}
         value={value}
         inputHeight={composer.state.inputHeight}
         scrollEnabled={composer.state.scrollEnabled}

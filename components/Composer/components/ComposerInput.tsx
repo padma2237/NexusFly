@@ -1,4 +1,5 @@
-import React from "react";
+
+import React, { forwardRef } from "react";
 import {
   NativeSyntheticEvent,
   TextInput,
@@ -11,7 +12,10 @@ import styles from "../styles";
 import { ComposerInputProps } from "../types";
 
 
-export default function ComposerInput({
+// export default function ComposerInput({
+
+const ComposerInput = forwardRef<TextInput, ComposerInputProps>(function ComposerInput({
+  
   value,
   inputHeight,
   scrollEnabled,
@@ -20,7 +24,7 @@ export default function ComposerInput({
   onContentHeightChange,
   onFocus,
   onBlur,
-}: ComposerInputProps) {
+}: ComposerInputProps, ref ) {
   const theme = useComposerTheme();
 
   // FIX: Reset height back to initial baseline whenever value is cleared
@@ -33,6 +37,7 @@ export default function ComposerInput({
 
   return (
     <TextInput
+    ref={ref}
       value={value}
       multiline
       scrollEnabled={scrollEnabled}
@@ -64,3 +69,6 @@ maxHeight: inputHeight,
     />
   );
 }
+);
+
+export default ComposerInput;

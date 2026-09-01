@@ -1,5 +1,7 @@
 import React, {
+  forwardRef,
   useEffect,
+  useImperativeHandle,
   useRef,
   useState,
 } from "react";
@@ -11,7 +13,6 @@ import {
 
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 
-// import AttachmentSheet from "../AttachmentSheet";
 
 import AttachmentSheet from "../Attachments/components/AttachmentSheet";
 
@@ -23,8 +24,8 @@ import ComposerBody from "./ComposerBody";
 import useComposer from "./hooks/useComposer";
 
 import { ComposerProps } from "./types";
-
-export default function Composer({
+  
+const Composer = forwardRef<any, ComposerProps>(function Composer({
   value,
   isLoading,
   webSearchEnabled,
@@ -35,9 +36,17 @@ export default function Composer({
   onToggleWebSearch,
   currentConversationId
   
-}: ComposerProps) {
+}: ComposerProps, ref ) {
 
   const composer = useComposer();
+  
+  const inputRef = useRef<any>(null);
+
+useImperativeHandle(ref, () => ({
+  focusInput: () => {
+    inputRef.current?.focus();
+  },
+}));
   
   const attachments = useAttachments();
   
@@ -108,7 +117,7 @@ export default function Composer({
           webSearchEnabled={webSearchEnabled}
           onChangeText={onChangeText}
           
-          
+          inputRef={inputRef}
 
 
 
@@ -170,4 +179,6 @@ onStop={onStop}
       />
     </>
   );
-}
+});
+
+export default Composer;

@@ -12,6 +12,7 @@ import {
   Copy,
   Share2,
   Pencil,
+  Check,
 } from "lucide-react-native";
 
 import { useTheme } from "../../../theme/useTheme";
@@ -52,25 +53,31 @@ export default function UserMessageActions({
   return (
     <View style={styles.container}>
 
+      
+      
+      
       <Pressable
-        style={styles.button}
-        onPress={handleCopy}
-        hitSlop={8}
-      >
-        {copied ? (
-          <Copy
-            size={19}
-            strokeWidth={2}
-            color={colors.text}
-          />
-        ) : (
-          <Copy
-            size={19}
-            strokeWidth={2}
-            color={colors.text}
-          />
-        )}
-      </Pressable>
+  style={styles.button}
+  onPress={handleCopy}
+  hitSlop={8}
+>
+  {copied ? (
+    <Check
+      size={19}
+      strokeWidth={2.5}
+      color={colors.text}
+    />
+  ) : (
+    <Copy
+      size={19}
+      strokeWidth={2}
+      color={colors.text}
+    />
+  )}
+</Pressable>
+      
+      
+      
 
       <Pressable
         style={styles.button}
