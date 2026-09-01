@@ -393,16 +393,24 @@ function ChatBubble({
   return (
     <>
 
-      <Animated.View
-        entering={
-        isUser
-        ? FadeInRight
-        .springify()
-        .damping(50): FadeInLeft
-        .springify()
-        .damping(50)
-        }
-        >
+      
+        
+        
+        
+        <Animated.View
+  style={{
+    alignSelf: isUser ? "flex-end" : "flex-start",
+  }}
+  entering={
+    isUser
+      ? FadeInRight
+          .springify()
+          .damping(50)
+      : FadeInLeft
+          .springify()
+          .damping(50)
+  }
+>
 
         <View
           style={[
@@ -495,16 +503,7 @@ function ChatBubble({
 
                 </Pressable>
               )}
-{onEdit && (
-  <Pressable
-    onPress={onEdit}
-    hitSlop={8}
-  >
-    <Text style={styles.editText}>
-      Edit
-    </Text>
-  </Pressable>
-)}
+
 
 
             </>
@@ -702,6 +701,7 @@ bubble: {
 },
 
   userBubble: {
+    alignSelf: "flex-end",
     backgroundColor:
     colors.userBubble ||
     colors.primary,

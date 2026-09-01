@@ -103,14 +103,16 @@ export default function UserMessageActions({
 }
 
 const styles = StyleSheet.create({
+  
+  
   container: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    alignSelf: "flex-end",
-    marginTop: 4,
-    gap: 12,
-  },
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "flex-end",
+  alignSelf: "flex-end",
+  marginTop: 6, //4
+  gap: 5, //12,
+},
 
   button: {
     width: 24,
