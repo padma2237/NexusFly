@@ -544,17 +544,17 @@ finally {
 
           <View
             style={[
-              styles.blossomGlowMid,
+              styles.blossomGlowBigBelow,
               {
                 backgroundColor:
-                colors.border,
+                colors.primary,
               },
             ]}
             />
 
           <View
             style={[
-              styles.blossomGlowMid1,
+              styles.blossomGlowBig1,
               {
                 backgroundColor:
                 colors.primary,
@@ -587,7 +587,7 @@ finally {
               styles.blossomBottomRight,
               {
                 backgroundColor:
-                colors.secondary,
+                colors.primary,
               },
             ]}
             />
@@ -710,7 +710,7 @@ finally {
       borderRadius: 310,
       top: -250,
       right: -150,
-      opacity: 0.20,
+      opacity: 0.10,
     },
 
     blossomGlowSide: {
@@ -720,27 +720,27 @@ finally {
       borderRadius: 310,
       top: 220,
       left: -65,
-      opacity: 0.1,
+      opacity: 0.10,
     },
 
-    blossomGlowMid: {
+    blossomGlowBigBelow: {
       position: "absolute",
       width: 620,
       height: 620,
       borderRadius: 360,
       bottom: -100,
       right: 150,
-      opacity: 0.50,
+      opacity: 0.10,
     },
 
-    blossomGlowMid1: {
+    blossomGlowBig1: {
       position: "absolute",
       width: 620,
       height: 620,
       borderRadius: 360,
       top: -100,
       left: 220,
-      opacity: 0.4,
+      opacity: 0.10,
     },
 
 
@@ -761,7 +761,7 @@ finally {
       borderRadius: 310,
       top: -150,
       left: -220,
-      opacity: 0.10,
+      opacity: 0.05,
     },
 
     blossomBottomRight: {

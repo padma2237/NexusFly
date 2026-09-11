@@ -9,30 +9,59 @@ import charmPetalTheme from "./charmPetal";
 
 export type BaseTheme = {
   name: string;
-  useGradient?: boolean;
+  useGradient: boolean;
 
-  colors: {
-    background: string;
+  
+    
+    
+    colors: {
+  background: string;
 
-    backgroundGradient?: readonly [
-      string,
-      string,
-      ...string[]
-    ];
+  brandTitle: string;
+  brandAccent: string;
+  brandGradient: readonly [
+    string,
+    string,
+    ...string[]
+  ];
+
+  backgroundGradient: readonly [
+    string,
+    string,
+    ...string[]
+  ];
+    
+    
+    
 
     surface: string;
-    surfaceElevated?: string;
+    surfaceElevated: string;
 
     primary: string;
     secondary: string;
+    userBubble: string;
 
-    primarySoft?: string;
-    primaryGlow?: string;
-    secondaryGlow?: string;
+
+
+    primarySoft: string;
+    primaryGlow: string;
+    secondaryGlow: string;
 
     text: string;
     subText: string;
     textSecondary: string;
+    
+    // UI / Icons
+icon: string;
+iconSecondary: string;
+iconMuted: string;
+
+// Content on accent surfaces
+onPrimary: string;
+
+// Interactive surfaces
+surfaceSelected: string;
+surfacePressed: string;
 
     border: string;
 
@@ -44,6 +73,11 @@ export type BaseTheme = {
     cardBlue: string;
     cardOrange: string;
     cardPurple: string;
+
+
+cardBg: string;
+cardBorder: string;
+cardAccent: string;
 
     codeBackground: string;
     codeHeader: string;

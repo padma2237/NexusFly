@@ -1,47 +1,126 @@
-
 const lightTheme = {
   name: "light",
+  useGradient: false,
 
   colors: {
-    background: "#F1F9F9",
-    surface: "#FFFFFF",
+    // ─────────────────────────────
+    // Background
+    // ─────────────────────────────
 
-    // Primary needs to be strong/vibrant for text, icons, & brand elements
-    primary: "#0284C7", 
-   
-   // "#F1F9F9",
-   // "#FCDCA8", 
-   // "#FFC2A6",
-   // "#FBCB98",   
-   // Warm orange
+    background: "#F1F9F9",
+
+    backgroundGradient: [
+      "#F1F9F9",
+
+      "#E2F1F5",
+
+      "#E0F2FE",
+
+      "#F1F9F9",
+
+    ] as const,
+
+    // ─────────────────────────────
+    // Branding
+    // ─────────────────────────────
+
+    brandAccent: "#64748B",
+    brandTitle: "#0F172A",
     
+    // brandAccent: "#0284C7",
+
+    //brandGradient: [
+    //  "#0284C7",
+    //  "#2563EB",
+    // "#7C3AED",
+    //    ] as const,
+
+    // brandGradient: ["#0284C7", "#2563EB", "#7C3AED"] as const,
+
+    brandGradient: [
+      //  "#000000",
+      "#64748B",
+      "#7C83A8",
+      "#000000",
+    ] as const,
+
+    // ─────────────────────────────
+    // Surfaces
+    // ─────────────────────────────
+
+    surface: "#FFFFFF",
+    surfaceElevated: "#FFFFFF",
+
+    // ─────────────────────────────
+    // Accent
+    // ─────────────────────────────
+
+    primary: "#000000",
+    // "#0284C7",
+    // "#334155",
     secondary: "#3B82F6",
 
-    // Dedicated bubble color for the user messages
-    userBubble: "#E0F2FE", 
+    primarySoft: "#E0F2FE",
+    primaryGlow: "#0284C738",
+    secondaryGlow: "#3B82F630",
+    
+    userBubble: "#E0F2FE",
 
-    brandTitle: "#0284C7",
-    brandAccent: "#0284C7",
-    brandGradient: ["#0284C7", "#2563EB", "#7C3AED"] as const,
+    // ─────────────────────────────
+    // Text
+    // ─────────────────────────────
 
     text: "#0F172A",
     subText: "#475569",
     textSecondary: "#94A3B8",
 
-    border: "#E2E8F0",
+    // ─────────────────────────────
+    // UI / Icons
+    // ─────────────────────────────
 
+    icon: "#0F172A",
+    iconSecondary: "#475569",
+    iconMuted: "#94A3B8",
+
+    // ─────────────────────────────
+    // Content on accent surfaces
+    // ─────────────────────────────
+
+    onPrimary: "#FFFFFF",
+
+    // ─────────────────────────────
+    // Interactive surfaces
+    // ─────────────────────────────
+
+    surfaceSelected: "#E0F2FE",
+    surfacePressed: "#CBD5E1",
+
+    // ─────────────────────────────
+    // Borders / status
+    // ─────────────────────────────
+
+    border: "#E2E8F0",
     success: "#16a34a",
     warning: "#d97706",
     error: "#dc2626",
+
+    // ─────────────────────────────
+    // Cards
+    // ─────────────────────────────
 
     cardGreen: "#DFF6E4",
     cardBlue: "#E5F1FF",
     cardOrange: "#FFF2D8",
     cardPurple: "#F4E8FF",
 
-    // ---------------------------------
-    // CODE BLOCK
-    // ---------------------------------
+    cardBg: "rgba(255, 255, 255, 0.85)",
+    cardBorder: "rgba(226, 232, 240, 0.8)",
+    cardAccent: "#0284C71F",
+
+    // ─────────────────────────────
+    // Code
+    // ─────────────────────────────
+
     codeBackground: "#F8FAFC",
     codeHeader: "#F1F5F9",
     codeBorder: "#CBD5E1",
@@ -74,6 +153,3 @@ const lightTheme = {
 };
 
 export default lightTheme;
-
-
-

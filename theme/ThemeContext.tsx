@@ -16,13 +16,26 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   themes,
   ThemeName,
+  
+  BaseTheme,
+  
 } from "./index";
 
 const STORAGE_KEY = "nexusfly_theme_v8";
 
+{/*
 type ThemeContextType = {
   themeName: ThemeName;
   colors: typeof themes.dark.colors;
+  useGradient: boolean;
+  setTheme: (theme: ThemeName) => void;
+};
+
+*/}
+
+type ThemeContextType = {
+  themeName: ThemeName;
+  colors: BaseTheme["colors"];
   useGradient: boolean;
   setTheme: (theme: ThemeName) => void;
 };

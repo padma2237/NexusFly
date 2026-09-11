@@ -393,24 +393,23 @@ function ChatBubble({
   return (
     <>
 
-      
-        
-        
-        
-        <Animated.View
-  style={{
-    alignSelf: isUser ? "flex-end" : "flex-start",
-  }}
-  entering={
-    isUser
-      ? FadeInRight
-          .springify()
-          .damping(50)
-      : FadeInLeft
-          .springify()
-          .damping(50)
-  }
->
+
+
+
+
+      <Animated.View
+        style={ {
+          alignSelf: isUser ? "flex-end": "flex-start",
+        }}
+        entering={
+        isUser
+        ? FadeInRight
+        .springify()
+        .damping(50): FadeInLeft
+        .springify()
+        .damping(50)
+        }
+        >
 
         <View
           style={[
@@ -512,7 +511,7 @@ function ChatBubble({
 
             <>
 
-<AIResponse text={message.text} />
+              <AIResponse text={message.text} />
 
               <MessageActionRow
                 onCopy={copyMessage}
@@ -583,21 +582,17 @@ function ChatBubble({
               )}
             </>
           )}
-          
-                  </View>
+
+        </View>
 
         {isUser && (
           <UserMessageActions
             text={message.text}
             onEdit={onEdit}
-          />
+            />
         )}
 
       </Animated.View>
-          
-
-
-
 
       {/*
        * ----------------------------------------
@@ -637,11 +632,8 @@ function ChatBubble({
                 style={styles.fullScreenImage}
                 resizeMode="contain"
                 />
-
             )}
-
           </Pressable>
-
 
           <Pressable
             style={styles.closeButton}
@@ -662,46 +654,40 @@ function ChatBubble({
         </View>
 
       </Modal>
-      
-
-<MessageActionSheet
-  ref={sheetRef}
-  onCopy={copyMessage}
-  onShare={shareMessage}
-  onRegenerate={onRegenerate}
-  onEdit={
-    isUser
-      ? onEdit
-      : undefined
-  }
-  onChange={(index) =>
-    setIsSheetOpen(index >= 0)
-  }
-/>
 
 
-
+      <MessageActionSheet
+        ref={sheetRef}
+        onCopy={copyMessage}
+        onShare={shareMessage}
+        onRegenerate={onRegenerate}
+        onEdit={
+        isUser
+        ? onEdit: undefined
+        }
+        onChange={(index) =>
+        setIsSheetOpen(index >= 0)
+        }
+        />
 
     </>
   );
 }
-
 
 const createStyles = (
   colors: any
 ) =>
 StyleSheet.create({
 
-  
-bubble: {
-  maxWidth: "100%",
-  paddingHorizontal: 14,
-  paddingVertical: 10,
-  borderRadius: 20,
-},
+  bubble: {
+    maxWidth: "100%",
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    borderRadius: 20,
+  },
 
   userBubble: {
-    alignSelf: "flex-end",
+    alignSelf: "flex-end", //use to change userbubble
     backgroundColor:
     colors.userBubble ||
     colors.primary,
@@ -883,13 +869,13 @@ bubble: {
     fontWeight: "900",
     marginTop: 8,
   },
-  
+
   editText: {
-  color: colors.primary,
-  fontSize: 13,
-  fontWeight: "600",
-  marginTop: 8,
-},
+    color: colors.primary,
+    fontSize: 13,
+    fontWeight: "600",
+    marginTop: 8,
+  },
 
 });
 
@@ -970,7 +956,7 @@ StyleSheet.create({
     color: colors.primary,
   },
 
-}); 
+});
 
 
 export default React.memo(

@@ -438,7 +438,7 @@ continue;
           key={`hr-${index}`}
           style={styles.response}
         >
-          {"\n────────────\n"}
+          {"\n───────────────────────────────\n"}
         </Text>
       );
 

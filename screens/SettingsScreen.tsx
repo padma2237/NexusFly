@@ -19,39 +19,40 @@ export default function SettingsScreen() {
 
   const themes = [{
     id: "system",
-    title: "📱 System",
+    title: "모 System",
   },
     {
       id: "dark",
-      title: "🌑 Dark",
+      title: ".✦ ݁˖ Dark",
     },
     {
       id: "light",
-      title: "☀️ Light",
+      title: "💫⃝✨ Light",
     },
     {
       id: "experimental",
-      title: "🧪 Experimental (Padma)",
+      title: "☄️⋆.˚ Explore",
     },
     {
       id: "blossom",
-      title: "💮 Blossom",
+      title: "💮⚘ Blossom",
     },
     
         {
       id: "sleek",
-      title: "🛸 Sleek",
+      title: "🥽 Sleek",
     },
     
             {
       id: "oracle",
-      title: "𖡼 Oracle",
+      title: "🔮ּ ֶָ֢. Oracle",
     },
     
     
       {
       id: "charmPetal",
-      title: "𖡼 CharmPetal",
+      title: // "𖡼SkyPetal",
+      ".☘︎ ݁˖ CharmPetal",
     },
     
     
@@ -90,16 +91,21 @@ export default function SettingsScreen() {
           ]}
           onPress={() => setTheme(theme.id as any)}
           >
+          
           <Text
-            style={[
-              styles.buttonText,
-              {
-                color: colors.text,
-              },
-            ]}
-            >
-            {theme.title}
-          </Text>
+  style={[
+    styles.buttonText,
+    {
+      color:
+        themeName === theme.id
+          ? colors.onPrimary
+          : colors.text,
+    },
+  ]}
+>
+  {theme.title}
+</Text>
+
         </TouchableOpacity>
       ))}
     </View>

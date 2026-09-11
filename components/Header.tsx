@@ -22,10 +22,13 @@ export default function Header({
   const insets = useSafeAreaInsets();
 
   // Dynamically uses theme's brandGradient, or falls back to theme's primary/secondary colors
+  {/*
   const gradientColors = (colors as any).brandGradient || [
     colors.primary,
     colors.secondary || colors.primary,
   ];
+  */}
+ const gradientColors = colors.brandGradient;
 
   return (
     <View style={[styles.container, { paddingTop: insets.top + 8 }]}>
@@ -37,7 +40,7 @@ export default function Header({
             onPress={onMenuPress}
             activeOpacity={0.7}
           >
-            <Menu color={colors.text} size={22} />
+            <Menu color={colors.icon} size={22} />
           </TouchableOpacity>
         </View>
 
@@ -61,7 +64,8 @@ export default function Header({
                 x="0"
                 y="19"
               >
-                NexusFly
+                Padmaria
+                {/* NexusFly*/}
               </SvgText>
             </Svg>
           </View>
@@ -78,7 +82,7 @@ export default function Header({
             onPress={onNewChatPress}
             activeOpacity={0.7}
           >
-            <SquarePen color={colors.text} size={20} />
+            <SquarePen color={colors.icon} size={20} />
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -86,7 +90,7 @@ export default function Header({
             onPress={onSettingsPress}
             activeOpacity={0.7}
           >
-            <Settings color={colors.text} size={20} />
+            <Settings color={colors.icon} size={20} />
           </TouchableOpacity>
         </View>
       </View>
@@ -126,7 +130,7 @@ const createStyles = (colors: any) =>
     },
     
     logoIcon: {
-  color: colors.brandAccent || colors.primary,
+  color: colors.brandAccent,
   fontSize: 15,
   marginRight: 2,
   marginTop: 1,
@@ -152,7 +156,7 @@ aiBadge: {
     aiBadgeText: {
       fontSize: 10,
       fontWeight: "800",
-      color: colors.brandAccent || colors.primary,
+      color: colors.brandAccent,
       includeFontPadding: false,
     },
     rightContainer: {

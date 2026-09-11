@@ -19,7 +19,7 @@ export function useComposerTheme() {
     border: colors.border,
 
     text: colors.text,
-
+textSecondary: colors.textSecondary,
     placeholder: colors.subText,
 
     primary: colors.primary,

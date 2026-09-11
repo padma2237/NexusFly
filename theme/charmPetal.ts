@@ -1,369 +1,216 @@
-{/*
-const charmPetalTheme = {
-  name: "charmPetal",
-  useGradient: true,
-  colors: {
-    background: "#F0FDF4",
-    backgroundGradient: [
-      "#CCFBFF", 
-      "#ECEBA7", 
-      "#ABF1C1"
-    ] as const,
-
-    surface: "#DCFCE7",
-    primary: "#22C55E",
-    //"#4ADE80",
-             //"#15803D",
-    secondary: "#166534",
-    text: "#14532D",
-    subText: "#166534",
-    textSecondary: "#3F6212",
-    border: "#BBF7D0",
-    success: "#166534",
-    warning: "#B45309",
-    error: "#991B1B",
-
-    cardGreen: "#DCFCE7",
-    cardBlue: "#E0F2FE",
-    cardOrange: "#FFEDD5",
-    cardPurple: "#F3E8FF",
-
-    codeBackground: "#F8FAFC",
-    codeHeader: "#F1F5F9",
-    codeBorder: "#E2E8F0",
-    codeText: "#334155",
-    codeLineNumber: "#94A3B8",
-    codeKeyword: "#0284C7",
-    codeFunction: "#15803D",
-    codeString: "#16A34A",
-    codeNumber: "#EA580C",
-    codeComment: "#64748B",
-    codeVariable: "#2563EB",
-    codeProperty: "#7C3AED",
-    codeType: "#0369A1",
-    codeOperator: "#EA580C",
-    codePunctuation: "#475569",
-    codeTag: "#15803D",
-    codeAttribute: "#2563EB",
-    codeConstant: "#7C3AED",
-    codeBoolean: "#EA580C",
-    codeBuiltin: "#0891B2",
-    codeCopy: "#15803D",
-    codeLanguage: "#475569",
-    codeButton: "#E2E8F0",
-    codeSegmentBackground: "#E2E8F0",
-    codeSegmentActive: "#BBF7D0",
-    codeSegmentActiveText: "#14532D",
-    codeSegmentText: "#475569",
-    codeSegmentPressed: "#86EFAC",
-  },
-};
-
-export default charmPetalTheme; 
-*/}
-
-{/*
-const oceanBreezeTheme = {
-  name: "oceanBreeze",
-  useGradient: true,
-  colors: {
-    background: "#F0F9FF",
-    backgroundGradient: ["#E0F2FE", "#BAE6FD", "#7DD3FC"] as const,
-
-    surface: "#E0F2FE",
-    primary: "#0284C7",
-    secondary: "#0369A1",
-    text: "#0C4A6E",
-    subText: "#0369A1",
-    textSecondary: "#0369A1",
-    border: "#BAE6FD",
-    success: "#0284C7",
-    warning: "#D97706",
-    error: "#DC2626",
-
-    cardGreen: "#E0F2FE",
-    cardBlue: "#DBEAFE",
-    cardOrange: "#FFEDD5",
-    cardPurple: "#F3E8FF",
-
-    codeBackground: "#F8FAFC",
-    codeHeader: "#F1F5F9",
-    codeBorder: "#E2E8F0",
-    codeText: "#334155",
-    codeLineNumber: "#94A3B8",
-    codeKeyword: "#0284C7",
-    codeFunction: "#2563EB",
-    codeString: "#0284C7",
-    codeNumber: "#EA580C",
-    codeComment: "#64748B",
-    codeVariable: "#2563EB",
-    codeProperty: "#7C3AED",
-    codeType: "#0369A1",
-    codeOperator: "#EA580C",
-    codePunctuation: "#475569",
-    codeTag: "#0284C7",
-    codeAttribute: "#2563EB",
-    codeConstant: "#7C3AED",
-    codeBoolean: "#EA580C",
-    codeBuiltin: "#0891B2",
-    codeCopy: "#0284C7",
-    codeLanguage: "#475569",
-    codeButton: "#E2E8F0",
-    codeSegmentBackground: "#E2E8F0",
-    codeSegmentActive: "#BAE6FD",
-    codeSegmentActiveText: "#0C4A6E",
-    codeSegmentText: "#475569",
-    codeSegmentPressed: "#7DD3FC",
-  },
-};
-
-export default oceanBreezeTheme;
-*/}
-
-{/*
-
-const royalVelvetTheme = {
-  name: "royalVelvet",
-  useGradient: true,
-  colors: {
-    background: "#FAF5FF",
-    backgroundGradient: ["#F3E8FF", "#E9D5FF", "#D8B4FE"] as const,
-
-    surface: "#F3E8FF",
-    primary: "#9333EA",
-    secondary: "#6B21A8",
-    text: "#3B0764",
-    subText: "#6B21A8",
-    textSecondary: "#581C87",
-    border: "#E9D5FF",
-    success: "#16A34A",
-    warning: "#D97706",
-    error: "#DC2626",
-
-    cardGreen: "#DCFCE7",
-    cardBlue: "#E0F2FE",
-    cardOrange: "#FFEDD5",
-    cardPurple: "#F3E8FF",
-
-    codeBackground: "#F8FAFC",
-    codeHeader: "#F1F5F9",
-    codeBorder: "#E2E8F0",
-    codeText: "#334155",
-    codeLineNumber: "#94A3B8",
-    codeKeyword: "#9333EA",
-    codeFunction: "#7C3AED",
-    codeString: "#2563EB",
-    codeNumber: "#EA580C",
-    codeComment: "#64748B",
-    codeVariable: "#9333EA",
-    codeProperty: "#7C3AED",
-    codeType: "#6B21A8",
-    codeOperator: "#EA580C",
-    codePunctuation: "#475569",
-    codeTag: "#9333EA",
-    codeAttribute: "#7C3AED",
-    codeConstant: "#C084FC",
-    codeBoolean: "#EA580C",
-    codeBuiltin: "#0891B2",
-    codeCopy: "#7C3AED",
-    codeLanguage: "#475569",
-    codeButton: "#E2E8F0",
-    codeSegmentBackground: "#E2E8F0",
-    codeSegmentActive: "#E9D5FF",
-    codeSegmentActiveText: "#3B0764",
-    codeSegmentText: "#475569",
-    codeSegmentPressed: "#D8B4FE",
-  },
-};
-
-export default royalVelvetTheme;
-*/}
-
-{/*
-const sunsetGlowTheme = {
-  name: "sunsetGlow",
-  useGradient: true,
-  colors: {
+{
+  /*
+colors: {
     background: "#FFFBEB",
     backgroundGradient: ["#FEF3C7", "#FDE68A", "#FCD34D"] as const,
 
     surface: "#FEF3C7",
-    primary: "#D97706",
-    secondary: "#92400E",
-    text: "#451A03",
-    subText: "#92400E",
-    textSecondary: "#78350F",
-    border: "#FDE68A",
-    success: "#16A34A",
-    warning: "#D97706",
-    error: "#DC2626",
-
-    cardGreen: "#DCFCE7",
-    cardBlue: "#E0F2FE",
-    cardOrange: "#FFEDD5",
-    cardPurple: "#F3E8FF",
-
-    codeBackground: "#F8FAFC",
-    codeHeader: "#F1F5F9",
-    codeBorder: "#E2E8F0",
-    codeText: "#334155",
-    codeLineNumber: "#94A3B8",
-    codeKeyword: "#D97706",
-    codeFunction: "#EA580C",
-    codeString: "#CA8A04",
-    codeNumber: "#DC2626",
-    codeComment: "#64748B",
-    codeVariable: "#2563EB",
-    codeProperty: "#7C3AED",
-    codeType: "#92400E",
-    codeOperator: "#EA580C",
-    codePunctuation: "#475569",
-    codeTag: "#D97706",
-    codeAttribute: "#EA580C",
-    codeConstant: "#7C3AED",
-    codeBoolean: "#DC2626",
-    codeBuiltin: "#0891B2",
-    codeCopy: "#D97706",
-    codeLanguage: "#475569",
-    codeButton: "#E2E8F0",
-    codeSegmentBackground: "#E2E8F0",
-    codeSegmentActive: "#FDE68A",
-    codeSegmentActiveText: "#451A03",
-    codeSegmentText: "#475569",
-    codeSegmentPressed: "#FCD34D",
-  },
-};
-
-export default sunsetGlowTheme;
-*/}
+    */
+}
 
 
-const skyPastelTheme = {
-  name: "skyPastel",
+const charmPetalTheme = {
+  name: "charmPetal",
   useGradient: true,
+
   colors: {
-    background: "#F0F9FF",
+    background: "#F8F7FC",
+
     backgroundGradient: [
-      "#E0F2FE", 
-      "#BAE6FD", 
-      "#7DD3FC"
+      "#F3E8FF",
+      "#EDE9FE",
+      "#E0F2FE",
+      // "#FEF9C3",
     ] as const,
 
-    surface: "#E0F2FE",
-    primary: "#0284C7",
-    secondary: "#0369A1",
-    text: "#0C4A6E",
-    subText: "#0369A1",
-    textSecondary: "#075985",
-    border: "#BAE6FD",
-    success: "#0284C7",
-    warning: "#D97706",
-    error: "#DC2626",
+    brandTitle: "#4C3A69",
 
-    cardGreen: "#DCFCE7",
+    brandAccent: "#8B7BB8",
+
+    brandGradient: [
+      // "#8B7BB8",
+      "#9E8ED4",
+      //"#A78BFA",
+      "#B9A2FF",
+      // "#7DD3FC",
+      // "#F4C7D9",
+    ] as const,
+
+    surface: "#FFFFFF",
+    surfaceElevated: "#FCFAFF",
+
+    primary: "#65578B", // "#8B7BB8",
+    secondary: "#7AA7C7",
+
+    primarySoft: "#EDE9FE",
+    primaryGlow: "#8B7BB838",
+    secondaryGlow: "#7AA7C730",
+
+    userBubble: "#F4DFFF",
+    //"#F4FFFF", //"#E5DDF4",
+
+    text: "#3F3652",
+    subText: "#746B85",
+    textSecondary: "#9F8DA3",
+   // "#958DA3",
+
+    icon: "#4C4560",
+    iconSecondary: "#756D86",
+    iconMuted: "#A8A2B3",
+
+    onPrimary: "#FFFFFF",
+
+    surfaceSelected: "#EDE9FE",
+    surfacePressed: "#DDD6FE",
+
+    border: "#E7E1F0",
+
+    success: "#65A68A",
+    warning: "#D6A85C",
+    error: "#D97878",
+
+    cardGreen: "#ECFDF5",
     cardBlue: "#E0F2FE",
-    cardOrange: "#FFEDD5",
+    cardOrange: "#FEF6D6",
     cardPurple: "#F3E8FF",
 
-    codeBackground: "#F8FAFC",
-    codeHeader: "#F1F5F9",
-    codeBorder: "#E2E8F0",
-    codeText: "#334155",
-    codeLineNumber: "#94A3B8",
-    codeKeyword: "#0284C7",
-    codeFunction: "#0369A1",
-    codeString: "#0284C7",
-    codeNumber: "#D97706",
-    codeComment: "#64748B",
-    codeVariable: "#2563EB",
-    codeProperty: "#7C3AED",
-    codeType: "#0369A1",
-    codeOperator: "#D97706",
-    codePunctuation: "#475569",
-    codeTag: "#0284C7",
-    codeAttribute: "#2563EB",
-    codeConstant: "#7C3AED",
-    codeBoolean: "#D97706",
-    codeBuiltin: "#0891B2",
-    codeCopy: "#0284C7",
-    codeLanguage: "#475569",
-    codeButton: "#E2E8F0",
-    codeSegmentBackground: "#E2E8F0",
-    codeSegmentActive: "#BAE6FD",
-    codeSegmentActiveText: "#0C4A6E",
-    codeSegmentText: "#475569",
-    codeSegmentPressed: "#7DD3FC",
+    cardBg: "rgba(255, 255, 255, 0.78)",
+    cardBorder: "rgba(196, 181, 253, 0.35)",
+    cardAccent: "#A78BFA24",
+
+    codeBackground: "#FAF9FD",
+    codeHeader: "#F5F3FA",
+    codeBorder: "#E7E1F0",
+
+    codeText: "#443B55",
+    codeLineNumber: "#A8A2B3",
+
+    codeKeyword: "#8B5CF6",
+    codeFunction: "#6D8FC7",
+    codeString: "#5F9F86",
+    codeNumber: "#C48A55",
+    codeComment: "#8E8899",
+
+    codeVariable: "#B56B91",
+    codeProperty: "#5D9BB5",
+    codeType: "#7766B8",
+
+    codeOperator: "#B47B9B",
+    codePunctuation: "#756D86",
+
+    codeTag: "#A05C8A",
+    codeAttribute: "#6D8FC7",
+
+    codeConstant: "#8066B5",
+    codeBoolean: "#C48A55",
+    codeBuiltin: "#5796A8",
+
+    codeCopy: "#7B6CAF",
+    codeLanguage: "#756D86",
+
+    codeButton: "#EEEAF5",
+
+    codeSegmentBackground: "#EEEAF5",
+    codeSegmentActive: "#EDE9FE",
+    codeSegmentActiveText: "#4C3A69",
+    codeSegmentText: "#756D86",
+    codeSegmentPressed: "#DDD6FE",
   },
 };
 
-export default skyPastelTheme;
+export default charmPetalTheme;
 
+
+  // Main charmPetal ✓✓✓
 
 {/*
-const indigoElectricTheme = {
-  name: "indigoElectric",
-  useGradient: true,
-  colors: {
-    background: "#EEF2FF",
-    backgroundGradient: [
-      "#E0E7FF", 
-      "#C7D2FE", 
-      "#A5B4FC"
-    ] as const,
+  const charmPetalTheme = {
+    //name: "skyPastel",
+    name: "charmPetal",
+    useGradient: true,
+    colors: {
+      background: "#F0F9FF",
+      backgroundGradient: [
+        "#E0F2FE",
+        "#BAE6FD",
+        "#7DD3FC"
+      ] as const,
+      brandTitle: "#0C4A6E",
+      brandAccent: "#0284C7",
+      brandGradient: [
+        "#0284C7",
+        "#0369A1",
+        "#7C3AED",
+      ] as const,
 
-    surface: "#E0E7FF",
-    primary: "#4F46E5",
-    secondary: "#3730A3",
-    text: "#1E1B4B",
-    subText: "#3730A3",
-    textSecondary: "#312E81",
-    border: "#C7D2FE",
-    success: "#16A34A",
-    warning: "#D97706",
-    error: "#DC2626",
+      text: "#0C4A6E",
+      subText: "#0369A1",
+      textSecondary: "#075985",
+      surface: "#E0F2FE",
+      surfaceElevated: "#F0F9FF",
 
-    cardGreen: "#DCFCE7",
-    cardBlue: "#DBEAFE",
-    cardOrange: "#FFEDD5",
-    cardPurple: "#F3E8FF",
+      primary: "#0284C7",
+      secondary: "#0369A1",
 
-    codeBackground: "#F8FAFC",
-    codeHeader: "#F1F5F9",
-    codeBorder: "#E2E8F0",
-    codeText: "#334155",
-    codeLineNumber: "#94A3B8",
-    codeKeyword: "#4F46E5",
-    codeFunction: "#3730A3",
-    codeString: "#2563EB",
-    codeNumber: "#EA580C",
-    codeComment: "#64748B",
-    codeVariable: "#4F46E5",
-    codeProperty: "#7C3AED",
-    codeType: "#312E81",
-    codeOperator: "#EA580C",
-    codePunctuation: "#475569",
-    codeTag: "#4F46E5",
-    codeAttribute: "#2563EB",
-    codeConstant: "#7C3AED",
-    codeBoolean: "#EA580C",
-    codeBuiltin: "#0891B2",
-    codeCopy: "#4F46E5",
-    codeLanguage: "#475569",
-    codeButton: "#E2E8F0",
-    codeSegmentBackground: "#E2E8F0",
-    codeSegmentActive: "#C7D2FE",
-    codeSegmentActiveText: "#1E1B4B",
-    codeSegmentText: "#475569",
-    codeSegmentPressed: "#A5B4FC",
-  },
-};
+      primarySoft: "#BAE6FD",
+      primaryGlow: "#0284C738",
+      secondaryGlow: "#0369A130",
 
-export default indigoElectricTheme;
+      userBubble: "#E0F2FE",
+      icon: "#0C4A6E",
+      iconSecondary: "#0369A1",
+      iconMuted: "#94A3B8",
 
-*/}
+      onPrimary: "#FFFFFF",
 
+      surfaceSelected: "#BAE6FD",
+      surfacePressed: "#7DD3FC",
+      border: "#BAE6FD",
+      success: "#0284C7",
+      warning: "#D97706",
+      error: "#DC2626",
 
+      cardGreen: "#DCFCE7",
+      cardBlue: "#E0F2FE",
+      cardOrange: "#FFEDD5",
+      cardPurple: "#F3E8FF",
+      cardBg: "rgba(255, 255, 255, 0.72)",
+      cardBorder: "rgba(186, 230, 253, 0.8)",
+      cardAccent: "#0284C724",
 
+      codeBackground: "#F8FAFC",
+      codeHeader: "#F1F5F9",
+      codeBorder: "#E2E8F0",
+      codeText: "#334155",
+      codeLineNumber: "#94A3B8",
+      codeKeyword: "#0284C7",
+      codeFunction: "#0369A1",
+      codeString: "#0284C7",
+      codeNumber: "#D97706",
+      codeComment: "#64748B",
+      codeVariable: "#2563EB",
+      codeProperty: "#7C3AED",
+      codeType: "#0369A1",
+      codeOperator: "#D97706",
+      codePunctuation: "#475569",
+      codeTag: "#0284C7",
+      codeAttribute: "#2563EB",
+      codeConstant: "#7C3AED",
+      codeBoolean: "#D97706",
+      codeBuiltin: "#0891B2",
+      codeCopy: "#0284C7",
+      codeLanguage: "#475569",
+      codeButton: "#E2E8F0",
+      codeSegmentBackground: "#E2E8F0",
+      codeSegmentActive: "#BAE6FD",
+      codeSegmentActiveText: "#0C4A6E",
+      codeSegmentText: "#475569",
+      codeSegmentPressed: "#7DD3FC",
+    },
+  };
 
+  export default charmPetalTheme;
 
-
+  */
+  }
+  //export default skyPastelTheme;

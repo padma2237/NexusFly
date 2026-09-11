@@ -92,7 +92,7 @@ export default function CustomDrawer(props: any) {
           <Ionicons
             name="add"
             size={24}
-            color={colors.surface}
+            color={colors.onPrimary}
           />
 
           <Text style={styles.newChatText}>
@@ -126,7 +126,7 @@ export default function CustomDrawer(props: any) {
                   }
 
                   activeTintColor={
-                    colors.surface
+                    colors.onPrimary
                   }
 
                   inactiveTintColor={
@@ -139,7 +139,7 @@ export default function CustomDrawer(props: any) {
                     styles.label,
                     {
                       color: isActive
-                        ? colors.surface
+                        ? colors.onPrimary
                         : colors.text,
 
                       fontWeight:
@@ -234,7 +234,7 @@ export default function CustomDrawer(props: any) {
             <Ionicons
               name="speedometer-outline"
               size={18}
-              color={colors.text}
+              color={colors.icon}
             />
 
             <Text
@@ -256,7 +256,7 @@ export default function CustomDrawer(props: any) {
             <Ionicons
               name="construct-outline"
               size={18}
-              color={colors.text}
+              color={colors.icon}
             />
 
             <Text
@@ -284,7 +284,7 @@ export default function CustomDrawer(props: any) {
             <Ionicons
               name="images-outline"
               size={18}
-              color={colors.text}
+              color={colors.icon}
             />
 
             <Text
@@ -306,7 +306,7 @@ export default function CustomDrawer(props: any) {
             <Ionicons
               name="settings-outline"
               size={18}
-              color={colors.text}
+              color={colors.icon}
             />
 
             <Text
@@ -416,7 +416,7 @@ const createStyles = (colors: any) =>
     },
 
     newChatText: {
-      color: colors.surface,
+      color: colors.onPrimary,
       marginLeft: 10,
       fontWeight: "600",
       fontSize: 16,

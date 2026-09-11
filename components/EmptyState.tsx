@@ -58,7 +58,7 @@ const PROMPT_SETS = [
     },
     {
       icon: "📝",
-      title: "Help me understand something",
+      title: "Help me understand AI",
     },
     {
       icon: "🚀",

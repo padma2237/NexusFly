@@ -1,78 +1,6 @@
+{
+  /*
 
-// HEADER GRADIENT AVAILABLE HERE.
-
-
-{/* const oracleTheme = {
-  name: "oracle",
-  useGradient: true,
-  colors: {
-    background: "#F0FDF4",
-    backgroundGradient: [
-      "#CCFBFF", 
-      "#ECEBA7", 
-      "#ABF1C1"
-    ] as const,
-
-    surface: "#DCFCE7",
-    primary: "#22C55E",
-    //"#4ADE80",
-             //"#15803D",
-    secondary: "#166534",
-    text: "#14532D",
-    subText: "#166534",
-    textSecondary: "#3F6212",
-    border: "#BBF7D0",
-    success: "#166534",
-    warning: "#B45309",
-    error: "#991B1B",
-
-    cardGreen: "#DCFCE7",
-    cardBlue: "#E0F2FE",
-    cardOrange: "#FFEDD5",
-    cardPurple: "#F3E8FF",
-
-    codeBackground: "#F8FAFC",
-    codeHeader: "#F1F5F9",
-    codeBorder: "#E2E8F0",
-    codeText: "#334155",
-    codeLineNumber: "#94A3B8",
-    codeKeyword: "#0284C7",
-    codeFunction: "#15803D",
-    codeString: "#16A34A",
-    codeNumber: "#EA580C",
-    codeComment: "#64748B",
-    codeVariable: "#2563EB",
-    codeProperty: "#7C3AED",
-    codeType: "#0369A1",
-    codeOperator: "#EA580C",
-    codePunctuation: "#475569",
-    codeTag: "#15803D",
-    codeAttribute: "#2563EB",
-    codeConstant: "#7C3AED",
-    codeBoolean: "#EA580C",
-    codeBuiltin: "#0891B2",
-    codeCopy: "#15803D",
-    codeLanguage: "#475569",
-    codeButton: "#E2E8F0",
-    codeSegmentBackground: "#E2E8F0",
-    codeSegmentActive: "#BBF7D0",
-    codeSegmentActiveText: "#14532D",
-    codeSegmentText: "#475569",
-    codeSegmentPressed: "#86EFAC",
-  },
-};
-
-export default oracleTheme;
-
-*/}
-
-
-
-
-
-
-
-{/*
 
 const oracleTheme = {
   name: "oracle",
@@ -80,8 +8,8 @@ const oracleTheme = {
   colors: {
     background: "#0F172A",
     backgroundGradient: [
-      "#0F172A", 
-      "#1E293B", 
+      "#0F172A",
+      "#1E293B",
       "#334155"
     ] as const,
 
@@ -134,17 +62,19 @@ const oracleTheme = {
 
 export default oracleTheme;
 
-*/}
+
+
+*/
+}
 
 
 
+{
+  /*
 
 
 
-
-{/*
-
-// Midnight Cyber
+  // Midnight Cyber PURPLE GOOD ✓✓✓✓
 
 const oracleTheme = {
   name: "oracle",
@@ -152,8 +82,8 @@ const oracleTheme = {
   colors: {
     background: "#090D16",
     backgroundGradient: [
-      "#090D16", 
-      "#111827", 
+      "#090D16",
+      "#111827",
       "#1F1D36"
     ] as const,
 
@@ -207,16 +137,23 @@ const oracleTheme = {
 export default oracleTheme;
 
 
-*/}
 
+*/
+}
+
+
+
+
+
+
+
+// Obsidian Black
 
 
 
 
 
 {/*
-
-// Obsidian Black
 
 const oracleTheme = {
   name: "oracle",
@@ -224,85 +161,59 @@ const oracleTheme = {
   colors: {
     background: "#0F172A",
     backgroundGradient: [
-      "#0F172A", 
-      "#1E293B", 
-      "#334155",
-      
+
+
+      "#0F172A",
+      // "#1E293B",
+      "#000000",
+      "#334155"] as const,
+
+
+    brandTitle: "#F8FAFC",
+    brandAccent: "#38BDF8",
+    brandGradient: [
+      "#38BDF8",
+      "#818CF8",
+      "#C084FC",
     ] as const,
 
     surface: "#1E293B",
     primary: "#38BDF8",
-    
-   // "#0EA5E9", // Brighter, vibrant blue to match header
     secondary: "#818CF8",
     text: "#F8FAFC",
     subText: "#94A3B8",
     textSecondary: "#CBD5E1",
+
+    surfaceElevated: "#273449",
+
+    primarySoft: "#0C4A6E",
+    primaryGlow: "#38BDF838",
+    secondaryGlow: "#818CF830",
+
+    userBubble: "#1E3A5F",
+
+
+
+    icon: "#F8FAFC",
+    iconSecondary: "#CBD5E1",
+    iconMuted: "#64748B",
+
+    onPrimary: "#0F172A",
+
+    surfaceSelected: "#1E293B",
+    surfacePressed: "#334155",
+
+
+
     border: "#334155",
     success: "#34D399",
     warning: "#FBBF24",
     error: "#F87171",
 
-    // Softened semi-transparent card accents for dark mode
     cardGreen: "#064E3B99",
     cardBlue: "#0C4A6E99",
     cardOrange: "#7C2D1299",
     cardPurple: "#581C8799",
-
-    codeBackground: "#0B0F19",
-    codeHeader: "#1E293B",
-    codeBorder: "#334155",
-    codeText: "#E2E8F0",
-    codeLineNumber: "#64748B",
-    codeKeyword: "#F472B6",
-    codeFunction: "#38BDF8",
-    codeString: "#34D399",
-    codeNumber: "#FBBF24",
-    codeComment: "#64748B",
-    codeVariable: "#818CF8",
-    codeProperty: "#C084FC",
-    codeType: "#38BDF8",
-    codeOperator: "#F472B6",
-    codePunctuation: "#94A3B8",
-    codeTag: "#F472B6",
-    codeAttribute: "#818CF8",
-    codeConstant: "#FBBF24",
-    codeBoolean: "#FBBF24",
-    codeBuiltin: "#22D3EE",
-    codeCopy: "#38BDF8",
-    codeLanguage: "#94A3B8",
-    codeButton: "#334155",
-    codeSegmentBackground: "#1E293B",
-    codeSegmentActive: "#0EA5E9",
-    codeSegmentActiveText: "#0F172A",
-    codeSegmentText: "#94A3B8",
-    codeSegmentPressed: "#0284C7",
-  },
-};
-
-export default oracleTheme;
-
-*/}
-
-{/*
-
-const oracleTheme = {
-  name: "oracle",
-  useGradient: true,
-  colors: {
-    background: "#0F172A",
-    backgroundGradient: ["#0F172A", "#1E293B", "#334155"] as const,
-
-    surface: "#1E293B",
-    primary: "#38BDF8",
-    secondary: "#818CF8",
-    text: "#F8FAFC",
-    subText: "#94A3B8",
-    textSecondary: "#CBD5E1",
-    border: "#334155",
-    success: "#34D399",
-    warning: "#FBBF24",
-    error: "#F87171",
 
     // Unified glassmorphism theme cards (replaces rainbow colors)
     cardBg: "rgba(30, 41, 59, 0.7)",
@@ -346,8 +257,258 @@ export default oracleTheme;
 */}
 
 
+const oracleTheme = {
+  name: "oracle",
+  useGradient: true,
 
-// MAIN oracleTheme ***
+  colors: {
+    // ─────────────────────────────
+    // Background
+    // ─────────────────────────────
+
+    background: "#08111F",
+
+    backgroundGradient: [
+      "#08111F",
+      "#0D1B2E",
+      "#10263D",
+      "#171B3A",
+    ] as const,
+
+    // ─────────────────────────────
+    // Branding
+    // ─────────────────────────────
+
+    brandTitle: "#F4F8FF",
+    brandAccent: "#7DD3FC",
+
+    brandGradient: [
+      "#7DD3FC",
+      "#A5B4FC",
+      "#D8B4FE",
+    ] as const,
+
+    // ─────────────────────────────
+    // Glass surfaces
+    // ─────────────────────────────
+
+    surface: "rgba(255, 255, 255, 0.08)",
+    surfaceElevated: "rgba(255, 255, 255, 0.12)",
+
+    // ─────────────────────────────
+    // Primary
+    // ─────────────────────────────
+
+    primary: "#67C8FF",
+    secondary: "#A78BFA",
+
+    primarySoft: "rgba(103, 200, 255, 0.16)",
+    primaryGlow: "rgba(103, 200, 255, 0.24)",
+    secondaryGlow: "rgba(167, 139, 250, 0.20)",
+
+    // User message glass
+    userBubble: "rgba(103, 200, 255, 0.16)",
+
+    // ─────────────────────────────
+    // Text
+    // ─────────────────────────────
+
+    text: "#F4F8FF",
+    subText: "#A8B7CA",
+    textSecondary: "#C3D0DF",
+
+    // ─────────────────────────────
+    // Icons
+    // ─────────────────────────────
+
+    icon: "#F4F8FF",
+    iconSecondary: "#B8C7D9",
+    iconMuted: "#718198",
+
+    onPrimary: "#06111F",
+
+    // ─────────────────────────────
+    // Interactive glass states
+    // ─────────────────────────────
+
+    surfaceSelected: "rgba(103, 200, 255, 0.14)",
+    surfacePressed: "rgba(255, 255, 255, 0.14)",
+
+    border: "rgba(255, 255, 255, 0.16)",
+
+    // ─────────────────────────────
+    // Status
+    // ─────────────────────────────
+
+    success: "#6EE7B7",
+    warning: "#FCD34D",
+    error: "#FDA4AF",
+
+    // ─────────────────────────────
+    // Feature cards
+    // ─────────────────────────────
+
+    cardGreen: "rgba(52, 211, 153, 0.12)",
+    cardBlue: "rgba(103, 200, 255, 0.13)",
+    cardOrange: "rgba(251, 191, 36, 0.12)",
+    cardPurple: "rgba(167, 139, 250, 0.13)",
+
+    // ─────────────────────────────
+    // Liquid glass cards
+    // ─────────────────────────────
+
+    cardBg: "rgba(255, 255, 255, 0.075)",
+    cardBorder: "rgba(255, 255, 255, 0.17)",
+    cardAccent: "rgba(103, 200, 255, 0.14)",
+
+    // ─────────────────────────────
+    // Code
+    // ─────────────────────────────
+
+    codeBackground: "rgba(3, 10, 20, 0.78)",
+    codeHeader: "rgba(255, 255, 255, 0.07)",
+    codeBorder: "rgba(255, 255, 255, 0.14)",
+
+    codeText: "#E5EEF8",
+    codeLineNumber: "#718198",
+
+    codeKeyword: "#F0ABFC",
+    codeFunction: "#67C8FF",
+    codeString: "#86EFAC",
+    codeNumber: "#FCD34D",
+    codeComment: "#718198",
+
+    codeVariable: "#C4B5FD",
+    codeProperty: "#7DD3FC",
+    codeType: "#A5B4FC",
+
+    codeOperator: "#F0ABFC",
+    codePunctuation: "#A8B7CA",
+
+    codeTag: "#F0ABFC",
+    codeAttribute: "#A5B4FC",
+
+    codeConstant: "#FCD34D",
+    codeBoolean: "#FCD34D",
+    codeBuiltin: "#67E8F9",
+
+    codeCopy: "#7DD3FC",
+    codeLanguage: "#A8B7CA",
+
+    codeButton: "rgba(255, 255, 255, 0.09)",
+
+    codeSegmentBackground: "rgba(255, 255, 255, 0.07)",
+    codeSegmentActive: "rgba(103, 200, 255, 0.18)",
+    codeSegmentActiveText: "#EAF7FF",
+    codeSegmentText: "#A8B7CA",
+    codeSegmentPressed: "rgba(103, 200, 255, 0.24)",
+  },
+};
+
+export default oracleTheme;
+
+
+  {
+    /*
+    // new google
+const oracleTheme = {
+  name: "oracle",
+  useGradient: true,
+  colors: {
+    background: "#080B11",
+    backgroundGradient: [
+      "#080B11",
+      "#0F172A",
+      "#131E35"
+    ] as const,
+    brandTitle: "#F8FAFC",
+    brandAccent: "#38BDF8",
+    brandGradient: [
+      "#38BDF8",
+      "#818CF8",
+      "#C084FC",
+    ] as const,
+
+    surface: "#111A2E",
+    primary: "#38BDF8",
+    secondary: "#818CF8",
+    text: "#F8FAFC",
+    subText: "#94A3B8",
+    textSecondary: "#CBD5E1",
+    surfaceElevated: "#1A263E",
+
+    primarySoft: "#0C4A6E",
+    primaryGlow: "#38BDF825",
+    secondaryGlow: "#818CF820",
+
+    userBubble: "#1E293B",
+    icon: "#F8FAFC",
+    iconSecondary: "#CBD5E1",
+    iconMuted: "#64748B",
+
+    onPrimary: "#080B11",
+
+    surfaceSelected: "#1A263E",
+    surfacePressed: "#22314E",
+    border: "#1E293B",
+    success: "#34D399",
+    warning: "#FBBF24",
+    error: "#F87171",
+    // Smooth 3-color modern gradients for individual cards
+    cardGreen: "linear-gradient(135deg, #064E3B 0%, #022C22 50%, #047857 100%)",
+    cardBlue: "linear-gradient(135deg, #0C4A6E 0%, #072E4A 50%, #0369A1 100%)",
+    cardOrange: "linear-gradient(135deg, #7C2D12 0%, #431407 50%, #9A3412 100%)",
+    cardPurple: "linear-gradient(135deg, #581C87 0%, #310E4F 50%, #6D28D9 100%)",
+
+    // Refined glassmorphism cards with subtle multi-stop linear reflections
+    cardBg: "linear-gradient(135deg, rgba(17, 26, 46, 0.8) 0%, rgba(13, 20, 35, 0.9) 100%)",
+    cardBorder: "linear-gradient(135deg, rgba(56, 189, 248, 0.2) 0%, rgba(129, 140, 248, 0.1) 50%, rgba(255, 255, 255, 0.05) 100%)",
+    cardAccent: "#38BDF815",
+
+    // Syntax Highlighting
+    codeBackground: "#06090E",
+    codeHeader: "#111A2E",
+    codeBorder: "#1E293B",
+    codeText: "#E2E8F0",
+    codeLineNumber: "#475569",
+    codeKeyword: "#F472B6",
+    codeFunction: "#38BDF8",
+    codeString: "#34D399",
+    codeNumber: "#FBBF24",
+    codeComment: "#64748B",
+    codeVariable: "#818CF8",
+    codeProperty: "#C084FC",
+    codeType: "#22D3EE",
+    codeOperator: "#F472B6",
+    codePunctuation: "#94A3B8",
+    codeTag: "#F472B6",
+    codeAttribute: "#818CF8",
+    codeConstant: "#FBBF24",
+    codeBoolean: "#FBBF24",
+    codeBuiltin: "#22D3EE",
+    codeCopy: "#38BDF8",
+    codeLanguage: "#94A3B8",
+    codeButton: "#1E293B",
+    codeSegmentBackground: "#111A2E",
+    codeSegmentActive: "#0EA5E9",
+    codeSegmentActiveText: "#080B11",
+    codeSegmentText: "#94A3B8",
+    codeSegmentPressed: "#0284C7",
+  },
+};
+
+export default oracleTheme;
+
+*/
+  }
+
+
+
+
+  {
+    /*
+
+    // MAIN oracleTheme ***
 
 const oracleTheme = {
   name: "oracle",
@@ -414,3 +575,6 @@ const oracleTheme = {
 };
 
 export default oracleTheme;
+
+*/
+  }

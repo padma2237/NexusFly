@@ -1,4 +1,4 @@
-
+{/*
 const experimentalTheme = {
   name: "experimental",
   useGradient: true,
@@ -63,11 +63,11 @@ const experimentalTheme = {
 
 export default experimentalTheme;
 
-
-
+*/}
 
 
 {/*
+
 
  const experimentalTheme = {
   name: "experimental",
@@ -82,19 +82,16 @@ export default experimentalTheme;
 
     backgroundGradient: [
 
-// "#B3EEFA", "#B7D2F7", "#C0BEF2", "#D8B5EC"
+// "#B3EEFA", "#B7D2F7", "#C0BEF2", "#D8B5EC" Good✓
+//"#A5F3FC", "#C084FC", "#F472B6", "#FB923C" ✓
+     // "#CCFBFF", "#ECEBA7", "#ABF1C1"
 
-// "#A5F3FC", "#C084FC", "#F472B6", "#FB923C"
-      "#CCFBFF", "#ECEBA7", "#ABF1C1"
-// "#FFEDD5", "#FED7AA", "#FBCFE8", "#E9D5FF" Orange
+ // "#E0F2FE", "#BAE6FD", "#7DD3FC", "#38BDF8" //Blue
 
-//  "#E0F2FE", "#BAE6FD", "#7DD3FC", "#38BDF8" Blue
+// "#54E38E", "#00A8FF" ✓✓✓✓
 
-// "#54E38E", "#00A8FF"
+  "#E0F2FE", "#BAE6FD", "#F5D0FE", "#FCE7F3"
 
-// "#E0F2FE", "#BAE6FD", "#F5D0FE", "#FCE7F3"
-
- // "#E0F7FA", "#B2EBF2", "#80CBC4", "#A5D6A7", //Green
 
 
 
@@ -170,4 +167,230 @@ export default experimentalTheme;
 
 export default experimentalTheme;
 
+*/}
+
+
+
+const experimentalTheme = {
+  name: "experimental",
+
+  useGradient: true,
+
+  colors: {
+    background: "#FEFCE8", // Soft warm yellow
+
+    backgroundGradient: [
+            
+             
+      "#FEF9C3", // Light Yellow
+      "#FFEDD5", 
+             // Soft Orange
+      "#E0F2FE", // Soft Sky Blue
+      "#BAE6FD"  // Light Ocean Blue
+    ] as const,
+    
+    brandTitle: "#F43F87",
+brandAccent: "#FF0000",
+//"#FF8C00",
+//"#B78CFF",
+brandGradient: [
+ // "#FF7F50",
+  "#FF8C00",
+  
+    "#FF0000",
+//  "#F43F87",
+  //"#D77BBF",
+  //"#A99AEF",
+] as const,
+
+    surface: "#FFF7ED", // Warm cream/orange tint
+
+    primary://"#000000", 
+    "#FF7F50",
+   // "#0284C7",   // Vivid Blue
+    secondary: "#EA580C", // Vibrant Orange
+
+    text: "#0F172A",          // Deep Navy-Slate
+    subText: "#334155",       // Slate
+    textSecondary: "#475569",  // Muted Slate
+
+
+icon: "#14532D",
+iconSecondary: "#166534",
+iconMuted: "#64748B",
+
+onPrimary: "#FFFFFF",
+
+surfaceSelected: "#DCFCE7",
+surfacePressed: "#86EFAC",
+
+
+
+surfaceElevated: "#FFFFFF",
+
+primarySoft: "#FFEDD5",
+primaryGlow: "#FF7F5038",
+secondaryGlow: "#EA580C30",
+
+
+
+
+
+
+    userBubble:"#FFFFFF",
+    //"#0284C7", // Added: Accent Blue for user chat bubbles
+
+    border: "#FFFFFF",
+    //"#FDE047", // Electric Yellow border
+
+    success: "#16A34A",
+    warning: "#D97706",
+    error: "#DC2626",
+
+    cardGreen: "#F0FDF4",
+    cardBlue: "#E0F2FE",
+    cardOrange: "#FFEDD5",
+    cardPurple: "#FAF5FF",
+    
+    cardBg: "rgba(255, 255, 255, 0.72)",
+cardBorder: "rgba(255, 255, 255, 0.8)",
+cardAccent: "#FF8C0024",
+
+    // ---------------------------------
+    // CODE BLOCK (Yellow / Blue Style)
+    // ---------------------------------
+
+    codeBackground: "#0F172A", // Dark Slate Blue contrast for code
+    codeHeader: "#1E293B",
+    codeBorder: "#38BDF8",     // Bright Blue accent border
+
+    codeText: "#F8FAFC",
+    codeLineNumber: "#64748B",
+
+    codeKeyword: "#FACC15",   // Bright Yellow
+    codeFunction: "#38BDF8",  // Bright Blue
+    codeString: "#FB923C",    // Soft Orange
+    codeNumber: "#F472B6",
+    codeComment: "#64748B",
+
+    codeVariable: "#38BDF8",
+    codeProperty: "#FDE047",
+    codeType: "#818CF8",
+
+    codeOperator: "#FACC15",
+    codePunctuation: "#94A3B8",
+
+    codeTag: "#FB923C",
+    codeAttribute: "#38BDF8",
+
+    codeConstant: "#FACC15",
+    codeBoolean: "#FB923C",
+    codeBuiltin: "#38BDF8",
+
+    codeCopy: "#38BDF8",
+    codeLanguage: "#94A3B8",
+
+    codeButton: "#1E293B",
+
+    codeSegmentBackground: "#1E293B",
+    codeSegmentActive: "#0284C7",
+    codeSegmentActiveText: "#FFFFFF",
+    codeSegmentText: "#94A3B8",
+    codeSegmentPressed: "#0369A1",
+  },
+};
+
+export default experimentalTheme;
+
+
+
+{/*
+const experimentalTheme = {
+  name: "experimental",
+
+  useGradient: true,
+
+  colors: {
+    background: "#FEFCE8",
+
+    backgroundGradient: [
+      "#FFFBEB", // Soft Warm Cream/Yellow (Top)
+      "#FFF7ED", // Warm Sunset Peach
+      "#E0F2FE", // Soft Sky Blue
+      "#BAE6FD"  // Light Ocean Blue (Bottom)
+    ] as const,
+
+    surface: "#FFFFFF",
+
+    primary: "#0284C7",   // Sky Blue accent
+    secondary: "#F97316", // Warm Orange accent
+
+    text: "#0F172A",          // Deep Slate
+    subText: "#475569",       // Medium Slate
+    textSecondary: "#64748B",  // Soft Slate
+
+    userBubble: "#0284C7", // Bright Accent Blue for user chat bubbles
+
+    border: "#FDE68A", // Softened Amber/Warm Yellow border (matches background seamlessly)
+
+    success: "#16A34A",
+    warning: "#EA580C",
+    error: "#DC2626",
+
+    // Option Cards (Matching background tints with subtle, cohesive borders)
+    cardGreen: "#F0FDF4",
+    cardBlue: "#F0F9FF",
+    cardOrange: "#FFF7ED",
+    cardPurple: "#FAF5FF",
+
+    cardBorderGreen: "#BBF7D0",
+    cardBorderBlue: "#BAE6FD",
+    cardBorderOrange: "#FED7AA",
+    cardBorderPurple: "#E9D5FF",
+
+    // ---------------------------------
+    // CODE BLOCK (Navy & Orange/Yellow)
+    // ---------------------------------
+
+    codeBackground: "#0F172A",
+    codeHeader: "#1E293B",
+    codeBorder: "#38BDF8",
+
+    codeText: "#F8FAFC",
+    codeLineNumber: "#64748B",
+
+    codeKeyword: "#FACC15",   // Warm Yellow
+    codeFunction: "#38BDF8",  // Ocean Blue
+    codeString: "#FB923C",    // Soft Orange
+    codeNumber: "#F472B6",
+    codeComment: "#64748B",
+
+    codeVariable: "#38BDF8",
+    codeProperty: "#FDE047",
+    codeType: "#818CF8",
+
+    codeOperator: "#FACC15",
+    codePunctuation: "#94A3B8",
+
+    codeTag: "#FB923C",
+    codeAttribute: "#38BDF8",
+
+    codeConstant: "#FACC15",
+    codeBoolean: "#FB923C",
+    codeBuiltin: "#38BDF8",
+
+    codeCopy: "#38BDF8",
+    codeLanguage: "#94A3B8",
+
+    codeButton: "#1E293B",
+
+    codeSegmentBackground: "#1E293B",
+    codeSegmentActive: "#0284C7",
+    codeSegmentActiveText: "#FFFFFF",
+    codeSegmentText: "#94A3B8",
+    codeSegmentPressed: "#0369A1",
+  },
+};
+
+export default experimentalTheme;
 */}

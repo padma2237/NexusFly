@@ -26,7 +26,7 @@ export default function SearchButton({
           color={
             enabled
               ? theme.primary
-              : theme.text
+              : theme.textSecondary
           }
         />
       }
