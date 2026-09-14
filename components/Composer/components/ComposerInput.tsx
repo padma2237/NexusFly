@@ -43,7 +43,8 @@ const ComposerInput = forwardRef<TextInput, ComposerInputProps>(function Compose
       scrollEnabled={scrollEnabled}
       underlineColorAndroid="transparent"
       
-      placeholder="Ask NexusFly..."
+      placeholder="Ask Padmaria..."
+      //"Ask NexusFly..."
       placeholderTextColor={theme.placeholder}
       onChangeText={onChangeText}
       onFocus={onFocus}

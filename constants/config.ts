@@ -1,4 +1,4 @@
-export const APP_NAME = "NexusFly";
+export const APP_NAME ="Padmaria"; //"NexusFly";
 
 export const STORAGE_KEYS = {
   CHAT_HISTORY: "chat_history",

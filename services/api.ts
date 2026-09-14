@@ -266,7 +266,7 @@ export async function sendMessage(
 
     return {
       answer:
-        "❌ Unable to connect to NexusFly.",
+        "Unable to connect to Padmaria",
 
       sources: [],
     };

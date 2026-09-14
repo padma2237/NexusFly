@@ -24,7 +24,7 @@ export default function TypingIndicator() {
       />
 
       <Text style={styles.text}>
-        NexusFly is thinking...
+        Padmaria is thinking...
       </Text>
     </View>
   );

@@ -79,7 +79,7 @@ export default function CustomDrawer(props: any) {
       >
 
         <Text style={styles.logo}>
-          NexusFly
+          Padmaria
         </Text>
 
         <TouchableOpacity
