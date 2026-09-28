@@ -688,6 +688,7 @@ StyleSheet.create({
 
   userBubble: {
     alignSelf: "flex-end", //use to change userbubble
+    maxWidth: "85%",
     backgroundColor:
     colors.userBubble ||
     colors.primary,
