@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "Padmaria",
+    "icon": "./assets/icon.png",
     "slug": "nexus-fly",
     "version": "1.0.0",
     "orientation": "portrait",
