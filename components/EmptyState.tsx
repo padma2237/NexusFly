@@ -156,6 +156,26 @@ const MOTIVATIONAL_LINES = [
   "Build it, learn from it, improve it.",
   "A little progress is still progress.",
   "There's always something new to discover.",
+  
+  
+  "Even the tallest oak started as a seed that refused to give up.",
+  "To learn is to give your mind wings to fly.",
+  "Every sunrise brings a blank page and a brand-new chance.",
+  "Life isn't a puzzle to solve, but a story to be beautifully lived.",
+  "Bloom quietly and beautifully, right where you are planted.",
+    "Code by code, thought by thought, we build the future.",
+  "Great things are hidden in the quiet moments of trying.",
+  "Let your curiosity pull you into the unknown.",
+  "Every blank screen is a canvas waiting for your story.",
+  "The best way to predict the future is to create it.",
+  "Mistakes are just unexpected waypoints on the path to success.",
+  "Simplicity is the ultimate sophistication of effort.",
+  "Behind every breakthrough is a series of small, unseen tries.",
+  "Focus on the rhythm of creation, not the rush of completion.",
+  "We grow most in the spaces between what we know and what we learn.",
+  "An elegant solution starts with a single, daring question.",
+  "Let what you build today speak for what you care about most.",
+
 ];
 
 function getTimeBlock() {
