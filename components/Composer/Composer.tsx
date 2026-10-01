@@ -11,21 +11,23 @@ import {
   Platform,
 } from "react-native";
 
-import { BottomSheetModal } from "@gorhom/bottom-sheet";
-
-
+import {
+  BottomSheetModal
+} from "@gorhom/bottom-sheet";
 import AttachmentSheet from "../Attachments/components/AttachmentSheet";
-
 import useAttachments from "../Attachments/hooks/useAttachments";
-
 import ComposerCard from "./ComposerCard";
 import ComposerBody from "./ComposerBody";
-
 import useComposer from "./hooks/useComposer";
+import {
+  ComposerProps
+} from "./types";
 
-import { ComposerProps } from "./types";
-  
-const Composer = forwardRef<any, ComposerProps>(function Composer({
+import {
+  useSpeechRecognition
+} from "./hooks/useSpeechRecognition";
+
+const Composer = forwardRef < any, ComposerProps > (function Composer({
   value,
   isLoading,
   webSearchEnabled,
@@ -35,60 +37,60 @@ const Composer = forwardRef<any, ComposerProps>(function Composer({
   onLayout,
   onToggleWebSearch,
   currentConversationId
-  
-}: ComposerProps, ref ) {
+
+}: ComposerProps, ref) {
 
   const composer = useComposer();
+  const inputRef = useRef < any > (null);
   
-  const inputRef = useRef<any>(null);
+  const { isListening, startListening, stopListening } =
+  useSpeechRecognition(onChangeText);
 
-useImperativeHandle(ref, () => ({
-  focusInput: () => {
-    inputRef.current?.focus();
-  },
-}));
-  
+  useImperativeHandle(ref, () => ({
+    focusInput: () => {
+      inputRef.current?.focus();
+    },
+  }));
+
   const attachments = useAttachments();
-  
+
   useEffect(() => {
-  attachments.clearAttachments();
-}, [currentConversationId]);
+    attachments.clearAttachments();
+  }, [currentConversationId]);
 
   const attachmentSheetRef =
-    useRef<BottomSheetModal>(null);
+  useRef < BottomSheetModal > (null);
 
   const [keyboardHeight, setKeyboardHeight] =
-    useState(0);
+  useState(0);
 
   useEffect(() => {
 
     const showEvent =
-      Platform.OS === "ios"
-        ? "keyboardWillShow"
-        : "keyboardDidShow";
+    Platform.OS === "ios"
+    ? "keyboardWillShow": "keyboardDidShow";
 
     const hideEvent =
-      Platform.OS === "ios"
-        ? "keyboardWillHide"
-        : "keyboardDidHide";
+    Platform.OS === "ios"
+    ? "keyboardWillHide": "keyboardDidHide";
 
     const showSubscription =
-      Keyboard.addListener(
-        showEvent,
-        (event) => {
-          setKeyboardHeight(
-            event.endCoordinates.height
-          );
-        }
-      );
+    Keyboard.addListener(
+      showEvent,
+      (event) => {
+        setKeyboardHeight(
+          event.endCoordinates.height
+        );
+      }
+    );
 
     const hideSubscription =
-      Keyboard.addListener(
-        hideEvent,
-        () => {
-          setKeyboardHeight(0);
-        }
-      );
+    Keyboard.addListener(
+      hideEvent,
+      () => {
+        setKeyboardHeight(0);
+      }
+    );
 
     return () => {
       showSubscription.remove();
@@ -108,7 +110,7 @@ useImperativeHandle(ref, () => ({
           },
         ]}
         onLayout={onLayout}
-      >
+        >
 
         <ComposerBody
           composer={composer}
@@ -116,20 +118,21 @@ useImperativeHandle(ref, () => ({
           isLoading={isLoading}
           webSearchEnabled={webSearchEnabled}
           onChangeText={onChangeText}
-          
           inputRef={inputRef}
+          
+          onMicPress={startListening}
 
 
 
-onSend={() => {
-  const currentAttachments = attachments.attachments;
+          onSend={() => {
+            const currentAttachments = attachments.attachments;
 
-  attachments.clearAttachments();
+            attachments.clearAttachments();
 
-  onSend(currentAttachments);
-}}
+            onSend(currentAttachments);
+          }}
 
-onStop={onStop}
+          onStop={onStop}
 
           onAttachmentPress={() => {
             Keyboard.dismiss();
@@ -140,43 +143,36 @@ onStop={onStop}
           }}
 
           onToggleWebSearch={onToggleWebSearch}
-            attachments={attachments.attachments}
-  onRemoveAttachment={
-    attachments.removeAttachment
-  }
-        />
+          attachments={attachments.attachments}
+          onRemoveAttachment={
+          attachments.removeAttachment
+          }
+          />
 
       </ComposerCard>
 
       <AttachmentSheet
         ref={attachmentSheetRef}
-        
+
         onCamera={async () => {
-  attachmentSheetRef.current?.dismiss();
+          attachmentSheetRef.current?.dismiss();
+          await attachments.capturePhoto();
+        }}
 
-  await attachments.capturePhoto();
-}}
-        
-        
-        
         onGallery={async () => {
-  attachmentSheetRef.current?.dismiss();
+          attachmentSheetRef.current?.dismiss();
+          await attachments.selectPhoto();
+        }}
 
-  await attachments.selectPhoto();
-}}
-    
-    onFile={async () => {
-  attachmentSheetRef.current?.dismiss();
+        onFile={async () => {
+          attachmentSheetRef.current?.dismiss();
+          await attachments.selectFile();
+        }}
 
-  await attachments.selectFile();
-}}
-    
-    
-        
         onClipboard={() =>
-          attachmentSheetRef.current?.dismiss()
+        attachmentSheetRef.current?.dismiss()
         }
-      />
+        />
     </>
   );
 });

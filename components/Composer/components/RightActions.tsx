@@ -1,6 +1,5 @@
 import React from "react";
 import { View } from "react-native";
-
 import styles from "../styles";
 import SendButton from "./SendButton";
 import MicButton from "./MicButton";
@@ -11,6 +10,7 @@ export default function RightActions({
   isLoading,
   onSend,
   onStop,
+  onMicPress,
 }: RightActionsProps) {
   return (
     <View style={styles.rightActions}>
@@ -22,7 +22,7 @@ export default function RightActions({
           onStop={onStop}
         />
       ) : (
-        <MicButton />
+        <MicButton onPress={onMicPress} />
       )}
     </View>
   );

@@ -14,6 +14,7 @@ export default function Toolbar({
   webSearchEnabled,
   onSend,
   onStop,
+  onMicPress,
   onAttachmentPress,
   onToggleWebSearch,
 }: ToolbarProps) {
@@ -37,6 +38,7 @@ export default function Toolbar({
         isLoading={isLoading}
         onSend={onSend}
         onStop={onStop}
+        onMicPress={onMicPress}
         />
     </Animated.View>
   );
