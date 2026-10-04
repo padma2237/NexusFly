@@ -27,6 +27,8 @@ export interface ToolbarProps {
   hasText: boolean;
   webSearchEnabled: boolean;
   isLoading: boolean;
+  isListening: boolean;
+  isTranscribing: boolean;
   onSend: () => void;
   onStop: () => void;
   onMicPress: () => void;
@@ -48,6 +50,8 @@ export interface LeftActionsProps {
 export interface RightActionsProps {
   hasText: boolean;
   isLoading: boolean;
+  isListening: boolean;
+isTranscribing: boolean;
   onSend: () => void;
   onStop: () => void;
   onMicPress: () => void;

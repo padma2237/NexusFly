@@ -11,6 +11,8 @@ export default function Toolbar({
   animatedStyle,
   hasText,
   isLoading,
+  isListening,
+  isTranscribing,
   webSearchEnabled,
   onSend,
   onStop,
@@ -36,6 +38,8 @@ export default function Toolbar({
       <RightActions
         hasText={hasText}
         isLoading={isLoading}
+        isListening={isListening}
+        isTranscribing={isTranscribing}
         onSend={onSend}
         onStop={onStop}
         onMicPress={onMicPress}

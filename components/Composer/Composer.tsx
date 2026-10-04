@@ -19,13 +19,11 @@ import useAttachments from "../Attachments/hooks/useAttachments";
 import ComposerCard from "./ComposerCard";
 import ComposerBody from "./ComposerBody";
 import useComposer from "./hooks/useComposer";
-import {
-  ComposerProps
-} from "./types";
+import {ComposerProps} from "./types";
 
 import {
-  useSpeechRecognition
-} from "./hooks/useSpeechRecognition";
+  useServerSpeechRecognition
+} from "./hooks/useServerSpeechRecognition";
 
 const Composer = forwardRef < any, ComposerProps > (function Composer({
   value,
@@ -42,9 +40,14 @@ const Composer = forwardRef < any, ComposerProps > (function Composer({
 
   const composer = useComposer();
   const inputRef = useRef < any > (null);
-  
-  const { isListening, startListening, stopListening } =
-  useSpeechRecognition(onChangeText);
+
+  const {
+    isListening,
+    isTranscribing,
+    startListening, 
+    stopListening
+  } =
+  useServerSpeechRecognition(onChangeText, value );
 
   useImperativeHandle(ref, () => ({
     focusInput: () => {
@@ -116,27 +119,23 @@ const Composer = forwardRef < any, ComposerProps > (function Composer({
           composer={composer}
           value={value}
           isLoading={isLoading}
+          isListening={isListening}
+          isTranscribing={isTranscribing}
           webSearchEnabled={webSearchEnabled}
           onChangeText={onChangeText}
           inputRef={inputRef}
-          
-          onMicPress={startListening}
 
-
+          onMicPress={isListening ? stopListening: startListening}
 
           onSend={() => {
             const currentAttachments = attachments.attachments;
-
             attachments.clearAttachments();
-
             onSend(currentAttachments);
           }}
 
           onStop={onStop}
-
           onAttachmentPress={() => {
             Keyboard.dismiss();
-
             requestAnimationFrame(() => {
               attachmentSheetRef.current?.present();
             });

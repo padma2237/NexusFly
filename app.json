@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Padmaria",
-    "icon": "./assets/icon.png",
+    "name": "NexusFly",
+    "icon": "./assets/iconNF.png",
     "slug": "nexus-fly",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -11,7 +11,7 @@
       "**/*"
     ],
     "android": {
-      "icon": "./assets/icon.png",
+      "icon": "./assets/iconNF.png",
       "package": "com.nexusfly.app",
       "softwareKeyboardLayoutMode": "resize"
     },
@@ -22,7 +22,8 @@
     },
     "plugins": [
       "expo-font",
-      "expo-speech-recognition"
+      "expo-audio",
+      "expo-asset"
     ]
   }
 }

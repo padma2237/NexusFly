@@ -8,7 +8,7 @@ import {
 
 import * as ImageManipulator from "expo-image-manipulator";
 
-const API_URL =
+export const API_URL =
   "https://nexusfly-backend.onrender.com/ask";
 
 

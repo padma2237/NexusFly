@@ -85,6 +85,24 @@ rightActions: {
   marginLeft: ACTION_GAP,
 },
 
+transcribingIndicator: {
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: 3,
+  minWidth: 44,
+  height: 44,
+},
+
+transcribingDot: {
+  width: 5,
+  height: 5,
+  borderRadius: 3,
+  
+},
+
+
+
 iconButton: {
   width: BUTTON_SIZE,
   height: BUTTON_SIZE,

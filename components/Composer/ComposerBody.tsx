@@ -22,6 +22,8 @@ export default function ComposerBody(props: any) {
     composer,
     value,
     isLoading,
+    isListening,
+    isTranscribing,
     inputRef,
     webSearchEnabled,
     onChangeText,
@@ -99,6 +101,8 @@ export default function ComposerBody(props: any) {
             animatedStyle={composer.animation.toolbarStyle}
             hasText={canSend}
             isLoading={isLoading}
+            isListening={isListening}
+            isTranscribing={isTranscribing}
             webSearchEnabled={webSearchEnabled}
             onSend={handleSend}
             onStop={onStop}
@@ -111,6 +115,8 @@ export default function ComposerBody(props: any) {
           <RightActions
             hasText={canSend}
             isLoading={isLoading}
+            isListening={isListening}
+            isTranscribing={isTranscribing}
             onSend={handleSend}
             onStop={onStop}
             onMicPress={onMicPress}

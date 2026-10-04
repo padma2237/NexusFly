@@ -7,6 +7,7 @@ import {
 import {
   Copy,
   Share2,
+  Volume2,
   RotateCcw,
   MoreHorizontal,
   ThumbsUp,
@@ -20,6 +21,7 @@ import { useTheme } from "../../../theme/useTheme";
 interface MessageActionRowProps {
   onCopy: () => void;
   onShare: () => void;
+  onReadAloud: () => void;
   onRegenerate?: () => void;
   onMore: () => void;
   showFeedback?: boolean;
@@ -28,6 +30,7 @@ interface MessageActionRowProps {
 export default function MessageActionRow({
   onCopy,
   onShare,
+  onReadAloud,
   onRegenerate,
   onMore,
   showFeedback = false,
@@ -72,6 +75,16 @@ export default function MessageActionRow({
           }
         />
       )}
+      
+      <MessageActionButton
+  onPress={onReadAloud}
+  icon={
+    <Volume2
+      size={18}
+      color={colors.subText}
+    />
+  }
+/>
 
       <MessageActionButton
         onPress={onCopy}

@@ -33,6 +33,11 @@ import UserMessageActions from "./Chat/MessageActions/UserMessageActions";
 import * as Clipboard from "expo-clipboard";
 
 import {
+  speakText,
+  stopSpeaking,
+} from "../services/speechSynthesis";
+
+import {
   useTheme
 } from "../theme/useTheme";
 
@@ -281,6 +286,14 @@ function ChatBubble({
     }
   };
 
+const readAloudMessage = () => {
+  stopSpeaking();
+
+  speakText(
+    message.text
+  );
+};
+
 
   const getDomain = (url: string) => {
     try {
@@ -516,6 +529,7 @@ function ChatBubble({
               <MessageActionRow
                 onCopy={copyMessage}
                 onShare={shareMessage}
+                onReadAloud={readAloudMessage}
                 onRegenerate={onRegenerate}
                 onMore={() => {
                   Keyboard.dismiss();
